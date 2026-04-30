@@ -1,0 +1,10 @@
+^\.github$
+^app\.R$
+^manifest\.json$
+^dev$
+^LICENSE\.md$
+^\.gitignore$
+^renv$
+^renv\.lock$
+^rsconnect$
+^\.Rprofile$
