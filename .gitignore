@@ -1,0 +1,27 @@
+# R / RStudio
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+*.Rproj.user
+*.Rproj
+
+# Package build artifacts
+*.tar.gz
+*.Rcheck/
+
+# renv
+renv/library/
+renv/local/
+renv/staging/
+renv/python/
+
+# Connect Cloud deployment record
+rsconnect/
+
+# Byte-compiled files
+*.pyc
+
+# OS files
+Thumbs.db
+.DS_Store

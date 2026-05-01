@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" viewBox="0 0 680 620" role="img">
+<title>CoDa Stereo logo</title>
+<desc>Hexagonal sticker logo featuring stylised tissue cross-sections with a stereological point-counting grid, overlaid by a ternary simplex with compositional data clusters</desc>
+
+<defs>
+  <clipPath id="hexClip">
+    <polygon points="340,30 570,163 570,430 340,563 110,430 110,163"/>
+  </clipPath>
+</defs>
+
+<polygon points="340,30 570,163 570,430 340,563 110,430 110,163" fill="#1a1a2e" stroke="#0f3460" stroke-width="4.5" stroke-linejoin="round"/>
+
+<g clip-path="url(#hexClip)">
+
+  <!-- Histological tissue layer: stylised tubule cross-sections (H&E palette) -->
+  <g opacity="0.18">
+    <circle cx="180" cy="160" r="22" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="180" cy="160" r="12" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="240" cy="185" r="18" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="240" cy="185" r="9" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="310" cy="148" r="24" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="310" cy="148" r="14" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="390" cy="170" r="20" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="390" cy="170" r="11" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="460" cy="190" r="16" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="460" cy="190" r="8" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="150" cy="220" r="19" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="150" cy="220" r="10" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="215" cy="240" r="25" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="215" cy="240" r="15" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="290" cy="225" r="17" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="290" cy="225" r="9" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="360" cy="240" r="22" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="360" cy="240" r="13" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="440" cy="250" r="20" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="440" cy="250" r="11" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="500" cy="220" r="15" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="500" cy="220" r="8" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="170" cy="300" r="21" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="170" cy="300" r="12" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="250" cy="310" r="18" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="250" cy="310" r="10" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="330" cy="295" r="23" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="330" cy="295" r="13" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="410" cy="310" r="19" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="410" cy="310" r="10" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="490" cy="290" r="17" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="490" cy="290" r="9" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="200" cy="370" r="20" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="200" cy="370" r="11" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="280" cy="380" r="16" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="280" cy="380" r="8" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="370" cy="370" r="22" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="370" cy="370" r="13" fill="#d4a0c0" fill-opacity="0.15"/>
+    <circle cx="450" cy="360" r="18" fill="none" stroke="#e8a0bf" stroke-width="1.2"/>
+    <circle cx="450" cy="360" r="9" fill="#d4a0c0" fill-opacity="0.15"/>
+
+    <!-- Oblique sections (ellipses) -->
+    <ellipse cx="195" cy="195" rx="14" ry="10" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="340" cy="180" rx="12" ry="15" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="270" cy="270" rx="15" ry="11" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="420" cy="225" rx="11" ry="14" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="160" cy="260" rx="13" ry="9" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="480" cy="340" rx="12" ry="14" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="310" cy="350" rx="14" ry="10" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+    <ellipse cx="230" cy="150" rx="10" ry="13" fill="#b07aab" fill-opacity="0.15" stroke="#c890b8" stroke-width="0.8"/>
+
+    <!-- Nuclei dots -->
+    <circle cx="200" cy="200" r="3" fill="#8b4070" fill-opacity="0.5"/>
+    <circle cx="330" cy="175" r="3.5" fill="#8b4070" fill-opacity="0.5"/>
+    <circle cx="155" cy="250" r="3" fill="#8b4070" fill-opacity="0.5"/>
+    <circle cx="460" cy="280" r="3" fill="#8b4070" fill-opacity="0.5"/>
+    <circle cx="250" cy="340" r="3.5" fill="#8b4070" fill-opacity="0.5"/>
+    <circle cx="400" cy="350" r="3" fill="#8b4070" fill-opacity="0.5"/>
+  </g>
+
+  <!-- Stereological point-counting grid -->
+  <g opacity="0.12">
+    <line x1="110" y1="163" x2="570" y2="163" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="200" x2="570" y2="200" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="237" x2="570" y2="237" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="274" x2="570" y2="274" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="311" x2="570" y2="311" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="348" x2="570" y2="348" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="385" x2="570" y2="385" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="110" y1="422" x2="570" y2="422" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="148" y1="130" x2="148" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="185" y1="130" x2="185" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="222" y1="130" x2="222" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="259" y1="130" x2="259" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="296" y1="130" x2="296" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="333" y1="130" x2="333" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="370" y1="130" x2="370" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="407" y1="130" x2="407" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="444" y1="130" x2="444" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="481" y1="130" x2="481" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <line x1="518" y1="130" x2="518" y2="460" stroke="#8ecae6" stroke-width="0.4"/>
+    <!-- Grid intersection points -->
+    <g fill="#8ecae6" opacity="0.5">
+      <circle cx="148" cy="200" r="1.5"/><circle cx="222" cy="200" r="1.5"/><circle cx="296" cy="200" r="1.5"/><circle cx="370" cy="200" r="1.5"/><circle cx="444" cy="200" r="1.5"/><circle cx="518" cy="200" r="1.5"/>
+      <circle cx="148" cy="274" r="1.5"/><circle cx="222" cy="274" r="1.5"/><circle cx="296" cy="274" r="1.5"/><circle cx="370" cy="274" r="1.5"/><circle cx="444" cy="274" r="1.5"/><circle cx="518" cy="274" r="1.5"/>
+      <circle cx="148" cy="348" r="1.5"/><circle cx="222" cy="348" r="1.5"/><circle cx="296" cy="348" r="1.5"/><circle cx="370" cy="348" r="1.5"/><circle cx="444" cy="348" r="1.5"/><circle cx="518" cy="348" r="1.5"/>
+      <circle cx="185" cy="237" r="1.5"/><circle cx="259" cy="237" r="1.5"/><circle cx="333" cy="237" r="1.5"/><circle cx="407" cy="237" r="1.5"/><circle cx="481" cy="237" r="1.5"/>
+      <circle cx="185" cy="311" r="1.5"/><circle cx="259" cy="311" r="1.5"/><circle cx="333" cy="311" r="1.5"/><circle cx="407" cy="311" r="1.5"/><circle cx="481" cy="311" r="1.5"/>
+      <circle cx="185" cy="385" r="1.5"/><circle cx="259" cy="385" r="1.5"/><circle cx="333" cy="385" r="1.5"/><circle cx="407" cy="385" r="1.5"/><circle cx="481" cy="385" r="1.5"/>
+    </g>
+  </g>
+
+  <!-- Connective tissue fibres -->
+  <g opacity="0.06">
+    <path d="M140,160 Q200,140 260,170 Q300,180 340,155 Q400,130 460,165 Q500,180 540,160" fill="none" stroke="#f4a261" stroke-width="1"/>
+    <path d="M120,230 Q180,210 240,240 Q300,260 340,230 Q400,200 470,240 Q520,250 560,230" fill="none" stroke="#f4a261" stroke-width="1"/>
+    <path d="M130,330 Q190,310 250,340 Q310,360 350,330 Q410,300 470,340 Q530,360 560,340" fill="none" stroke="#f4a261" stroke-width="1"/>
+  </g>
+
+  <!-- Ternary simplex triangle -->
+  <polygon points="190,415 490,415 340,155" fill="none" stroke="#4cc9f0" stroke-width="2.5" stroke-linejoin="round" opacity="0.95"/>
+
+  <!-- Ternary grid lines -->
+  <g opacity="0.07">
+    <line x1="223" y1="415" x2="357" y2="183" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="256" y1="415" x2="373" y2="211" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="289" y1="415" x2="390" y2="240" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="390" y1="415" x2="340" y2="155" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="423" y1="415" x2="405" y2="183" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="456" y1="415" x2="420" y2="211" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="223" y1="415" x2="490" y2="415" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="240" y1="380" x2="465" y2="380" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="273" y1="333" x2="440" y2="333" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="306" y1="286" x2="407" y2="286" stroke="#4cc9f0" stroke-width="0.5"/>
+    <line x1="323" y1="240" x2="390" y2="240" stroke="#4cc9f0" stroke-width="0.5"/>
+  </g>
+
+  <!-- Cluster 1: Ecological station (red) -->
+  <polygon points="225,365 265,340 250,385 215,390" fill="#e63946" fill-opacity="0.25" stroke="#e63946" stroke-width="1.2" stroke-opacity="0.7"/>
+  <circle cx="228" cy="370" r="4.5" fill="#e63946" opacity="0.95"/>
+  <circle cx="252" cy="350" r="4.5" fill="#e63946" opacity="0.95"/>
+  <circle cx="242" cy="382" r="4.5" fill="#e63946" opacity="0.95"/>
+  <circle cx="218" cy="388" r="4.5" fill="#e63946" opacity="0.95"/>
+  <circle cx="260" cy="342" r="4.5" fill="#e63946" opacity="0.95"/>
+  <circle cx="235" cy="358" r="4" fill="#e63946" opacity="0.7"/>
+
+  <!-- Cluster 2: Rural (green) -->
+  <polygon points="350,275 410,315 425,365 380,385 345,345" fill="#06d6a0" fill-opacity="0.25" stroke="#06d6a0" stroke-width="1.2" stroke-opacity="0.7"/>
+  <circle cx="358" cy="290" r="4.5" fill="#06d6a0" opacity="0.95"/>
+  <circle cx="388" cy="325" r="4.5" fill="#06d6a0" opacity="0.95"/>
+  <circle cx="408" cy="335" r="4.5" fill="#06d6a0" opacity="0.95"/>
+  <circle cx="420" cy="358" r="4.5" fill="#06d6a0" opacity="0.95"/>
+  <circle cx="383" cy="378" r="4.5" fill="#06d6a0" opacity="0.95"/>
+  <circle cx="350" cy="340" r="4.5" fill="#06d6a0" opacity="0.95"/>
+  <circle cx="370" cy="305" r="4" fill="#06d6a0" opacity="0.7"/>
+  <circle cx="398" cy="350" r="4" fill="#06d6a0" opacity="0.7"/>
+
+  <!-- Cluster 3: Urban (yellow) -->
+  <polygon points="430,390 465,395 455,412 425,405" fill="#ffd166" fill-opacity="0.25" stroke="#ffd166" stroke-width="1.2" stroke-opacity="0.7"/>
+  <circle cx="438" cy="393" r="4.5" fill="#ffd166" opacity="0.95"/>
+  <circle cx="456" cy="398" r="4.5" fill="#ffd166" opacity="0.95"/>
+  <circle cx="448" cy="410" r="4.5" fill="#ffd166" opacity="0.95"/>
+  <circle cx="430" cy="404" r="4.5" fill="#ffd166" opacity="0.95"/>
+  <circle cx="462" cy="392" r="4" fill="#ffd166" opacity="0.7"/>
+</g>
+
+<!-- Typography -->
+<text x="340" y="498" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="52" font-weight="700" letter-spacing="3" fill="#4cc9f0">CoDa</text>
+<text x="340" y="540" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="28" font-weight="300" letter-spacing="12" fill="#a0d2db">STEREO</text>
+
+<text x="340" y="590" text-anchor="middle" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="10.5" fill="#8899aa" letter-spacing="0.8">compositional data analysis for stereology</text>
+
+</svg>
