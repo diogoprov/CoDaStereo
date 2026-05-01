@@ -5,10 +5,7 @@
 #' Build the PPDAC guided tour using cicerone
 #' @noRd
 build_tour <- function() {
-  cicerone::Cicerone$new(
-    id = "ppdac_tour",
-    overlay_opacity = 0.5
-  )$
+  cicerone::Cicerone$new(id = "ppdac_tour")$
     step(
       el        = "sidebarMenu",
       title     = "Welcome to CoDa Stereo!",
