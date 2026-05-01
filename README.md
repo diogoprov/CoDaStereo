@@ -8,14 +8,14 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
-> **Compositional Data Analysis for Stereological and Histomorphometric Data**
+> **Compositional Data Analysis for Stereological and Hematological Data**
 >
 > A Shiny application implementing the Aitchison geometry for the full
-> PPDAC cycle: data upload, zero/NA handling, compositional
+> Data analysis cycle: data upload, zero/NA handling, compositional
 > visualisation, and permutational MANOVA with post-hoc tests.
 >
 > Developed as supplementary material for:
-> Provete, D.B. (2026). *Title*. **Journal of Microscopy**, *xx*(x), xx–xx.
+> Provete, D.B. et al. (2026). *A Practical Guide to Compositional Data Analysis in Tissue Stereology and Blood Cell Profile*. **Cell and Tissue Research**, *xx*(x), xx–xx.
 > doi: [10.xxxx/jmi.xxxxx](https://doi.org/)
 
 ---
@@ -38,7 +38,7 @@
 ```r
 # Install from GitHub
 # install.packages("devtools")
-devtools::install_github("GITHUB_USER/CoDaStereo")
+devtools::install_github("diogoprov/CoDaStereo")
 
 # Launch
 CoDaStereo::run_app()
@@ -142,8 +142,8 @@ the software:
 ```bibtex
 @article{provete2026codastreo,
   author  = {Provete, Diogo B.},
-  title   = {Title},
-  journal = {Journal of Microscopy},
+  title   = {A Practical Guide to Compositional Data Analysis in Tissue Stereology and Blood Cell Profile},
+  journal = {Cell and Tissue Research},
   year    = {2026},
   doi     = {10.xxxx/jmi.xxxxx}
 }
@@ -152,7 +152,7 @@ the software:
   author  = {Provete, Diogo B.},
   title   = {{CoDa Stereo}: Compositional Data Analysis for Stereological Data},
   year    = {2026},
-  url     = {https://github.com/GITHUB_USER/CoDaStereo},
+  url     = {https://github.com/diogoprov/CoDaStereo},
   version = {2.0.0}
 }
 ```
@@ -160,7 +160,7 @@ the software:
 ## Contributing
 
 Bug reports and feature requests are welcome via
-[GitHub Issues](https://github.com/GITHUB_USER/CoDaStereo/issues).
+[GitHub Issues](https://github.com/diogoprov/CoDaStereo/issues).
 Pull requests should target the `dev` branch.
 
 ## License
