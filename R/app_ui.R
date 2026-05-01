@@ -10,7 +10,7 @@ app_ui <- function(request) {
       dashboardHeader(
         title = "CoDa Stereo v2.1",
         tags$li(class = "dropdown",
-                actionButton("tutorial-start_tour",
+                actionButton("tour_btn_header",
                              label = "\U0001f393 Tour",
                              class = "btn btn-default btn-sm",
                              style = "margin-top: 8px; margin-right: 10px;"))
@@ -56,7 +56,7 @@ app_ui <- function(request) {
                             "residual diagnostics.")
                   ),
                   hr(),
-                  actionButton("tutorial-start_tour",
+                  actionButton("tour_btn_intro",
                                "Start guided tour",
                                icon = icon("graduation-cap"),
                                class = "btn-primary btn-lg")

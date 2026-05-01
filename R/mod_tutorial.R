@@ -2,123 +2,136 @@
 # Module: Interactive Tutorial (cicerone guided tour)
 # ==============================================================================
 
+# Element IDs used in steps must match the actual HTML element IDs rendered by
+# Shiny / shinydashboard. Verified IDs:
+#   "sidebarMenu"       -> sidebarMenu(id = "sidebarMenu") in app_ui.R
+#   "imputation-run"    -> actionButton(ns("run")) in mod_imputation.R
+#   "data-parts"        -> selectInput(ns("parts")) in mod_data.R
+#   "analysis-ternary_plot" -> plotOutput(ns("ternary_plot")) in mod_analysis.R
+#   "analysis-biplot"   -> plotOutput(ns("biplot")) in mod_analysis.R
+#   "stats-run_manova"  -> actionButton(ns("run_manova")) in mod_stats.R
+#
+# shinydashboard tab panels render as <div id="shiny-tab-TABNAME">, but those
+# are only in the DOM when the tab is active, so we avoid pointing at them.
+
 #' Build the PPDAC guided tour using cicerone
 #' @noRd
 build_tour <- function() {
-  cicerone::Cicerone$new(id = "ppdac_tour")$
+  cicerone::Cicerone$new()$
     step(
-      el        = "sidebarMenu",
-      title     = "Welcome to CoDa Stereo!",
+      el          = "sidebarMenu",
+      title       = "Welcome to CoDa Stereo!",
       description = paste(
         "This application implements the Aitchison geometry for",
         "stereological and histomorphometric data.<br><br>",
-        "Follow the sidebar tabs <b>top to bottom</b> to complete the",
-        "<b>PPDAC cycle</b> (Problem, Plan, Data, Analysis, Conclusion).<br><br>",
-        "Click <b>Next</b> to learn about each step."
-      ),
-      position = "right"
+        "Follow the sidebar tabs <b>top to bottom</b> to complete",
+        "the <b>PPDAC cycle</b>.",
+        "<br><br>Click <b>Next</b> to learn about each step."
+      )
     )$
     step(
-      el        = "data-upload_ui",
-      title     = "1. Data Upload",
+      el          = "sidebarMenu",
+      title       = "1. Data Upload",
       description = paste(
-        "Upload your CSV or Excel file here.<br><br>",
-        "<b>Important:</b> After uploading, select which numeric columns",
-        "are the <b>compositional parts</b> (volume fractions, area",
-        "percentages, or cell counts that sum to a constant).<br><br>",
-        "Columns that look like IDs (e.g., Sample_ID) are deselected",
-        "automatically, but check that non-compositional covariates",
-        "(body weight, biochemical assays) are also unchecked."
-      ),
-      position = "right"
+        "Upload a <b>CSV or Excel file</b>.<br><br>",
+        "After uploading, use the <b>Compositional parts</b> selector",
+        "to declare which numeric columns are the parts of the composition.",
+        "ID columns are excluded automatically.<br><br>",
+        "The <b>Pre-flight check</b> will alert you if any selected",
+        "column has an incompatible scale."
+      )
     )$
     step(
-      el        = "data-inspect_ui",
-      title     = "2. Data Inspection",
+      el          = "data-parts",
+      title       = "Parts selector",
       description = paste(
-        "Before any analysis, inspect your data for:<br>",
+        "Select <em>only</em> the columns that form the closed composition",
+        "(e.g., volume fractions or cell counts summing to a constant).",
+        "<br><br>Non-compositional covariates (body weight, biochemical",
+        "assays on a different scale) must be unchecked here."
+      ),
+      position    = "right"
+    )$
+    step(
+      el          = "sidebarMenu",
+      title       = "2. Data Inspection",
+      description = paste(
+        "Before any transformation, inspect your data for:<br>",
         "<ul>",
-        "<li><b>Structural zeros</b> (rare tissue compartments)</li>",
+        "<li><b>Structural zeros</b> — rare tissue compartments</li>",
         "<li><b>Missing values (NA)</b></li>",
         "</ul>",
-        "The heatmap distinguishes observed values, zeros, and NAs.",
-        "The naniar plot shows the overall missingness pattern."
-      ),
-      position = "right"
+        "The three-state heatmap distinguishes observed values,",
+        "zeros, and NAs — something <code>vis_miss</code> alone cannot."
+      )
     )$
     step(
-      el        = "imputation-run",
-      title     = "3. Zero & NA Handling",
+      el          = "imputation-run",
+      title       = "3. Zero and NA handling",
       description = paste(
-        "Choose the appropriate imputation method:<br><br>",
-        "<b>CZM</b> for count zeros (point counts).<br>",
-        "<b>multRepl</b> for rounded zeros (percentages).<br>",
-        "<b>lrEM</b> for rounded zeros with larger samples.<br><br>",
-        "If your data has NAs, decide whether to drop those rows",
-        "or impute them with the column geometric mean.<br><br>",
-        "Click <b>Run Imputation</b> when ready."
+        "Choose the imputation method:<br><br>",
+        "<b>CZM</b> — for count zeros (point counts).<br>",
+        "<b>multRepl</b> — for rounded zeros (percentages).<br>",
+        "<b>lrEM</b> — for rounded zeros, larger samples.<br><br>",
+        "If the data has NAs, choose <em>drop rows</em> or",
+        "<em>geometric-mean imputation</em> before running."
       ),
-      position = "right"
+      position    = "top"
     )$
     step(
-      el        = "analysis-ternary_plot",
-      title     = "4a. Ternary Plot",
+      el          = "analysis-ternary_plot",
+      title       = "4a. Ternary plot",
       description = paste(
-        "Visualise 3 parts inside the Aitchison simplex.<br><br>",
-        "If your composition has more than 3 parts, use",
-        "<b>Amalgamate into 3 groups</b> to define sub-compositions",
-        "(e.g., Parenchyma, Stroma, Inflammatory).<br><br>",
-        "This plot uses the <b>raw data</b> (pre-imputation) for",
-        "exploratory purposes."
+        "Visualise 3 parts inside the Aitchison simplex.",
+        "<br><br>",
+        "For <b>D > 3</b>, use <em>Amalgamate into 3 groups</em>",
+        "to combine related parts before plotting.",
+        "<br><br>",
+        "Convex hulls delimit each group's compositional territory."
       ),
-      position = "left"
+      position    = "right"
     )$
     step(
-      el        = "analysis-biplot",
-      title     = "4b. clr-PCA Biplot",
+      el          = "analysis-biplot",
+      title       = "4b. clr-PCA Biplot",
       description = paste(
-        "The Compositional Ray Biplot projects the <b>clr-transformed</b>",
+        "The Compositional Ray Biplot projects <b>clr-transformed</b>",
         "data onto the first two principal components.<br><br>",
-        "Arrow length indicates the importance of each part.<br>",
-        "Arrow direction shows correlations between parts.<br>",
-        "Convex hulls delimit the morphological space per group.<br><br>",
-        "This plot uses the <b>imputed data</b>."
+        "Arrow <b>length</b> = importance of each part.<br>",
+        "Arrow <b>direction</b> = log-ratio covariance between parts."
       ),
-      position = "left"
+      position    = "left"
     )$
     step(
-      el        = "stats-run_manova",
-      title     = "5. Statistical Modeling",
+      el          = "stats-run_manova",
+      title       = "5. Statistical Modeling",
       description = paste(
-        "Fit a permutational MANOVA on ilr coordinates via RRPP.<br><br>",
-        "Select one or more factors. With 2+ factors, choose between",
-        "additive or factorial designs.<br><br>",
-        "After fitting, run <b>Pairwise comparisons</b> and inspect",
-        "the <b>Residual diagnostics</b>.<br><br>",
+        "Fit a permutational MANOVA on <b>ilr coordinates</b> via RRPP.",
+        "<br><br>",
+        "Select one or more factors; toggle additive or factorial design.",
+        "After fitting, run pairwise post-hoc tests and inspect",
+        "residual diagnostics.",
+        "<br><br>",
         "All results are downloadable as CSV or PDF."
       ),
-      position = "left"
+      position    = "top"
     )$
     step(
-      el        = "sidebarMenu",
-      title     = "You're ready!",
+      el          = "sidebarMenu",
+      title       = "You're ready!",
       description = paste(
         "That's the full PPDAC cycle.<br><br>",
         "Start by uploading your data or loading the built-in example.",
         "You can restart this tour anytime by clicking the",
         "<b>\U0001f393 Tour</b> button in the header."
-      ),
-      position = "right"
+      )
     )
 }
 
 #' @noRd
 mod_tutorial_server <- function(id) {
   moduleServer(id, function(input, output, session) {
-    tour <- build_tour()
-    
-    observeEvent(input$start_tour, {
-      tour$init()$start()
-    })
+    # intentionally empty — tour is wired in app_server to avoid
+    # namespace issues with buttons defined outside module UI
   })
 }
