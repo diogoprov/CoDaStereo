@@ -3761,6 +3761,40 @@
         "RemoteSha": "1.4.5"
       }
     },
+    "rintrojs": {
+      "Source": "CRAN",
+      "Repository": "https://cran.rstudio.com",
+      "description": {
+        "Package": "rintrojs",
+        "Type": "Package",
+        "Title": "Wrapper for the 'Intro.js' Library",
+        "Version": "0.3.4",
+        "Authors@R": "c(\n  person(\"Carl\", \"Ganz\", email = \"carlganz@gmail.com\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0002-2973-3545\")),\n  person(\"Afshin\", \"Mehrabani\", role = c(\"ctb\",\"cph\"), comment = \"intro.js in javascript/introjs\")\n  )",
+        "Description": "A wrapper for the 'Intro.js' library (For more info: <https://introjs.com/>). \n  This package makes it easy to include step-by-step introductions, and clickable hints in a 'Shiny' \n  application. It supports both static introductions in the UI, and programmatic introductions from \n  the server-side. ",
+        "License": "AGPL-3",
+        "Imports": "shiny, jsonlite",
+        "Depends": "R (>= 3.0.0)",
+        "RoxygenNote": "7.2.3",
+        "URL": "https://github.com/carlganz/rintrojs, http://rintrojs.carlganz.com",
+        "BugReports": "https://github.com/carlganz/rintrojs/issues",
+        "Suggests": "testthat, covr",
+        "Config/potools/style": "base",
+        "NeedsCompilation": "no",
+        "Packaged": "2024-01-11 20:46:10 UTC; carlganz",
+        "Author": "Carl Ganz [aut, cre] (<https://orcid.org/0000-0002-2973-3545>),\n  Afshin Mehrabani [ctb, cph] (intro.js in javascript/introjs)",
+        "Maintainer": "Carl Ganz <carlganz@gmail.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2024-01-11 21:30:02 UTC",
+        "Built": "R 4.5.0; ; 2025-04-01 20:32:00 UTC; unix",
+        "RemoteType": "standard",
+        "RemoteRef": "rintrojs",
+        "RemotePkgRef": "rintrojs",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteReposName": "CRAN",
+        "RemotePkgPlatform": "aarch64-apple-darwin20",
+        "RemoteSha": "0.3.4"
+      }
+    },
     "rlang": {
       "Source": "CRAN",
       "Repository": "https://cran.rstudio.com",
@@ -4798,9 +4832,6 @@
     }
   },
   "files": {
-    ".github/workflows/R-CMD-check.yaml": {
-      "checksum": "defacb7987e70a53b5bd05e4432f8528"
-    },
     ".Rbuildignore": {
       "checksum": "da4d7dc3df583877db2c80d2b0ba7065"
     },
@@ -4808,7 +4839,7 @@
       "checksum": "69724ec05776dcf752c323ec129cfee3"
     },
     "DESCRIPTION": {
-      "checksum": "3bc071746836e2b00d3c892654867b84"
+      "checksum": "bbed6785a9d45515c6b7f9a9d838d5d9"
     },
     "dev/run_dev.R": {
       "checksum": "1af526d148c9a7c438ad25581374b433"
@@ -4826,10 +4857,13 @@
       "checksum": "42d78cb5232d98666f2163147fe769b5"
     },
     "R/app_server.R": {
-      "checksum": "d2f8a506148ad59cfdce6b7bd0008a0b"
+      "checksum": "9cd231d6cd23b38e907d0dcdea15140d"
     },
     "R/app_ui.R": {
-      "checksum": "97428eefeaa2a2423a5ad16c423acd54"
+      "checksum": "9ab7ee5fa9ae84b9845f4a1cafbc4d49"
+    },
+    "R/app.R": {
+      "checksum": "4a83a14bf543c783cee3685e89381286"
     },
     "R/fct_helpers.R": {
       "checksum": "60915083b4ff4feb1fefc608c8eaa629"
@@ -4847,13 +4881,13 @@
       "checksum": "8c650f502fc2033c9ba383015c5bce86"
     },
     "R/mod_tutorial.R": {
-      "checksum": "49b6f8e6d8ec4c3e3e89660411afed2a"
+      "checksum": "4b956907b4c31667a3dabef5a48b4bb7"
     },
     "R/run_app.R": {
       "checksum": "eb864f118958f7781c05ffbd368c12df"
     },
     "README.md": {
-      "checksum": "4ad409944dcd2a5f4129af12a9949f22"
+      "checksum": "44640bf281878081c2f987c6d899324a"
     },
     "www/logo/codastreo_logo.svg": {
       "checksum": "cdbda3163179e85a899d2d39872dfaf4"

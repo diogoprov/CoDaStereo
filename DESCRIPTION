@@ -1,11 +1,11 @@
 Package: CoDaStereo
-Title: Compositional Data Analysis for Stereological Data
+Title: Compositional Data Analysis for Stereological and Histomorphometric Data
 Version: 2.1.0
 Authors@R: person("Diogo B.", "Provete", email = "diogo.provete@ufms.br",
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0002-1981-8865"))
 Description: Shiny application implementing the Aitchison geometry for
-    stereological data. Covers the full data analysis cycle:
+    stereological and histomorphometric data. Covers the full PPDAC cycle:
     data upload, zero/NA handling, compositional visualisation (ternary plots,
     clr-biplots), and permutational MANOVA with pairwise post-hoc tests.
     Developed as supplementary material for the Journal of Microscopy.
@@ -28,7 +28,7 @@ Imports:
     RRPP,
     factoextra,
     FactoMineR,
-    cicerone (>= 1.0.0),
+    rintrojs (>= 0.3.0),
     golem (>= 0.4.0)
 Suggests:
     pkgload,

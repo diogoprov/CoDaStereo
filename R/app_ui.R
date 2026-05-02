@@ -5,7 +5,7 @@
 #' @noRd
 app_ui <- function(request) {
   tagList(
-    cicerone::use_cicerone(),  # inject cicerone JS/CSS
+    rintrojs::introjsUI(),
     dashboardPage(
       dashboardHeader(
         title = "CoDa Stereo v2.1",
