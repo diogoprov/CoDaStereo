@@ -16,6 +16,9 @@ run_app <- function(
     uiPattern = "/",
     ...
 ) {
+  # Serve inst/logo at "logo/" (the root app.R serves www/ instead)
+  logo_dir <- system.file("logo", package = "CoDaStereo")
+  if (nzchar(logo_dir)) addResourcePath("logo", logo_dir)
   golem::with_golem_options(
     app = shinyApp(
       ui = app_ui,
