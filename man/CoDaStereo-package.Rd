@@ -9,11 +9,11 @@
 Shiny application implementing the Aitchison geometry for stereological and histomorphometric data. Covers the full PPDAC cycle: data upload, zero/NA handling, compositional visualisation (ternary plots, clr-biplots), and permutational MANOVA with pairwise post-hoc tests. Developed as supplementary material for the Journal of Microscopy.
 }
 \author{
-\strong{Maintainer}: Diogo B. Provete \email{diogo.provete@ufms.br} (\href{https://orcid.org/0000-0002-1981-8865}{ORCID})
+\strong{Maintainer}: Diogo B. Provete \email{diogo.provete@ufms.br} (\href{https://orcid.org/0000-0002-0097-0651}{ORCID})
 
 Authors:
 \itemize{
-  \item Diogo B. Provete \email{diogo.provete@ufms.br} (\href{https://orcid.org/0000-0002-1981-8865}{ORCID})
+  \item Diogo B. Provete \email{diogo.provete@ufms.br} (\href{https://orcid.org/0000-0002-0097-0651}{ORCID})
 }
 
 }

@@ -8,7 +8,7 @@ app_ui <- function(request) {
     rintrojs::introjsUI(),
     dashboardPage(
       dashboardHeader(
-        title = "CoDa Stereo v2.1",
+        title = "CoDa Stereo v3.0",
         tags$li(class = "dropdown",
                 actionButton("tour_btn_header",
                              label = "\U0001f393 Tour",
