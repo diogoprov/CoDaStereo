@@ -55,5 +55,6 @@ app_server <- function(input, output, session) {
                    df        = data_r$df,
                    parts     = data_r$parts,
                    comp      = impute_r$comp,
-                   keep_rows = impute_r$keep_rows)
+                   keep_rows = impute_r$keep_rows,
+                   raw       = impute_r$raw)
 }

@@ -179,6 +179,36 @@ scale_palette <- function(name, n) {
 }
 
 # ==============================================================================
+# Composition + total (Pawlowsky-Glahn, Egozcue & Lovell 2015,
+# Statistical Modelling 15(2):175-190, doi:10.1177/1471082X14535526)
+# ==============================================================================
+
+#' Log-total coordinate to analyse jointly with the ilr coordinates
+#'
+#' "sum": ln of the sum of parts (product space Ts; recommended by the authors
+#' when the relevant total is the sum). "product": ln of prod(x)^(1/sqrt(D)) =
+#' sum(ln x) / sqrt(D) (space Tp), which makes [ilr, coordinate] isometric to
+#' the log of each part. For "product", zero-replaced parts are rescaled to the
+#' observed sum.
+#' @param raw Numeric matrix of parts on their original (absolute) scale.
+#' @param comp \code{acomp} of the same rows (zero-replaced).
+#' @noRd
+log_total_coord <- function(raw, comp, type = c("sum", "product")) {
+  type <- match.arg(type)
+  t_s  <- rowSums(raw)
+  if (type == "sum") return(log(t_s))
+  x_abs <- unclass(compositions::acomp(comp)) * t_s
+  rowSums(log(x_abs)) / sqrt(ncol(x_abs))
+}
+
+#' Coefficient of variation of the totals (flags totals fixed by design)
+#' @noRd
+total_cv <- function(raw) {
+  t_s <- rowSums(raw)
+  stats::sd(t_s) / mean(t_s)
+}
+
+# ==============================================================================
 # clr-PCA (basis of the compositional biplot)
 # ==============================================================================
 

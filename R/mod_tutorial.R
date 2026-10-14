@@ -110,6 +110,8 @@ build_tour_steps <- function() {
         "<br><br>",
         "Select one or more factors; toggle additive or factorial design.",
         "The formula is previewed before fitting.<br><br>",
+        "If parts are on an <b>absolute scale</b>, tick <em>Include the",
+        "total</em> to test composition and size jointly.<br><br>",
         "After fitting: run <b>pairwise post-hoc tests</b> and inspect",
         "<b>residual diagnostics</b>.",
         "All results are downloadable as CSV or PDF."

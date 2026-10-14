@@ -44,7 +44,7 @@ mod_imputation_ui <- function(id) {
 #' @noRd
 mod_imputation_server <- function(id, df, parts) {
   moduleServer(id, function(input, output, session) {
-    rv <- reactiveValues(comp = NULL, imputed = NULL, keep_rows = NULL,
+    rv <- reactiveValues(comp = NULL, imputed = NULL, raw = NULL, keep_rows = NULL,
                          method_used = NULL, na_action = NULL)
 
     observeEvent(input$run, {
@@ -77,6 +77,7 @@ mod_imputation_server <- function(id, df, parts) {
       }
       rv$keep_rows <- keep_rows
       rv$na_action <- na_action
+      rv$raw       <- mat  # after NA handling, before zero replacement
 
       if (!any(mat == 0, na.rm = TRUE)) {
         showNotification("No zeros detected. Using raw composition.", type = "message", duration = 6)
@@ -107,6 +108,7 @@ mod_imputation_server <- function(id, df, parts) {
     })
 
     list(comp = reactive(rv$comp), imputed = reactive(rv$imputed),
+         raw = reactive(rv$raw),
          keep_rows = reactive(rv$keep_rows), method_used = reactive(rv$method_used))
   })
 }
