@@ -1,6 +1,14 @@
 #' Run the CoDa Stereo Application
+#'
+#' @param onStart,options,enableBookmarking,uiPattern Passed to
+#'   [shiny::shinyApp()].
 #' @param ... Arguments passed to golem_opts.
+#' @return A Shiny app object.
 #' @export
+#' @examples
+#' if (interactive()) {
+#'   run_app()
+#' }
 run_app <- function(
     onStart = NULL,
     options = list(),

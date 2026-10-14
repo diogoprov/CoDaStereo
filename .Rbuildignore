@@ -9,3 +9,6 @@
 ^rsconnect$
 ^www$
 ^\.Rprofile$
+^\.DS_Store$
+^CoDaStereo_v3_plan\.md$
+^CLAUDE\.md$

@@ -24,7 +24,7 @@ library(zCompositions)
 library(RRPP)
 library(factoextra)
 library(FactoMineR)
-library(cicerone)         # guided tour
+library(rintrojs)         # guided tour
 
 # Source package code (order matters: helpers first, then modules, then app)
 source("R/fct_helpers.R",     local = TRUE)

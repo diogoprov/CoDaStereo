@@ -3,6 +3,7 @@
 # ==============================================================================
 
 #' Compute per-column detection limits
+#' @noRd
 compute_dl <- function(mat, frac = 0.5) {
   vec <- apply(mat, 2, function(x) {
     nz <- x[x > 0 & !is.na(x)]
@@ -16,11 +17,13 @@ compute_dl <- function(mat, frac = 0.5) {
 }
 
 #' Heuristic: does a column name look like an ID?
+#' @noRd
 is_id_name <- function(x) {
   grepl("^id$|_id$|^id_", x, ignore.case = TRUE)
 }
 
 #' Replace NAs with column geometric mean of positive values
+#' @noRd
 gmean_impute <- function(mat) {
   for (j in seq_len(ncol(mat))) {
     col <- mat[, j]
@@ -33,6 +36,7 @@ gmean_impute <- function(mat) {
 }
 
 #' Get non-numeric, non-part column names (factor candidates)
+#' @noRd
 factor_candidates <- function(df, parts) {
   setdiff(names(df)[!sapply(df, is.numeric)], parts)
 }
@@ -51,6 +55,7 @@ factor_candidates <- function(df, parts) {
 #' @param parts Character vector of selected part names.
 #' @return A list with \code{ok} (logical), \code{warnings} (character vector
 #'   of human-readable warnings), and \code{flagged} (names of flagged parts).
+#' @noRd
 preflight_check <- function(df, parts) {
   if (length(parts) < 2) {
     return(list(ok = FALSE,
@@ -110,6 +115,7 @@ preflight_check <- function(df, parts) {
 #' @param comp An \code{acomp} object.
 #' @param groups Factor vector of group labels (same length as nrow(comp)).
 #' @return A data frame in long format: Group, Part, Proportion.
+#' @noRd
 comp_center_by_group <- function(comp, groups) {
   lvls <- levels(as.factor(groups))
   out  <- lapply(lvls, function(g) {
@@ -130,6 +136,7 @@ comp_center_by_group <- function(comp, groups) {
 #' @param comp An \code{acomp} object.
 #' @param groups Factor vector of group labels.
 #' @return A data frame: Group, Total_Variance.
+#' @noRd
 comp_totvar_by_group <- function(comp, groups) {
   lvls <- levels(as.factor(groups))
   out  <- lapply(lvls, function(g) {
@@ -145,6 +152,7 @@ comp_totvar_by_group <- function(comp, groups) {
 # ==============================================================================
 
 #' Build a ternary plot using plain ggplot2
+#' @noRd
 plot_ternary_manual <- function(data, parts, group_var,
                                 amalg = NULL, base_size = 14) {
   h <- sqrt(3) / 2

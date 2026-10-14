@@ -46,7 +46,7 @@ build_tour_steps <- function() {
       ),
       # 3 Parts selector detail
       paste(
-        "<b>Parts selector — what to include</b><br><br>",
+        "<b>Parts selector &mdash; what to include</b><br><br>",
         "Select <em>only</em> columns that form a <b>closed composition</b>",
         "(volume fractions, area percentages, or cell counts",
         "summing to a constant).<br><br>",
@@ -58,11 +58,11 @@ build_tour_steps <- function() {
         "<b>2 &mdash; Data Inspection</b><br><br>",
         "Before any transformation, visualise:<br>",
         "<ul>",
-        "<li><b>Structural zeros</b> — rare tissue compartments</li>",
+        "<li><b>Structural zeros</b> &mdash; rare tissue compartments</li>",
         "<li><b>Missing values (NA)</b></li>",
         "</ul>",
         "The three-state heatmap distinguishes observed values, zeros,",
-        "and NAs — a critical distinction for choosing the right",
+        "and NAs &mdash; a critical distinction for choosing the right",
         "imputation method."
       ),
       # 5 Zero Handling

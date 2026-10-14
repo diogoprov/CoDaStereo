@@ -10,9 +10,10 @@ Description: Shiny application implementing the Aitchison geometry for
     clr-biplots), and permutational MANOVA with pairwise post-hoc tests.
     Developed as supplementary material for the Journal of Microscopy.
 License: MIT + file LICENSE
+Depends:
+    R (>= 4.1.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Imports:
     shiny (>= 1.7.0),
     shinydashboard,
@@ -29,7 +30,13 @@ Imports:
     factoextra,
     FactoMineR,
     rintrojs (>= 0.3.0),
-    golem (>= 0.4.0)
+    golem (>= 0.4.0),
+    rlang,
+    stats,
+    utils,
+    grDevices,
+    tools
 Suggests:
     pkgload,
     testthat (>= 3.0.0)
+Config/roxygen2/version: 8.1.1
