@@ -86,7 +86,9 @@ build_tour_steps <- function() {
         "<b>clr-PCA Biplot</b>: arrow length = variance; direction =",
         "log-ratio covariance between parts.<br><br>",
         "<b>Compositional descriptives</b>: geometric-mean composition",
-        "and total variance per group."
+        "and total variance per group.<br><br>",
+        "Use <b>Colour palette</b> to switch between high-contrast colour",
+        "schemes, including colour-blind-safe options."
       ),
       # 7 Statistical Modeling
       paste(

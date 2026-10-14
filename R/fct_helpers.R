@@ -120,7 +120,7 @@ comp_center_by_group <- function(comp, groups) {
   lvls <- levels(as.factor(groups))
   out  <- lapply(lvls, function(g) {
     sub <- comp[groups == g, ]
-    ctr <- compositions::mean.acomp(compositions::acomp(sub))
+    ctr <- compositions::mean.acomp(compositions::acomp(sub), robust = FALSE)
     data.frame(
       Group      = g,
       Part       = names(ctr),
@@ -141,10 +141,41 @@ comp_totvar_by_group <- function(comp, groups) {
   lvls <- levels(as.factor(groups))
   out  <- lapply(lvls, function(g) {
     sub <- comp[groups == g, ]
-    tv  <- compositions::mvar(compositions::acomp(sub))
+    tv  <- compositions::mvar(compositions::acomp(sub), robust = FALSE)
     data.frame(Group = g, Total_Variance = tv, stringsAsFactors = FALSE)
   })
   do.call(rbind, out)
+}
+
+# ==============================================================================
+# Colour palettes (shared by every group/part-coloured plot)
+# ==============================================================================
+
+#' Palettes offered in the UI (label = value)
+#' @noRd
+plot_palettes <- c("Okabe-Ito (colour-blind safe)" = "okabe_ito",
+                   "Dark2 (ColorBrewer)"           = "dark2",
+                   "Viridis"                       = "viridis")
+
+#' Resolve n colours from a named palette
+#'
+#' Discrete palettes are recycled when n exceeds their length.
+#' @noRd
+palette_colours <- function(name, n) {
+  switch(name,
+    okabe_ito = rep_len(c("#E69F00", "#56B4E9", "#009E73", "#F0E442",
+                          "#0072B2", "#D55E00", "#CC79A7", "#000000"), n),
+    dark2     = rep_len(scales::brewer_pal(palette = "Dark2")(8), n),
+    viridis   = scales::viridis_pal(end = 0.9)(n),
+    stop("Unknown palette: ", name)
+  )
+}
+
+#' ggplot2 colour + fill scale for a named palette
+#' @noRd
+scale_palette <- function(name, n) {
+  ggplot2::scale_colour_manual(values = palette_colours(name, n),
+                               aesthetics = c("colour", "fill"))
 }
 
 # ==============================================================================
@@ -154,7 +185,8 @@ comp_totvar_by_group <- function(comp, groups) {
 #' Build a ternary plot using plain ggplot2
 #' @noRd
 plot_ternary_manual <- function(data, parts, group_var,
-                                amalg = NULL, base_size = 14) {
+                                amalg = NULL, base_size = 14,
+                                palette = "okabe_ito") {
   h <- sqrt(3) / 2
   vL <- c(0, 0);  vT <- c(0.5, h);  vR <- c(1, 0)
 
@@ -228,6 +260,7 @@ plot_ternary_manual <- function(data, parts, group_var,
                       fontface = "bold", size = base_size / 3, hjust = 0.5) +
     ggplot2::annotate("text", x = vR[1], y = vR[2] - 0.08, label = labels[3],
                       fontface = "bold", size = base_size / 3, hjust = 0.5) +
+    scale_palette(palette, length(unique(pts$group))) +
     ggplot2::labs(colour = group_var, fill = group_var) +
     ggplot2::coord_fixed(clip = "off") +
     ggplot2::theme_void(base_size = base_size) +

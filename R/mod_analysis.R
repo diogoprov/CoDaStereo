@@ -10,6 +10,7 @@ mod_analysis_ui <- function(id) {
     fluidRow(
       box(title = "Ternary Plot", width = 6,
           uiOutput(ns("group_var_ui")),
+          selectInput(ns("palette"), "Colour palette:", choices = plot_palettes),
           hr(),
           radioButtons(ns("tern_mode"), "Ternary mode:",
                        choices = c("Select 3 parts" = "direct",
@@ -108,10 +109,12 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
       req(df(), input$group_var)
       if (input$tern_mode == "direct") {
         req(input$tern_vars, length(input$tern_vars) == 3)
-        plot_ternary_manual(df(), input$tern_vars, input$group_var)
+        plot_ternary_manual(df(), input$tern_vars, input$group_var,
+                            palette = input$palette)
       } else {
         req(amalg_list())
-        plot_ternary_manual(df(), parts = NULL, group_var = input$group_var, amalg = amalg_list())
+        plot_ternary_manual(df(), parts = NULL, group_var = input$group_var,
+                            amalg = amalg_list(), palette = input$palette)
       }
     })
 
@@ -131,6 +134,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
       factoextra::fviz_pca_biplot(
         res_pca, habillage = group_vec, addEllipses = TRUE,
         ellipse.type = "convex",
+        palette = palette_colours(input$palette, nlevels(group_vec)),
         label = "var", repel = TRUE,      # show only variable arrows, no sample numbers
         pointsize = 2.5,
         title = "Compositional Ray Biplot (clr-PCA)") +
@@ -156,7 +160,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
                                    fill = .data$Part)) +
         ggplot2::geom_col(position = "stack", width = 0.7) +
         ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
-        ggplot2::scale_fill_brewer(palette = "Set2") +
+        scale_palette(input$palette, length(unique(center_df$Part))) +
         ggplot2::labs(x = NULL, y = "Compositional center (closed %)", fill = "Part") +
         ggplot2::coord_flip() +
         ggplot2::theme_minimal(base_size = 14) +
@@ -177,7 +181,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
       ggplot2::ggplot(tv_df, ggplot2::aes(x = .data$Group, y = .data$Total_Variance,
                                            fill = .data$Group)) +
         ggplot2::geom_col(width = 0.6, show.legend = FALSE) +
-        ggplot2::scale_fill_brewer(palette = "Set1") +
+        scale_palette(input$palette, nrow(tv_df)) +
         ggplot2::labs(x = NULL, y = "Total metric variance (mvar)") +
         ggplot2::theme_minimal(base_size = 14)
     })
