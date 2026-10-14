@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="inst/logo/codastreo_logo.svg" width="250" alt="CoDa Stereo logo"/>
+  <img src="inst/logo/codastreo_logo.png" width="250" alt="CoDa Stereo logo"/>
 </p>
 
-# CoDa Stereo <img src="https://img.shields.io/badge/version-2.1.0-blue" alt="version"/> <img src="https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R" alt="R"/>
+# CoDa Stereo <img src="https://img.shields.io/badge/version-3.0.0-blue" alt="version"/> <img src="https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R" alt="R"/>
 
 <!-- badges: start -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
