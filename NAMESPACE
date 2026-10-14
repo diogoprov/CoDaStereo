@@ -3,7 +3,10 @@
 export(run_app)
 import(shiny)
 import(shinydashboard)
-importFrom(rlang,.data)
+importFrom(rlang,
+  "%||%",
+  .data
+)
 importFrom(stats,
   anova,
   complete.cases,

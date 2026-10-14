@@ -179,6 +179,104 @@ scale_palette <- function(name, n) {
 }
 
 # ==============================================================================
+# Sequential binary partition (SBP) and CoDa dendrogram
+# ==============================================================================
+
+#' Default SBP from Ward clustering of parts on clr distances
+#'
+#' @param comp An \code{acomp} object.
+#' @return Numeric matrix, (D-1) balances x D parts, entries in {-1, 0, 1};
+#'   b1 is the first (root) partition.
+#' @noRd
+sbp_auto <- function(comp) {
+  hc  <- stats::hclust(stats::dist(t(compositions::clr(comp))), method = "ward.D")
+  sig <- compositions::gsi.merge2signary(hc$merge)  # parts x balances, root last
+  sbp <- t(sig)[rev(seq_len(ncol(sig))), , drop = FALSE]
+  dimnames(sbp) <- list(paste0("b", seq_len(nrow(sbp))), colnames(comp))
+  sbp
+}
+
+#' Problems that make a matrix an invalid SBP (empty = valid)
+#' @noRd
+sbp_problems <- function(sbp) {
+  D <- ncol(sbp)
+  if (nrow(sbp) != D - 1) {
+    return(sprintf("%d parts need exactly %d balances.", D, D - 1))
+  }
+  one_sided <- rownames(sbp)[rowSums(sbp == 1) == 0 | rowSums(sbp == -1) == 0]
+  if (length(one_sided) > 0) {
+    return(sprintf("Balance %s needs at least one +1 and one -1 part.",
+                   one_sided))
+  }
+  out <- character(0)
+  if (sum(rowSums(sbp != 0) == D) != 1) {
+    out <- c(out, "Exactly one balance (the first split) must involve all parts.")
+  }
+  nested_in <- function(a, b) {  # support of row a lies on one side of row b
+    sa <- sbp[a, ] != 0
+    all(sbp[b, sa] == 1) || all(sbp[b, sa] == -1)
+  }
+  pairs <- utils::combn(nrow(sbp), 2, simplify = FALSE)
+  clash <- purrr::keep(pairs, \(ij) {
+    i <- ij[1]; j <- ij[2]
+    any(sbp[i, ] != 0 & sbp[j, ] != 0) && !nested_in(i, j) && !nested_in(j, i)
+  })
+  out <- c(out, purrr::map_chr(clash, \(ij) sprintf(
+    "Balances %s and %s are not nested: each balance must split one group of its parent.",
+    rownames(sbp)[ij[1]], rownames(sbp)[ij[2]])))
+  out
+}
+
+#' Human-readable balance definitions: numerator / denominator parts
+#' @noRd
+sbp_labels <- function(sbp) {
+  data.frame(
+    Balance     = rownames(sbp),
+    Numerator   = purrr::map_chr(seq_len(nrow(sbp)), \(i)
+                    paste(colnames(sbp)[sbp[i, ] == 1], collapse = ", ")),
+    Denominator = purrr::map_chr(seq_len(nrow(sbp)), \(i)
+                    paste(colnames(sbp)[sbp[i, ] == -1], collapse = ", ")),
+    stringsAsFactors = FALSE
+  )
+}
+
+#' CoDa dendrogram with per-group boxplots of each balance (base graphics)
+#'
+#' Vertical bar length = variance of the balance; its contact point with the
+#' horizontal axis = mean balance. Boxes show the balance distribution per group.
+#' @noRd
+plot_coda_dendrogram <- function(comp, sbp, groups, palette = "okabe_ito") {
+  # CoDaDendrogram reads getOption("robust"), set only when compositions is attached
+  op <- options(robust = getOption("robust", FALSE))
+  on.exit(options(op), add = TRUE)
+  x    <- compositions::acomp(comp)
+  sig  <- t(sbp)
+  bal  <- compositions::ilr(x, V = compositions::gsi.buildilrBase(sig))
+  lim  <- ceiling(max(abs(unclass(bal))))
+  grp  <- as.factor(groups)
+  k    <- nlevels(grp)
+  cols <- palette_colours(palette, k)
+  # box.space is relative to the smallest balance variance; scale it so each
+  # group box is ~4% of the tallest variance bar
+  vars  <- apply(unclass(bal), 2, stats::var)
+  space <- 0.04 * max(vars) / max(min(vars), .Machine$double.eps)
+
+  op_par <- graphics::par(mar = c(9, 4, 1, 1))
+  on.exit(graphics::par(op_par), add = TRUE)
+  compositions::CoDaDendrogram(X = x, signary = sig, type = "lines",
+                               range = c(-lim, lim))
+  graphics::title(ylab = "Balance variance")
+  xs <- split(x, grp)
+  for (i in seq_len(k)) {
+    compositions::CoDaDendrogram(X = xs[[i]], col = cols[i], border = cols[i],
+                                 type = "boxplot", box.pos = i - (k + 1) / 2,
+                                 box.space = space, add = TRUE)
+  }
+  graphics::legend("topright", legend = levels(grp), fill = cols, bty = "n")
+  invisible(NULL)
+}
+
+# ==============================================================================
 # Manual ternary plot (ggplot2 only — no ggtern dependency)
 # ==============================================================================
 

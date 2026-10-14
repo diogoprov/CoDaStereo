@@ -43,6 +43,13 @@ app_server <- function(input, output, session) {
                       comp      = impute_r$comp,
                       keep_rows = impute_r$keep_rows)
 
+  # -- Module: Balances (SBP + CoDa dendrogram) ------------------------------
+  mod_balances_server("balances",
+                      df        = data_r$df,
+                      parts     = data_r$parts,
+                      comp      = impute_r$comp,
+                      keep_rows = impute_r$keep_rows)
+
   # -- Module: Statistical Modeling ------------------------------------------
   mod_stats_server("stats",
                    df        = data_r$df,

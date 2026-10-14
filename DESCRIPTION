@@ -32,6 +32,8 @@ Imports:
     rintrojs (>= 0.3.0),
     golem (>= 0.4.0),
     rlang,
+    purrr,
+    graphics,
     stats,
     utils,
     grDevices,

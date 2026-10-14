@@ -22,6 +22,7 @@ app_ui <- function(request) {
           menuItem("Data Inspection", tabName = "inspect", icon = icon("magnifying-glass")),
           menuItem("Zero Handling", tabName = "zeros", icon = icon("eraser")),
           menuItem("Compositional Analysis", tabName = "analysis", icon = icon("chart-pie")),
+          menuItem("Balances (SBP)", tabName = "balances", icon = icon("sitemap")),
           menuItem("Statistical Modeling", tabName = "stats", icon = icon("microscope"))
         )
       ),
@@ -51,6 +52,9 @@ app_ui <- function(request) {
                     tags$li(strong("Compositional Analysis"), ": ternary plots ",
                             "(with optional amalgamation), clr-PCA biplots, and ",
                             "compositional descriptives per group."),
+                    tags$li(strong("Balances (SBP)"), ": define a sequential ",
+                            "binary partition (automatic or edited) and view ",
+                            "it as a CoDa dendrogram."),
                     tags$li(strong("Statistical Modeling"), ": permutational ",
                             "MANOVA, pairwise post-hoc comparisons, and ",
                             "residual diagnostics.")
@@ -65,6 +69,7 @@ app_ui <- function(request) {
           mod_data_inspect_ui("data"),
           mod_imputation_ui("imputation"),
           mod_analysis_ui("analysis"),
+          mod_balances_ui("balances"),
           mod_stats_ui("stats")
         )
       )

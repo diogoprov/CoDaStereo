@@ -22,6 +22,7 @@ build_tour_steps <- function() {
       "a[data-value='inspect']",             # 4 data inspection tab link
       "a[data-value='zeros']",               # 5 zero handling tab link
       "a[data-value='analysis']",            # 6 ternary + biplot tab link
+      "a[data-value='balances']",            # 6b SBP + CoDa dendrogram tab link
       "a[data-value='stats']",               # 7 MANOVA tab link
       "#tour_btn_header"                     # 8 done — point at tour button
     ),
@@ -90,9 +91,20 @@ build_tour_steps <- function() {
         "Use <b>Colour palette</b> to switch between high-contrast colour",
         "schemes, including colour-blind-safe options."
       ),
+      # 6b Balances
+      paste(
+        "<b>5 &mdash; Balances (SBP)</b><br><br>",
+        "A <b>sequential binary partition</b> splits the parts into nested",
+        "groups; each split defines one <b>balance</b> (an ilr coordinate).",
+        "<br><br>",
+        "The SBP is built automatically from the data, and you can edit",
+        "any cell (+1 / -1 / 0).<br><br>",
+        "The <b>CoDa dendrogram</b> shows each balance's variance (bar",
+        "height), mean, and per-group distribution."
+      ),
       # 7 Statistical Modeling
       paste(
-        "<b>5 &mdash; Statistical Modeling</b><br><br>",
+        "<b>6 &mdash; Statistical Modeling</b><br><br>",
         "Fits a permutational MANOVA on <b>ilr coordinates</b> via RRPP.",
         "<br><br>",
         "Select one or more factors; toggle additive or factorial design.",
@@ -118,6 +130,7 @@ build_tour_steps <- function() {
       "right",   # 4 inspect tab
       "right",   # 5 zeros tab
       "right",   # 6 analysis tab
+      "right",   # 6b balances tab
       "right",   # 7 stats tab
       "bottom"   # 8 tour button
     ),
