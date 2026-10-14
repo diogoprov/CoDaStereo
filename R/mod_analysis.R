@@ -36,7 +36,33 @@ mod_analysis_ui <- function(id) {
       ),
       box(title = "Compositional PCA (clr-Biplot)", width = 6,
           plotOutput(ns("biplot")),
-          downloadButton(ns("dl_biplot"), "Download PDF"))
+          downloadButton(ns("dl_biplot"), "Download PDF"),
+          tags$details(
+            style = "margin-top: 10px;",
+            tags$summary(strong("How to read this biplot")),
+            tags$ul(
+              tags$li(strong("Rays"), " (arrows) are the parts, as clr ",
+                      "variables. Ray length is proportional to the clr ",
+                      "standard deviation: longer rays are parts whose share ",
+                      "varies more relative to the geometric mean."),
+              tags$li(strong("Links"), " are the (imaginary) segments joining ",
+                      "two ray tips. Link length is proportional to the ",
+                      "standard deviation of the log-ratio of those two parts. ",
+                      "A short link means the two parts stay nearly ",
+                      "proportional across samples."),
+              tags$li("The cosine of the angle between two links approximates ",
+                      "the correlation between the two log-ratios; links at ",
+                      "right angles indicate uncorrelated log-ratios."),
+              tags$li("Do ", em("not"), " read the angle between two rays as a ",
+                      "correlation between the parts themselves."),
+              tags$li(strong("Points"), " are samples; points lying toward a ",
+                      "ray tend to have relatively more of that part. Polygons ",
+                      "are the convex hulls of each group."),
+              tags$li("All of this is a planar approximation: rely on it only ",
+                      "when the two axes explain a large share of the total ",
+                      "variance (shown in the axis titles).")
+            )
+          ))
     ),
     # -- Compositional Descriptives -------------------------------------------
     fluidRow(
@@ -128,8 +154,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
     # -- Biplot ----------------------------------------------------------------
     biplot_obj <- reactive({
       req(comp(), input$group_var, keep_rows())
-      clr_data  <- as.data.frame(unclass(compositions::clr(comp())))
-      res_pca   <- FactoMineR::PCA(clr_data, graph = FALSE)
+      res_pca   <- clr_pca(comp())
       group_vec <- as.factor(df()[[input$group_var]][keep_rows()])
       factoextra::fviz_pca_biplot(
         res_pca, habillage = group_vec, addEllipses = TRUE,

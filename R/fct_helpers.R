@@ -179,6 +179,23 @@ scale_palette <- function(name, n) {
 }
 
 # ==============================================================================
+# clr-PCA (basis of the compositional biplot)
+# ==============================================================================
+
+#' PCA of centred, unscaled clr coordinates
+#'
+#' clr variables must not be standardised: with unit variance every ray has the
+#' same length and links no longer approximate log-ratio standard deviations.
+#' @param comp An \code{acomp} object.
+#' @return A FactoMineR \code{PCA} object.
+#' @noRd
+clr_pca <- function(comp) {
+  clr_data <- as.data.frame(unclass(compositions::clr(comp)))
+  FactoMineR::PCA(clr_data, scale.unit = FALSE, ncp = ncol(clr_data),
+                  graph = FALSE)
+}
+
+# ==============================================================================
 # Sequential binary partition (SBP) and CoDa dendrogram
 # ==============================================================================
 
