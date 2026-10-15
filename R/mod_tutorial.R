@@ -22,6 +22,7 @@ build_tour_steps <- function() {
       "a[data-value='inspect']",             # 4 data inspection tab link
       "a[data-value='zeros']",               # 5 zero handling tab link
       "a[data-value='analysis']",            # 6 ternary + biplot tab link
+      "a[data-value='balances']",            # 6b SBP + CoDa dendrogram tab link
       "a[data-value='stats']",               # 7 MANOVA tab link
       "#tour_btn_header"                     # 8 done — point at tour button
     ),
@@ -46,7 +47,7 @@ build_tour_steps <- function() {
       ),
       # 3 Parts selector detail
       paste(
-        "<b>Parts selector — what to include</b><br><br>",
+        "<b>Parts selector &mdash; what to include</b><br><br>",
         "Select <em>only</em> columns that form a <b>closed composition</b>",
         "(volume fractions, area percentages, or cell counts",
         "summing to a constant).<br><br>",
@@ -58,11 +59,11 @@ build_tour_steps <- function() {
         "<b>2 &mdash; Data Inspection</b><br><br>",
         "Before any transformation, visualise:<br>",
         "<ul>",
-        "<li><b>Structural zeros</b> — rare tissue compartments</li>",
+        "<li><b>Structural zeros</b> &mdash; rare tissue compartments</li>",
         "<li><b>Missing values (NA)</b></li>",
         "</ul>",
         "The three-state heatmap distinguishes observed values, zeros,",
-        "and NAs — a critical distinction for choosing the right",
+        "and NAs &mdash; a critical distinction for choosing the right",
         "imputation method."
       ),
       # 5 Zero Handling
@@ -83,18 +84,34 @@ build_tour_steps <- function() {
         "<b>Ternary plot</b>: visualise 3 parts in the simplex.",
         "Use <em>Amalgamate</em> if D &gt; 3.",
         "Convex hulls delimit each group's territory.<br><br>",
-        "<b>clr-PCA Biplot</b>: arrow length = variance; direction =",
-        "log-ratio covariance between parts.<br><br>",
+        "<b>clr-PCA Biplot</b>: ray length ~ clr standard deviation;",
+        "the distance between two ray tips ~ standard deviation of their",
+        "log-ratio. Open <em>How to read this biplot</em> for details.<br><br>",
         "<b>Compositional descriptives</b>: geometric-mean composition",
-        "and total variance per group."
+        "and total variance per group.<br><br>",
+        "Use <b>Colour palette</b> to switch between high-contrast colour",
+        "schemes, including colour-blind-safe options."
+      ),
+      # 6b Balances
+      paste(
+        "<b>5 &mdash; Balances (SBP)</b><br><br>",
+        "A <b>sequential binary partition</b> splits the parts into nested",
+        "groups; each split defines one <b>balance</b> (an ilr coordinate).",
+        "<br><br>",
+        "The SBP is built automatically from the data, and you can edit",
+        "any cell (+1 / -1 / 0).<br><br>",
+        "The <b>CoDa dendrogram</b> shows each balance's variance (bar",
+        "height), mean, and per-group distribution."
       ),
       # 7 Statistical Modeling
       paste(
-        "<b>5 &mdash; Statistical Modeling</b><br><br>",
+        "<b>6 &mdash; Statistical Modeling</b><br><br>",
         "Fits a permutational MANOVA on <b>ilr coordinates</b> via RRPP.",
         "<br><br>",
         "Select one or more factors; toggle additive or factorial design.",
         "The formula is previewed before fitting.<br><br>",
+        "If parts are on an <b>absolute scale</b>, tick <em>Include the",
+        "total</em> to test composition and size jointly.<br><br>",
         "After fitting: run <b>pairwise post-hoc tests</b> and inspect",
         "<b>residual diagnostics</b>.",
         "All results are downloadable as CSV or PDF."
@@ -116,6 +133,7 @@ build_tour_steps <- function() {
       "right",   # 4 inspect tab
       "right",   # 5 zeros tab
       "right",   # 6 analysis tab
+      "right",   # 6b balances tab
       "right",   # 7 stats tab
       "bottom"   # 8 tour button
     ),

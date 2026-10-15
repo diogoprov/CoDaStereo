@@ -3,6 +3,7 @@
 # ==============================================================================
 
 #' Compute per-column detection limits
+#' @noRd
 compute_dl <- function(mat, frac = 0.5) {
   vec <- apply(mat, 2, function(x) {
     nz <- x[x > 0 & !is.na(x)]
@@ -16,11 +17,13 @@ compute_dl <- function(mat, frac = 0.5) {
 }
 
 #' Heuristic: does a column name look like an ID?
+#' @noRd
 is_id_name <- function(x) {
   grepl("^id$|_id$|^id_", x, ignore.case = TRUE)
 }
 
 #' Replace NAs with column geometric mean of positive values
+#' @noRd
 gmean_impute <- function(mat) {
   for (j in seq_len(ncol(mat))) {
     col <- mat[, j]
@@ -33,6 +36,7 @@ gmean_impute <- function(mat) {
 }
 
 #' Get non-numeric, non-part column names (factor candidates)
+#' @noRd
 factor_candidates <- function(df, parts) {
   setdiff(names(df)[!sapply(df, is.numeric)], parts)
 }
@@ -51,6 +55,7 @@ factor_candidates <- function(df, parts) {
 #' @param parts Character vector of selected part names.
 #' @return A list with \code{ok} (logical), \code{warnings} (character vector
 #'   of human-readable warnings), and \code{flagged} (names of flagged parts).
+#' @noRd
 preflight_check <- function(df, parts) {
   if (length(parts) < 2) {
     return(list(ok = FALSE,
@@ -110,11 +115,12 @@ preflight_check <- function(df, parts) {
 #' @param comp An \code{acomp} object.
 #' @param groups Factor vector of group labels (same length as nrow(comp)).
 #' @return A data frame in long format: Group, Part, Proportion.
+#' @noRd
 comp_center_by_group <- function(comp, groups) {
   lvls <- levels(as.factor(groups))
   out  <- lapply(lvls, function(g) {
     sub <- comp[groups == g, ]
-    ctr <- compositions::mean.acomp(compositions::acomp(sub))
+    ctr <- compositions::mean.acomp(compositions::acomp(sub), robust = FALSE)
     data.frame(
       Group      = g,
       Part       = names(ctr),
@@ -130,14 +136,191 @@ comp_center_by_group <- function(comp, groups) {
 #' @param comp An \code{acomp} object.
 #' @param groups Factor vector of group labels.
 #' @return A data frame: Group, Total_Variance.
+#' @noRd
 comp_totvar_by_group <- function(comp, groups) {
   lvls <- levels(as.factor(groups))
   out  <- lapply(lvls, function(g) {
     sub <- comp[groups == g, ]
-    tv  <- compositions::mvar(compositions::acomp(sub))
+    tv  <- compositions::mvar(compositions::acomp(sub), robust = FALSE)
     data.frame(Group = g, Total_Variance = tv, stringsAsFactors = FALSE)
   })
   do.call(rbind, out)
+}
+
+# ==============================================================================
+# Colour palettes (shared by every group/part-coloured plot)
+# ==============================================================================
+
+#' Palettes offered in the UI (label = value)
+#' @noRd
+plot_palettes <- c("Okabe-Ito (colour-blind safe)" = "okabe_ito",
+                   "Dark2 (ColorBrewer)"           = "dark2",
+                   "Viridis"                       = "viridis")
+
+#' Resolve n colours from a named palette
+#'
+#' Discrete palettes are recycled when n exceeds their length.
+#' @noRd
+palette_colours <- function(name, n) {
+  switch(name,
+    okabe_ito = rep_len(c("#E69F00", "#56B4E9", "#009E73", "#F0E442",
+                          "#0072B2", "#D55E00", "#CC79A7", "#000000"), n),
+    dark2     = rep_len(scales::brewer_pal(palette = "Dark2")(8), n),
+    viridis   = scales::viridis_pal(end = 0.9)(n),
+    stop("Unknown palette: ", name)
+  )
+}
+
+#' ggplot2 colour + fill scale for a named palette
+#' @noRd
+scale_palette <- function(name, n) {
+  ggplot2::scale_colour_manual(values = palette_colours(name, n),
+                               aesthetics = c("colour", "fill"))
+}
+
+# ==============================================================================
+# Composition + total (Pawlowsky-Glahn, Egozcue & Lovell 2015,
+# Statistical Modelling 15(2):175-190, doi:10.1177/1471082X14535526)
+# ==============================================================================
+
+#' Log-total coordinate to analyse jointly with the ilr coordinates
+#'
+#' "sum": ln of the sum of parts (product space Ts; recommended by the authors
+#' when the relevant total is the sum). "product": ln of prod(x)^(1/sqrt(D)) =
+#' sum(ln x) / sqrt(D) (space Tp), which makes [ilr, coordinate] isometric to
+#' the log of each part. For "product", zero-replaced parts are rescaled to the
+#' observed sum.
+#' @param raw Numeric matrix of parts on their original (absolute) scale.
+#' @param comp \code{acomp} of the same rows (zero-replaced).
+#' @noRd
+log_total_coord <- function(raw, comp, type = c("sum", "product")) {
+  type <- match.arg(type)
+  t_s  <- rowSums(raw)
+  if (type == "sum") return(log(t_s))
+  x_abs <- unclass(compositions::acomp(comp)) * t_s
+  rowSums(log(x_abs)) / sqrt(ncol(x_abs))
+}
+
+#' Coefficient of variation of the totals (flags totals fixed by design)
+#' @noRd
+total_cv <- function(raw) {
+  t_s <- rowSums(raw)
+  stats::sd(t_s) / mean(t_s)
+}
+
+# ==============================================================================
+# clr-PCA (basis of the compositional biplot)
+# ==============================================================================
+
+#' PCA of centred, unscaled clr coordinates
+#'
+#' clr variables must not be standardised: with unit variance every ray has the
+#' same length and links no longer approximate log-ratio standard deviations.
+#' @param comp An \code{acomp} object.
+#' @return A FactoMineR \code{PCA} object.
+#' @noRd
+clr_pca <- function(comp) {
+  clr_data <- as.data.frame(unclass(compositions::clr(comp)))
+  FactoMineR::PCA(clr_data, scale.unit = FALSE, ncp = ncol(clr_data),
+                  graph = FALSE)
+}
+
+# ==============================================================================
+# Sequential binary partition (SBP) and CoDa dendrogram
+# ==============================================================================
+
+#' Default SBP from Ward clustering of parts on clr distances
+#'
+#' @param comp An \code{acomp} object.
+#' @return Numeric matrix, (D-1) balances x D parts, entries in {-1, 0, 1};
+#'   b1 is the first (root) partition.
+#' @noRd
+sbp_auto <- function(comp) {
+  hc  <- stats::hclust(stats::dist(t(compositions::clr(comp))), method = "ward.D")
+  sig <- compositions::gsi.merge2signary(hc$merge)  # parts x balances, root last
+  sbp <- t(sig)[rev(seq_len(ncol(sig))), , drop = FALSE]
+  dimnames(sbp) <- list(paste0("b", seq_len(nrow(sbp))), colnames(comp))
+  sbp
+}
+
+#' Problems that make a matrix an invalid SBP (empty = valid)
+#' @noRd
+sbp_problems <- function(sbp) {
+  D <- ncol(sbp)
+  if (nrow(sbp) != D - 1) {
+    return(sprintf("%d parts need exactly %d balances.", D, D - 1))
+  }
+  one_sided <- rownames(sbp)[rowSums(sbp == 1) == 0 | rowSums(sbp == -1) == 0]
+  if (length(one_sided) > 0) {
+    return(sprintf("Balance %s needs at least one +1 and one -1 part.",
+                   one_sided))
+  }
+  out <- character(0)
+  if (sum(rowSums(sbp != 0) == D) != 1) {
+    out <- c(out, "Exactly one balance (the first split) must involve all parts.")
+  }
+  nested_in <- function(a, b) {  # support of row a lies on one side of row b
+    sa <- sbp[a, ] != 0
+    all(sbp[b, sa] == 1) || all(sbp[b, sa] == -1)
+  }
+  pairs <- utils::combn(nrow(sbp), 2, simplify = FALSE)
+  clash <- purrr::keep(pairs, \(ij) {
+    i <- ij[1]; j <- ij[2]
+    any(sbp[i, ] != 0 & sbp[j, ] != 0) && !nested_in(i, j) && !nested_in(j, i)
+  })
+  out <- c(out, purrr::map_chr(clash, \(ij) sprintf(
+    "Balances %s and %s are not nested: each balance must split one group of its parent.",
+    rownames(sbp)[ij[1]], rownames(sbp)[ij[2]])))
+  out
+}
+
+#' Human-readable balance definitions: numerator / denominator parts
+#' @noRd
+sbp_labels <- function(sbp) {
+  data.frame(
+    Balance     = rownames(sbp),
+    Numerator   = purrr::map_chr(seq_len(nrow(sbp)), \(i)
+                    paste(colnames(sbp)[sbp[i, ] == 1], collapse = ", ")),
+    Denominator = purrr::map_chr(seq_len(nrow(sbp)), \(i)
+                    paste(colnames(sbp)[sbp[i, ] == -1], collapse = ", ")),
+    stringsAsFactors = FALSE
+  )
+}
+
+#' CoDa dendrogram with per-group boxplots of each balance (base graphics)
+#'
+#' Vertical bar length = variance of the balance; its contact point with the
+#' horizontal axis = mean balance. Boxes show the balance distribution per group.
+#' @noRd
+plot_coda_dendrogram <- function(comp, sbp, groups, palette = "okabe_ito") {
+  # CoDaDendrogram reads getOption("robust"), set only when compositions is attached
+  op <- options(robust = getOption("robust", FALSE))
+  on.exit(options(op), add = TRUE)
+  x    <- compositions::acomp(comp)
+  sig  <- t(sbp)
+  bal  <- compositions::ilr(x, V = compositions::gsi.buildilrBase(sig))
+  lim  <- ceiling(max(abs(unclass(bal))))
+  grp  <- as.factor(groups)
+  k    <- nlevels(grp)
+  cols <- palette_colours(palette, k)
+  # box.space is relative to the smallest balance variance; scale it so each
+  # group box is ~4% of the tallest variance bar
+  vars  <- apply(unclass(bal), 2, stats::var)
+  space <- 0.04 * max(vars) / max(min(vars), .Machine$double.eps)
+
+  op_par <- graphics::par(mar = c(9, 4, 1, 1))
+  on.exit(graphics::par(op_par), add = TRUE)
+  compositions::CoDaDendrogram(X = x, signary = sig, type = "lines",
+                               range = c(-lim, lim))
+  graphics::title(ylab = "Balance variance")
+  xs <- split(x, grp)
+  for (i in seq_len(k)) {
+    compositions::CoDaDendrogram(X = xs[[i]], col = cols[i], border = cols[i],
+                                 type = "boxplot", box.pos = i - (k + 1) / 2,
+                                 box.space = space, add = TRUE)
+  }
+  graphics::legend("topright", legend = levels(grp), fill = cols, bty = "n")
+  invisible(NULL)
 }
 
 # ==============================================================================
@@ -145,8 +328,10 @@ comp_totvar_by_group <- function(comp, groups) {
 # ==============================================================================
 
 #' Build a ternary plot using plain ggplot2
+#' @noRd
 plot_ternary_manual <- function(data, parts, group_var,
-                                amalg = NULL, base_size = 14) {
+                                amalg = NULL, base_size = 14,
+                                palette = "okabe_ito") {
   h <- sqrt(3) / 2
   vL <- c(0, 0);  vT <- c(0.5, h);  vR <- c(1, 0)
 
@@ -220,6 +405,7 @@ plot_ternary_manual <- function(data, parts, group_var,
                       fontface = "bold", size = base_size / 3, hjust = 0.5) +
     ggplot2::annotate("text", x = vR[1], y = vR[2] - 0.08, label = labels[3],
                       fontface = "bold", size = base_size / 3, hjust = 0.5) +
+    scale_palette(palette, length(unique(pts$group))) +
     ggplot2::labs(colour = group_var, fill = group_var) +
     ggplot2::coord_fixed(clip = "off") +
     ggplot2::theme_void(base_size = base_size) +

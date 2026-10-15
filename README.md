@@ -1,22 +1,25 @@
 <p align="center">
-  <img src="inst/logo/codastreo_logo.svg" width="250" alt="CoDa Stereo logo"/>
+  <img src="man/figures/logo.png" width="250" alt="CoDa Stereo logo"/>
 </p>
 
-# CoDa Stereo <img src="https://img.shields.io/badge/version-2.1.0-blue" alt="version"/> <img src="https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R" alt="R"/>
+# CoDa Stereo <img src="https://img.shields.io/badge/version-3.0.0-blue" alt="version"/> <img src="https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R" alt="R"/>
 
 <!-- badges: start -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
-> **Compositional Data Analysis for Stereological and Hematological Data**
+> **Compositional Data Analysis for Stereological, Histomorphometric and Blood-Cell Data**
 >
 > A Shiny application implementing the Aitchison geometry for the full
-> Data analysis cycle: data upload, zero/NA handling, compositional
-> visualisation, and permutational MANOVA with post-hoc tests.
+> data analysis cycle: data upload, zero/NA handling, compositional
+> visualisation, balances, and permutational MANOVA with post-hoc tests.
 >
-> Developed as supplementary material for:
-> Provete, D.B. et al. (2026). *A Practical Guide to Compositional Data Analysis in Tissue Stereology and Blood Cell Profile*. **Cell and Tissue Research**, *xx*(x), xx–xx.
-> doi: [10.xxxx/jmi.xxxxx](https://doi.org/)
+> Developed alongside:
+> Provete, D.B., Severgnini, M.R., Fernandes, C.E. & Franco-Belussi, L.
+> *A Practical Guide to using Compositional Data Analysis in Tissue Stereology
+> and Blood Cell Profile*. **Physiological Reports** (in review).
+
+See [NEWS.md](NEWS.md) for the changes in each version.
 
 ---
 
@@ -27,9 +30,10 @@
 | **Data Upload** | CSV and Excel (.xlsx/.xls) with sheet selector; smart parts selector that auto-excludes ID columns |
 | **Data Inspection** | Zero/NA heatmap (observed vs. structural zero vs. missing); `naniar::vis_miss` plot; counts per part |
 | **Zero Handling** | Three methods via `zCompositions`: CZM (count zeros), multRepl (rounded zeros), lrEM (rounded zeros); NA handling via listwise deletion or geometric-mean imputation |
-| **Compositional Analysis** | Manual ternary plot (pure ggplot2, no ggtern dependency); amalgamation of D > 3 parts into 3 groups; clr-PCA biplot via `FactoMineR` + `factoextra` |
-| **Statistical Modeling** | Factorial permutational MANOVA via `RRPP::lm.rrpp`; pairwise post-hoc via `RRPP::pairwise`; residual diagnostics; formula preview before fitting |
-| **Downloads** | Ternary and biplot as PDF; imputed data as CSV; ANOVA and pairwise tables as CSV |
+| **Compositional Analysis** | Manual ternary plot (pure ggplot2, no ggtern dependency); amalgamation of D > 3 parts into 3 groups; clr-PCA biplot on unscaled clr coordinates with a "how to read" note; compositional centre and total variance per group; selectable colour palettes (Okabe-Ito, Dark2, viridis) |
+| **Balances (SBP)** | Automatic sequential binary partition (Ward clustering on clr distances), editable cell by cell with on-the-fly validation; balance definitions table; CoDa dendrogram with per-group boxplots |
+| **Statistical Modeling** | Factorial permutational MANOVA via `RRPP::lm.rrpp`; optional log-total as an extra coordinate (composition + total; Pawlowsky-Glahn, Egozcue & Lovell 2015) with a warning when totals are fixed by design; pairwise post-hoc via `RRPP::pairwise`; residual diagnostics; formula preview before fitting |
+| **Downloads** | Ternary, biplot and CoDa dendrogram as PDF; imputed data, SBP, ANOVA and pairwise tables as CSV |
 
 ## Installation
 
@@ -55,9 +59,10 @@ run_app()
 
 ### Dependencies
 
-CoDaStereo depends on: `shiny`, `shinydashboard`, `dplyr`, `tidyr`,
-`tibble`, `ggplot2`, `readxl`, `naniar`, `compositions`,
-`zCompositions`, `RRPP`, `factoextra`, `FactoMineR`, `golem`.
+CoDaStereo depends on: `shiny`, `shinydashboard`, `rintrojs`, `dplyr`,
+`tidyr`, `tibble`, `purrr`, `ggplot2`, `scales`, `readxl`, `naniar`,
+`compositions`, `zCompositions`, `RRPP`, `factoextra`, `FactoMineR`,
+`golem`, `rlang`.
 
 All are available on CRAN.
 
@@ -78,7 +83,10 @@ directly from a public GitHub repository with automatic push-to-publish.
 
    ```r
    # install.packages("rsconnect")
-   rsconnect::writeManifest(appDir = ".", appPrimaryDoc = "app.R")
+   # list only the files the deployed app needs
+   f <- system("git ls-files", intern = TRUE)
+   f <- f[grepl("^(app[.]R|DESCRIPTION|NAMESPACE|LICENSE|R/|www/|inst/)", f)]
+   rsconnect::writeManifest(appDir = ".", appFiles = f, appPrimaryDoc = "app.R")
    ```
 
    Commit and push the generated `manifest.json`.
@@ -114,24 +122,25 @@ rsconnect::deployApp(appDir = ".", appName = "CoDaStereo")
 
 ```
 CoDaStereo/
-├── app.R                        # Entry point for Connect Cloud
-├── DESCRIPTION                  # R package metadata
-├── NAMESPACE
-├── LICENSE
-├── manifest.json                # Generated by rsconnect::writeManifest()
+├── app.R                  # Entry point for Posit Connect Cloud
+├── DESCRIPTION, NAMESPACE, LICENSE, NEWS.md
+├── manifest.json          # Generated by rsconnect::writeManifest()
 ├── R/
-│   ├── run_app.R          (23)  # golem entry: run_app()
-│   ├── app_ui.R           (56)  # Dashboard layout (assembles modules)
-│   ├── app_server.R       (34)  # Wires module reactives
-│   ├── fct_helpers.R     (156)  # compute_dl, gmean_impute, plot_ternary_manual
-│   ├── mod_data.R        (216)  # Upload + parts selector + inspection
-│   ├── mod_imputation.R  (140)  # Zero/NA imputation
-│   ├── mod_analysis.R    (164)  # Ternary + biplot + downloads
-│   └── mod_stats.R       (170)  # MANOVA + pairwise + diagnostics
-├── inst/golem-config.yml
-├── dev/run_dev.R                # Development entry point
-└── .github/workflows/
-    └── R-CMD-check.yaml         # CI: R CMD check on 3 OSes
+│   ├── run_app.R          # golem entry point: run_app()
+│   ├── app_ui.R           # Dashboard layout (assembles modules)
+│   ├── app_server.R       # Wires module reactives
+│   ├── fct_helpers.R      # Helpers: zeros, ternary plot, palettes, SBP, total, clr-PCA
+│   ├── mod_data.R         # Upload, parts selector, inspection
+│   ├── mod_imputation.R   # Zero/NA imputation
+│   ├── mod_analysis.R     # Ternary, biplot, descriptives
+│   ├── mod_balances.R     # SBP editor and CoDa dendrogram
+│   ├── mod_stats.R        # MANOVA (with optional total), pairwise, diagnostics
+│   └── mod_tutorial.R     # Guided tour (rintrojs)
+├── tests/testthat/        # Unit and module tests
+├── vignettes/             # Getting started
+├── inst/logo/             # Hex sticker (SVG, PNG)
+├── dev/                   # Development scripts (run_dev.R, make_sticker.py)
+└── .github/workflows/     # R CMD check on Linux, macOS and Windows
 ```
 
 ## How to cite
@@ -141,11 +150,11 @@ the software:
 
 ```bibtex
 @article{provete2026codastreo,
-  author  = {Provete, Diogo B.},
-  title   = {A Practical Guide to Compositional Data Analysis in Tissue Stereology and Blood Cell Profile},
-  journal = {Cell and Tissue Research},
+  author  = {Provete, Diogo B. and Severgnini, Marcos R. and Fernandes, Carlos E. and Franco-Belussi, Lilian},
+  title   = {A Practical Guide to using Compositional Data Analysis in Tissue Stereology and Blood Cell Profile},
+  journal = {Physiological Reports},
   year    = {2026},
-  doi     = {10.xxxx/jmi.xxxxx}
+  note    = {In review}
 }
 
 @software{provete2026codastreo_app,
@@ -153,7 +162,8 @@ the software:
   title   = {{CoDa Stereo}: Compositional Data Analysis for Stereological Data},
   year    = {2026},
   url     = {https://github.com/diogoprov/CoDaStereo},
-  version = {2.0.0}
+  doi     = {10.5281/zenodo.19928374},
+  version = {3.0.0}
 }
 ```
 
@@ -161,7 +171,7 @@ the software:
 
 Bug reports and feature requests are welcome via
 [GitHub Issues](https://github.com/diogoprov/CoDaStereo/issues).
-Pull requests should target the `dev` branch.
+Pull requests are welcome.
 
 ## License
 

@@ -24,7 +24,7 @@ library(zCompositions)
 library(RRPP)
 library(factoextra)
 library(FactoMineR)
-library(cicerone)         # guided tour
+library(rintrojs)         # guided tour
 
 # Source package code (order matters: helpers first, then modules, then app)
 source("R/fct_helpers.R",     local = TRUE)
@@ -32,6 +32,7 @@ source("R/mod_tutorial.R",    local = TRUE)
 source("R/mod_data.R",        local = TRUE)
 source("R/mod_imputation.R",  local = TRUE)
 source("R/mod_analysis.R",    local = TRUE)
+source("R/mod_balances.R",    local = TRUE)
 source("R/mod_stats.R",       local = TRUE)
 source("R/app_ui.R",          local = TRUE)
 source("R/app_server.R",      local = TRUE)
