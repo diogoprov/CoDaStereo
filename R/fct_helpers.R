@@ -310,10 +310,14 @@ total_cv <- function(raw) {
 #' clr variables must not be standardised: with unit variance every ray has the
 #' same length and links no longer approximate log-ratio standard deviations.
 #' @param comp An \code{acomp} object.
+#' @param log_total Optional log-total coordinate (see `log_total_coord()`),
+#'   added as a variable for the T-space biplot of Pawlowsky-Glahn et al. (2015).
 #' @return A FactoMineR \code{PCA} object.
 #' @noRd
-clr_pca <- function(comp) {
+clr_pca <- function(comp, log_total = NULL) {
   clr_data <- as.data.frame(unclass(compositions::clr(comp)))
+  # T-space biplot: the (centred) log-total enters as one more variable
+  if (!is.null(log_total)) clr_data$log_total <- log_total
   FactoMineR::PCA(clr_data, scale.unit = FALSE, ncp = ncol(clr_data),
                   graph = FALSE)
 }
@@ -424,28 +428,38 @@ plot_coda_dendrogram <- function(comp, sbp, groups, palette = "okabe_ito") {
 #' @noRd
 plot_ternary_manual <- function(data, parts, group_var,
                                 amalg = NULL, base_size = 14,
-                                palette = "okabe_ito") {
+                                palette = "okabe_ito", regions = "hull",
+                                centre = FALSE, ids = NULL, interactive = FALSE,
+                                region_data = NULL) {
   h <- sqrt(3) / 2
   vL <- c(0, 0);  vT <- c(0.5, h);  vR <- c(1, 0)
 
-  if (!is.null(amalg) && length(amalg) == 3) {
-    L  <- rowSums(data[, amalg[[1]], drop = FALSE])
-    Tp <- rowSums(data[, amalg[[2]], drop = FALSE])
-    R  <- rowSums(data[, amalg[[3]], drop = FALSE])
-    labels <- names(amalg)
-  } else {
-    L  <- data[[parts[1]]]
-    Tp <- data[[parts[2]]]
-    R  <- data[[parts[3]]]
-    labels <- parts
+  three_parts <- function(d) {
+    if (!is.null(amalg) && length(amalg) == 3) {
+      purrr::map(amalg, \(p) rowSums(d[, p, drop = FALSE]))
+    } else {
+      purrr::map(parts[1:3], \(p) d[[p]])
+    }
   }
+  abc <- three_parts(data)
+  L <- abc[[1]]; Tp <- abc[[2]]; R <- abc[[3]]
+  labels <- if (!is.null(amalg) && length(amalg) == 3) names(amalg) else parts
   S <- L + Tp + R
 
-  pts <- data.frame(
-    xc    = (R / S) + 0.5 * (Tp / S),
-    yc    = (Tp / S) * h,
-    group = data[[group_var]]
-  )
+  to_xy <- function(l, t, r) {
+    s <- l + t + r
+    data.frame(xc = (r / s) + 0.5 * (t / s), yc = (t / s) * h)
+  }
+  pts <- data.frame(to_xy(L, Tp, R), group = data[[group_var]],
+                    id = ids %||% as.character(seq_len(length(L))))
+  pts$group <- as.factor(pts$group)
+  # Regions and centres are log-ratio summaries: use the zero-replaced data
+  # (region_data, same columns plus group_var) when given, else positive rows
+  rd   <- region_data %||% data
+  rabc <- three_parts(rd)
+  rL <- rabc[[1]]; rT <- rabc[[2]]; rR <- rabc[[3]]
+  lr_ok   <- rL > 0 & rT > 0 & rR > 0 & !is.na(rL + rT + rR)
+  grp_idx <- split(which(lr_ok), as.factor(rd[[group_var]])[lr_ok])
 
   tri <- data.frame(x = c(vL[1], vR[1], vT[1], vL[1]),
                     y = c(vL[2], vR[2], vT[2], vL[2]))
@@ -471,11 +485,25 @@ plot_ternary_manual <- function(data, parts, group_var,
     data.frame(x = 0.5 + 0.5 * fracs + off, y = (1 - fracs) * h, label = pct, hj = 0,   vj = 0.5)
   )
 
-  # -- Convex hulls per group -------------------------------------------------
-  hulls <- do.call(rbind, lapply(split(pts, pts$group), function(sub) {
-    if (nrow(sub) < 3) return(sub)  # need ≥3 points for a hull
-    sub[grDevices::chull(sub$xc, sub$yc), ]
-  }))
+  # -- Group regions: convex hulls or 95% ellipses (ilr normal model) ----------
+  hulls <- if (regions == "hull") {
+    do.call(rbind, lapply(split(pts, pts$group), function(sub) {
+      if (nrow(sub) < 3) return(sub)  # need >= 3 points for a hull
+      sub[grDevices::chull(sub$xc, sub$yc), ]
+    }))
+  } else if (regions %in% c("confidence", "predictive")) {
+    do.call(rbind, purrr::imap(grp_idx, \(i, g) {
+      reg <- ternary_region(cbind(rL[i], rT[i], rR[i]), regions)
+      if (is.null(reg)) return(NULL)
+      data.frame(to_xy(reg[, 1], reg[, 2], reg[, 3]), group = g)
+    }))
+  }
+  centres <- if (centre) {
+    do.call(rbind, purrr::imap(grp_idx, \(i, g) {
+      gm <- exp(colMeans(log(cbind(rL[i], rT[i], rR[i]))))
+      data.frame(to_xy(gm[1], gm[2], gm[3]), group = g)
+    }))
+  }
 
   # -- Assemble ---------------------------------------------------------------
   ggplot2::ggplot() +
@@ -483,12 +511,23 @@ plot_ternary_manual <- function(data, parts, group_var,
                        colour = "grey85", linewidth = 0.25) +
     ggplot2::geom_polygon(data = tri, ggplot2::aes(x = .data$x, y = .data$y),
                           fill = NA, colour = "grey30", linewidth = 0.6) +
-    ggplot2::geom_polygon(data = hulls,
-                          ggplot2::aes(x = .data$xc, y = .data$yc,
-                                       fill = .data$group, colour = .data$group),
-                          alpha = 0.15, linewidth = 0.5) +
-    ggplot2::geom_point(data = pts, ggplot2::aes(x = .data$xc, y = .data$yc, colour = .data$group),
-                        size = 3, alpha = 0.8) +
+    (if (!is.null(hulls)) {
+      ggplot2::geom_polygon(data = hulls,
+                            ggplot2::aes(x = .data$xc, y = .data$yc,
+                                         fill = .data$group, colour = .data$group),
+                            alpha = 0.15, linewidth = 0.5)
+    }) +
+    suppressWarnings(geom_point_maybe(interactive, data = pts,
+                                      mapping = ggplot2::aes(x = .data$xc, y = .data$yc,
+                                                             colour = .data$group,
+                                                             tooltip = .data$id,
+                                                             data_id = .data$id),
+                                      size = 3, alpha = 0.8)) +
+    (if (!is.null(centres)) {
+      ggplot2::geom_point(data = centres,
+                          ggplot2::aes(x = .data$xc, y = .data$yc, fill = .data$group),
+                          shape = 23, size = 5, colour = "black", stroke = 1)
+    }) +
     ggplot2::geom_text(data = ticks, ggplot2::aes(x = .data$x, y = .data$y, label = .data$label,
                                                    hjust = .data$hj, vjust = .data$vj),
                        size = base_size / 4, colour = "grey50") +

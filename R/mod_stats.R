@@ -67,7 +67,8 @@ mod_stats_ui <- function(id) {
               "factors, to separate the size effect from the compositional one."),
             fluidRow(
               column(6, verbatimTextOutput(ns("total_results"))),
-              column(6, plotOutput(ns("total_plot"), height = "300px"))
+              column(6, plotOutput(ns("total_plot"), height = "300px"),
+                     downloadButton(ns("dl_total_plot"), "Download figure"))
             ))
       )
     ),
@@ -90,7 +91,11 @@ mod_stats_ui <- function(id) {
       box(title = "Model diagnostics", width = 6, status = "warning",
           p("Residual plots from the fitted RRPP model."),
           plotOutput(ns("diag_resid"), height = "300px"),
-          plotOutput(ns("diag_pc"), height = "300px")
+          downloadButton(ns("dl_diag_resid"), "Download figure"),
+          plotOutput(ns("diag_pc"), height = "300px"),
+          downloadButton(ns("dl_diag_pc"), "Download figure"),
+          hr(),
+          export_settings_ui(ns)
       )
     )
   )
@@ -260,14 +265,16 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       print(rv$fit$total_anova)
     })
 
-    output$total_plot <- renderPlot({
+    total_plot_build <- function() {
       req(rv$fit$total_df)
       ggplot2::ggplot(rv$fit$total_df, ggplot2::aes(x = .data$group, y = .data$log_total)) +
         ggplot2::geom_boxplot(outlier.shape = NA, width = 0.5) +
         ggplot2::geom_jitter(width = 0.1, height = 0, alpha = 0.6) +
         ggplot2::labs(x = input$factors[1], y = "log-total") +
         ggplot2::theme_minimal(base_size = 14)
-    })
+    }
+    output$total_plot    <- renderPlot(total_plot_build())
+    output$dl_total_plot <- plot_download(input, "log_total", total_plot_build)
 
     output$pairwise_results <- renderPrint({
       req(rv$pairwise)
@@ -279,8 +286,12 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       rv$pairwise$var
     })
 
-    output$diag_resid <- renderPlot({ req(rv$fit); plot(rv$fit$model, type = "diagnostics") })
-    output$diag_pc    <- renderPlot({ req(rv$fit); plot(rv$fit$model, type = "PC", pch = 19) })
+    diag_resid_draw <- function() plot(rv$fit$model, type = "diagnostics")
+    diag_pc_draw    <- function() plot(rv$fit$model, type = "PC", pch = 19)
+    output$diag_resid <- renderPlot({ req(rv$fit); diag_resid_draw() })
+    output$diag_pc    <- renderPlot({ req(rv$fit); diag_pc_draw() })
+    output$dl_diag_resid <- plot_download(input, "diagnostics", function() { req(rv$fit); diag_resid_draw })
+    output$dl_diag_pc    <- plot_download(input, "fitted_pcs", function() { req(rv$fit); diag_pc_draw })
 
     output$dl_manova <- downloadHandler(
       filename = function() paste0("manova_", Sys.Date(), ".csv"),

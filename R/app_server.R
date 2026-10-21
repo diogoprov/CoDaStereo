@@ -37,14 +37,15 @@ app_server <- function(input, output, session) {
                                      parts = data_r$parts)
 
   # -- Module: Compositional Analysis ----------------------------------------
-  mod_analysis_server("analysis",
-                      df        = data_r$df,
-                      parts     = data_r$parts,
-                      comp      = impute_r$comp,
-                      keep_rows = impute_r$keep_rows)
+  analysis_r <- mod_analysis_server("analysis",
+                                   df        = data_r$df,
+                                   parts     = data_r$parts,
+                                   comp      = impute_r$comp,
+                                   keep_rows = impute_r$keep_rows,
+                                   raw       = impute_r$raw)
 
   # -- Module: Balances (SBP + CoDa dendrogram) ------------------------------
-  mod_balances_server("balances",
+  balances_r <- mod_balances_server("balances",
                       df        = data_r$df,
                       parts     = data_r$parts,
                       comp      = impute_r$comp,

@@ -26,7 +26,24 @@ mod_balances_ui <- function(id) {
             "is the balance variance, and where the bar meets the axis is the ",
             "balance mean. Coloured boxes show the balance distribution per group."),
           plotOutput(ns("dendrogram"), height = "500px"),
-          downloadButton(ns("dl_dendrogram"), "Download PDF")
+          downloadButton(ns("dl_dendrogram"), "Download figure"),
+          hr(),
+          export_settings_ui(ns)
+      )
+    ),
+    fluidRow(
+      box(title = "Balances by group", width = 12, status = "info",
+          p("Each panel is one balance (numerator / denominator parts). Positive ",
+            "values mean the numerator parts dominate. Test each balance with a ",
+            "univariate permutational ANOVA; Z is the standardised effect size. ",
+            "With several balances, interpret P-values with the multiple ",
+            "comparisons in mind."),
+          plotOutput(ns("balance_plot"), height = "450px"),
+          downloadButton(ns("dl_balance_plot"), "Download figure"),
+          actionButton(ns("test_balances"), "Test balances (999 permutations)",
+                       icon = icon("vial")),
+          downloadButton(ns("dl_balance_tests"), "Download tests (CSV)"),
+          tableOutput(ns("balance_tests"))
       )
     )
   )
@@ -106,14 +123,44 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows) {
                            palette = input$palette)
     }
 
-    output$dendrogram <- renderPlot(draw_dendrogram())
+    output$dendrogram <- renderPlot(draw_dendrogram()) |>
+      bindCache(comp(), keep_rows(), sbp_settled(), input$group_var, input$palette)
+    output$dl_dendrogram <- plot_download(input, "coda_dendrogram",
+                                          function() draw_dendrogram)
 
-    output$dl_dendrogram <- downloadHandler(
-      filename = function() paste0("coda_dendrogram_", Sys.Date(), ".pdf"),
+    # -- Balances by group -----------------------------------------------------
+    balances <- reactive({
+      req(comp(), length(sbp_issues()) == 0)
+      balance_coords(comp(), sbp_settled())
+    })
+    bal_groups <- reactive({
+      req(input$group_var, keep_rows())
+      df()[[input$group_var]][keep_rows()]
+    })
+    balance_plot_build <- function() {
+      plot_balances(balances(), bal_groups(), sbp_settled(), palette = input$palette)
+    }
+    output$balance_plot <- renderPlot(balance_plot_build()) |>
+      bindCache(comp(), keep_rows(), sbp_settled(), input$group_var, input$palette)
+    output$dl_balance_plot <- plot_download(input, "balances", balance_plot_build)
+
+    tests <- reactiveVal(NULL)
+    observeEvent(list(sbp_settled(), input$group_var), tests(NULL))
+    observeEvent(input$test_balances, {
+      withProgress(message = "Testing balances...", {
+        tests(balance_tests(balances(), bal_groups()))
+      })
+    })
+    output$balance_tests <- renderTable({
+      req(tests())
+      merge(sbp_labels(sbp_settled()), tests(), by = "Balance")
+    }, digits = 3)
+    output$dl_balance_tests <- downloadHandler(
+      filename = function() paste0("balance_tests_", Sys.Date(), ".csv"),
       content  = function(file) {
-        grDevices::pdf(file, width = 9, height = 7)
-        on.exit(grDevices::dev.off())
-        draw_dendrogram()
+        req(tests())
+        utils::write.csv(merge(sbp_labels(sbp_settled()), tests(), by = "Balance"),
+                         file, row.names = FALSE)
       }
     )
 
@@ -123,5 +170,8 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows) {
         utils::write.csv(sbp_current(), file)
       }
     )
+
+    list(sbp = reactive(if (length(sbp_issues()) == 0) sbp_settled()),
+         group_var = reactive(input$group_var))
   })
 }

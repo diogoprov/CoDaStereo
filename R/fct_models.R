@@ -24,7 +24,7 @@ model_rhs <- function(factors, design = "+", covariates = character(0),
 #' Fit the permutational MANOVA (and the total-only model when requested)
 #'
 #' @param spec List with elements `y` (ilr matrix), `data` (data frame of
-#'   factors, covariates and block), `rhs` (from [model_rhs()]), `iter`,
+#'   factors, covariates and block), `rhs` (from `model_rhs()`), `iter`,
 #'   `seed`, `ss_type`, `block` (column name or NULL), `total_mode`
 #'   ("none", "joint" or "covariate") and `log_total` (numeric or NULL).
 #' @return List with `model`, `anova`, `rhs`, and for `total_mode = "joint"`
