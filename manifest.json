@@ -1296,37 +1296,6 @@
         "RemoteSha.Version": "0.3.2"
       }
     },
-    "corrplot": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "corrplot",
-        "Type": "Package",
-        "Title": "Visualization of a Correlation Matrix",
-        "Version": "0.95",
-        "Date": "2024-10-14",
-        "Authors@R": "c(\n  person('Taiyun', 'Wei', email = 'weitaiyun@gmail.com', role = c('cre', 'aut')),\n  person('Viliam', 'Simko', email = 'viliam.simko@gmail.com', role = 'aut'),\n  person('Michael', 'Levy', email = 'michael.levy@healthcatalyst.com', role = 'ctb'),\n  person('Yihui', 'Xie', email = 'xie@yihui.name', role = 'ctb'),\n  person('Yan', 'Jin', email = 'jyfeather@gmail.com', role = 'ctb'),\n  person('Jeff', 'Zemla', email = 'zemla@wisc.edu', role = 'ctb'),\n  person('Moritz', 'Freidank', email = 'freidankm@googlemail.com', role = 'ctb'),\n  person('Jun', 'Cai', email = 'cai-j12@mails.tsinghua.edu.cn', role = 'ctb'),\n  person('Tomas', 'Protivinsky', email = 'tomas.protivinsky@gmail.com', role = 'ctb')\n  )",
-        "Maintainer": "Taiyun Wei <weitaiyun@gmail.com>",
-        "Suggests": "seriation, knitr, RColorBrewer, rmarkdown, magrittr,\nprettydoc, testthat",
-        "Description": "Provides a visual exploratory tool on correlation matrix that supports automatic variable reordering to help detect hidden patterns among variables.",
-        "License": "MIT + file LICENSE",
-        "URL": "https://github.com/taiyun/corrplot",
-        "BugReports": "https://github.com/taiyun/corrplot/issues",
-        "VignetteBuilder": "knitr",
-        "RoxygenNote": "7.2.1",
-        "NeedsCompilation": "no",
-        "Packaged": "2024-10-14 05:38:35 UTC; weita",
-        "Author": "Taiyun Wei [cre, aut],\n  Viliam Simko [aut],\n  Michael Levy [ctb],\n  Yihui Xie [ctb],\n  Yan Jin [ctb],\n  Jeff Zemla [ctb],\n  Moritz Freidank [ctb],\n  Jun Cai [ctb],\n  Tomas Protivinsky [ctb]",
-        "Repository": "CRAN",
-        "Date/Publication": "2024-10-14 12:11:18 UTC",
-        "Built": "R 4.6.0; ; 2026-04-25 15:41:41 UTC; unix",
-        "RemoteType": "standard",
-        "RemotePkgRef": "corrplot",
-        "RemoteRef": "corrplot",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "0.95"
-      }
-    },
     "cowplot": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -1456,42 +1425,6 @@
         "RemoteRef": "crosstalk",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "1.2.2"
-      }
-    },
-    "dendextend": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "dendextend",
-        "Type": "Package",
-        "Title": "Extending 'dendrogram' Functionality in R",
-        "Version": "1.19.1",
-        "Date": "2025-07-15",
-        "Authors@R": "c(person(\"Tal\", \"Galili\", role = c(\"aut\", \"cre\", \"cph\"), email =\n    \"tal.galili@gmail.com\", comment = \"https://www.r-statistics.com\"),\n    person(\"Yoav\", \"Benjamini\", email = \"ybenja@tau.ac.il\",role = \"ths\"),\n    person(\"Gavin\", \"Simpson\", role = \"ctb\"), person(\"Gregory\",\"Jefferis\", role\n    = c(\"aut\", \"ctb\"), email = \"jefferis@gmail.com\",\n    comment =\"imported code from his dendroextras package\"),\n    person(\"Marco\", \"Gallotta\", role = \"ctb\", comment =\n    \"a.k.a: marcog\") , person(\"Johan\", \"Renaudie\", role = \"ctb\", comment =\n    \"https://github.com/plannapus\"), person(\"The R Core Team\", role = \"ctb\",\n    comment = \"Thanks for the Infastructure, and code in the examples\"),\n    person(\"Kurt\", \"Hornik\", role = \"ctb\"), person(\"Uwe\", \"Ligges\",\n    role = \"ctb\"), person(\"Andrej-Nikolai\", \"Spiess\", role = \"ctb\"),\n    person(\"Steve\", \"Horvath\",email = \"SHorvath@mednet.ucla.edu\", role =\n    \"ctb\"), person(\"Peter\", \"Langfelder\",email = \"Peter.Langfelder@gmail.com\",\n    role = \"ctb\"), person(\"skullkey\", role = \"ctb\"), person(\"Mark\",\n    \"Van Der Loo\", email = \"mark.vanderloo@gmail.com\", comment =\n    \"https://github.com/markvanderloo d3dendrogram\", role = \"ctb\"),\n    person(\"Andrie\",\n    \"de Vries\", email = \"apdevries@gmail.com\", comment =\n    \"ggdendro author\", role = \"ctb\"),\n    person(\"Zuguang\",\n    \"Gu\", email = \"z.gu@dkfz-heidelberg.de\", comment =\n    \"circlize author\", role = \"ctb\"),    \n    person(\"Cath\", comment =\n    \"https://github.com/CathG\", role = \"ctb\"), person(\"John\",\n    \"Ma\", comment =\n    \"https://github.com/JohnMCMa\", role = \"ctb\"), person(\"Krzysiek\",\n    \"G\", comment =\n    \"https://github.com/storaged\", role = \"ctb\"), person(\"Manuela\",\n    \"Hummel\", email = \"m.hummel@dkfz.de\", comment =\n    \"https://github.com/hummelma\", role = \"ctb\"), \n    person(\"Chase\",\n    \"Clark\", comment =\n    \"https://github.com/chasemc\", role = \"ctb\"), \n    person(\"Lucas\",\n    \"Graybuck\", comment =\n    \"https://github.com/hypercompetent\", role = \"ctb\"), \n    person(\"jdetribol\", comment =\n    \"https://github.com/jdetribol\", role = \"ctb\"), \n    person(\"Ben\", \"Ho\", role = \"ctb\", email = \"ben.ho@sickkids.ca\", comment = \"https://github.com/SplitInf\"),\n    person(\"Samuel\", \"Perreault\", role = \"ctb\", email = \"samuel.perreault.3@ulaval.ca\", comment = \"https://github.com/samperochkin\"),\n    person(\"Christian\", \"Hennig\", role = \"ctb\", email = \"c.hennig@ucl.ac.uk\", comment = \"http://www.homepages.ucl.ac.uk/~ucakche/\"),\n    person(\"David\", \"Bradley\", role = \"ctb\", comment = \"https://github.com/DBradley27\"),\n    person(\"Houyun\", \"Huang\", role = \"ctb\", email = 'houyunhuang@163.com', comment = \"https://github.com/houyunhuang\"),\n    person(\"Patrick\", \"Schupp\", role = \"ctb\", email = 'pschupp@sonic.net', comment = \"https://github.com/pschupp\"),\n    person(\"Alec\", \"Buetow\", role = \"ctb\", email = 'alecbuetow@gmail.com', comment = \"https://github.com/alecbuetow\")\n    )",
-        "Description": "Offers a set of functions for extending\n    'dendrogram' objects in R, letting you visualize and compare trees of\n    'hierarchical clusterings'. You can (1) Adjust a tree's graphical parameters\n    - the color, size, type, etc of its branches, nodes and labels. (2)\n    Visually and statistically compare different 'dendrograms' to one another.",
-        "Depends": "R (>= 3.0.0)",
-        "Imports": "utils, stats, datasets, magrittr (>= 1.0.1), ggplot2, viridis",
-        "Suggests": "knitr, rmarkdown, testthat, seriation, colorspace, ape,\nmicrobenchmark, gplots, heatmaply, dynamicTreeCut, pvclust,\ncorrplot, DendSer, MASS, cluster, fpc, circlize (>= 0.2.5),\ncovr",
-        "Enhances": "ggdendro, dendroextras, Hmisc, data.table, rpart, WGCNA,\nmoduleColor, distory, phangorn, zoo",
-        "VignetteBuilder": "knitr",
-        "LazyData": "true",
-        "License": "GPL-2 | GPL-3",
-        "URL": "https://talgalili.github.io/dendextend/,\nhttps://github.com/talgalili/dendextend/,\nhttps://cran.r-project.org/package=dendextend,\nhttps://www.r-statistics.com/tag/dendextend/,\nhttps://doi.org/10.1093/bioinformatics/btv428",
-        "BugReports": "https://github.com/talgalili/dendextend/issues",
-        "RoxygenNote": "7.3.2",
-        "Encoding": "UTF-8",
-        "NeedsCompilation": "no",
-        "Packaged": "2025-07-15 03:41:11 UTC; talgalili",
-        "Author": "Tal Galili [aut, cre, cph] (https://www.r-statistics.com),\n  Yoav Benjamini [ths],\n  Gavin Simpson [ctb],\n  Gregory Jefferis [aut, ctb] (imported code from his dendroextras\n    package),\n  Marco Gallotta [ctb] (a.k.a: marcog),\n  Johan Renaudie [ctb] (https://github.com/plannapus),\n  The R Core Team [ctb] (Thanks for the Infastructure, and code in the\n    examples),\n  Kurt Hornik [ctb],\n  Uwe Ligges [ctb],\n  Andrej-Nikolai Spiess [ctb],\n  Steve Horvath [ctb],\n  Peter Langfelder [ctb],\n  skullkey [ctb],\n  Mark Van Der Loo [ctb] (https://github.com/markvanderloo d3dendrogram),\n  Andrie de Vries [ctb] (ggdendro author),\n  Zuguang Gu [ctb] (circlize author),\n  Cath [ctb] (https://github.com/CathG),\n  John Ma [ctb] (https://github.com/JohnMCMa),\n  Krzysiek G [ctb] (https://github.com/storaged),\n  Manuela Hummel [ctb] (https://github.com/hummelma),\n  Chase Clark [ctb] (https://github.com/chasemc),\n  Lucas Graybuck [ctb] (https://github.com/hypercompetent),\n  jdetribol [ctb] (https://github.com/jdetribol),\n  Ben Ho [ctb] (https://github.com/SplitInf),\n  Samuel Perreault [ctb] (https://github.com/samperochkin),\n  Christian Hennig [ctb] (http://www.homepages.ucl.ac.uk/~ucakche/),\n  David Bradley [ctb] (https://github.com/DBradley27),\n  Houyun Huang [ctb] (https://github.com/houyunhuang),\n  Patrick Schupp [ctb] (https://github.com/pschupp),\n  Alec Buetow [ctb] (https://github.com/alecbuetow)",
-        "Maintainer": "Tal Galili <tal.galili@gmail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2025-07-15 08:50:09 UTC",
-        "Built": "R 4.6.0; ; 2026-04-26 05:24:36 UTC; unix",
-        "RemoteType": "standard",
-        "RemotePkgRef": "dendextend",
-        "RemoteRef": "dendextend",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "1.19.1"
       }
     },
     "digest": {
@@ -1710,39 +1643,6 @@
         "RemoteSha": "1.0.5"
       }
     },
-    "factoextra": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "factoextra",
-        "Type": "Package",
-        "Title": "Extract and Visualize the Results of Multivariate Data Analyses",
-        "Version": "2.2.0",
-        "Date": "2026-07-24",
-        "Authors@R": "c(\n    person(\"Alboukadel\", \"Kassambara\", role = c(\"aut\", \"cre\"), email = \"alboukadel.kassambara@gmail.com\",\n           comment = c(ORCID = \"0009-0002-9136-0791\")),\n    person(\"Fabian\", \"Mundt\", role = \"aut\", email = \"f.mundt@inventionate.de\"),\n    person(\"Laszlo\", \"Erdey\", role = \"ctb\", email = \"erdey.laszlo@econ.unideb.hu\",\n           comment = c(ORCID = \"0000-0002-6781-4303\",\n                       affiliation = \"Faculty of Economics and Business, University of Debrecen, Hungary\",\n                       contribution = \"Modern compatibility fixes, tests, and maintenance updates\"))\n    )",
-        "Description": "Provides easy-to-use functions to extract and visualize the output\n    of multivariate data analyses, including 'PCA' (Principal Component Analysis),\n    'CA' (Correspondence Analysis), 'MCA' (Multiple Correspondence Analysis),\n    'FAMD' (Factor Analysis of Mixed Data), 'MFA' (Multiple Factor Analysis),\n    and 'HMFA' (Hierarchical Multiple Factor Analysis) from different R packages.\n    It standardizes coordinates, squared cosines, contributions, and eigenvalues\n    from several analysis backends and produces 'ggplot2'-based factor maps,\n    scree plots, contribution plots, clustering diagnostics, dendrograms, and\n    silhouette plots. It also visualizes two-dimensional 'UMAP' and t-SNE\n    embeddings and adapts precomputed or 'tidymodels' principal-component\n    results for the same plotting interface.",
-        "License": "GPL-2",
-        "LazyData": "true",
-        "LazyDataCompression": "xz",
-        "Encoding": "UTF-8",
-        "Depends": "R (>= 4.1.0), ggplot2 (>= 3.5.2)",
-        "Imports": "cluster (>= 2.1.8.2), dendextend (>= 1.19.1), FactoMineR (>=\n2.13), ggpubr (>= 0.6.3), grid, rlang (>= 1.1.7), stats,\nggrepel (>= 0.9.5)",
-        "Suggests": "ade4, ca, hardhat, igraph, MASS, knitr, mclust, parsnip,\nrecipes, rmarkdown, Rtsne, testthat (>= 3.0.0), umap, uwot,\nworkflows",
-        "VignetteBuilder": "knitr",
-        "URL": "https://github.com/kassambara/factoextra,\nhttps://rpkgs.datanovia.com/factoextra/",
-        "BugReports": "https://github.com/kassambara/factoextra/issues",
-        "Collate": "'fviz_add.R' 'eigenvalue.R' 'utilities.R' 'as_factoextra.R'\n'cluster_utilities.R' 'decathlon2.R' 'print.factoextra.R'\n'get_hmfa.R' 'fviz_hmfa.R' 'get_mfa.R' 'fviz_mfa.R'\n'deprecated.R' 'dist.R' 'fviz_dend.R' 'hcut.R' 'get_pca.R'\n'fviz_cluster.R' 'eclust.R' 'facto_summarize.R' 'fviz.R'\n'fviz_ca.R' 'fviz_contrib.R' 'fviz_cos2.R' 'fviz_ellipses.R'\n'fviz_famd.R' 'get_mca.R' 'fviz_mca.R' 'fviz_mclust.R'\n'fviz_nbclust.R' 'fviz_pca.R' 'fviz_silhouette.R' 'fviz_umap.R'\n'get_ca.R' 'get_clust_tendency.R' 'get_famd.R' 'hkmeans.R'\n'housetasks.R' 'multishapes.R' 'poison.R' 'theme_palette.R'\n'zzz.R'",
-        "RoxygenNote": "7.3.3",
-        "Config/testthat/edition": "3",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-07-23 23:22:53 UTC; kassambara",
-        "Author": "Alboukadel Kassambara [aut, cre] (ORCID:\n    <https://orcid.org/0009-0002-9136-0791>),\n  Fabian Mundt [aut],\n  Laszlo Erdey [ctb] (ORCID: <https://orcid.org/0000-0002-6781-4303>,\n    affiliation: Faculty of Economics and Business, University of\n    Debrecen, Hungary, contribution: Modern compatibility fixes, tests,\n    and maintenance updates)",
-        "Maintainer": "Alboukadel Kassambara <alboukadel.kassambara@gmail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-07-24 09:00:02 UTC",
-        "Built": "R 4.6.1; ; 2026-07-24 11:29:52 UTC; unix"
-      }
-    },
     "farver": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -1833,6 +1733,54 @@
         "RemoteSha": "1.1-4"
       }
     },
+    "fontBitstreamVera": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "fontBitstreamVera",
+        "Title": "Fonts with 'Bitstream Vera Fonts' License",
+        "Version": "0.1.1",
+        "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", , \"lionel.hry@gmail.com\", c(\"cre\", \"aut\")),\n    person(\"Bitstream\", role = \"cph\"))",
+        "Description": "Provides fonts licensed under the 'Bitstream Vera Fonts'\n    license for the 'fontquiver' package.",
+        "Depends": "R (>= 3.0.0)",
+        "License": "file LICENCE",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "5.0.1",
+        "NeedsCompilation": "no",
+        "Packaged": "2017-01-31 20:03:43 UTC; lionel",
+        "Author": "Lionel Henry [cre, aut],\n  Bitstream [cph]",
+        "Maintainer": "Lionel Henry <lionel.hry@gmail.com>",
+        "License_is_FOSS": "yes",
+        "Repository": "CRAN",
+        "Date/Publication": "2017-02-01 00:53:34",
+        "Built": "R 4.6.0; ; 2026-04-25 15:45:28 UTC; unix"
+      }
+    },
+    "fontLiberation": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "fontLiberation",
+        "Title": "Liberation Fonts",
+        "Version": "0.1.0",
+        "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", , \"lionel@rstudio.com\", \"cre\"),\n    person(\"Pravin Satpute\", role = \"aut\"),\n    person(\"Steve Matteson\", role = \"aut\"),\n    person(\"Red Hat, Inc\", role = \"cph\"),\n    person(\"Google Corporation\", role = \"cph\"))",
+        "Description": "A placeholder for the Liberation fontset intended for the\n    `fontquiver` package. This fontset covers the 12 combinations of\n    families (sans, serif, mono) and faces (plain, bold, italic, bold\n    italic) supported in R graphics devices.",
+        "Depends": "R (>= 3.0)",
+        "License": "file LICENSE",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "5.0.1",
+        "NeedsCompilation": "no",
+        "Packaged": "2016-10-14 14:21:59 UTC; lionel",
+        "Author": "Lionel Henry [cre],\n  Pravin Satpute [aut],\n  Steve Matteson [aut],\n  Red Hat, Inc [cph],\n  Google Corporation [cph]",
+        "Maintainer": "Lionel Henry <lionel@rstudio.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2016-10-15 11:24:18",
+        "License_is_FOSS": "yes",
+        "Built": "R 4.6.0; ; 2026-04-25 15:45:35 UTC; unix"
+      }
+    },
     "fontawesome": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -1865,6 +1813,32 @@
         "RemoteRef": "fontawesome",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "0.5.3"
+      }
+    },
+    "fontquiver": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "fontquiver",
+        "Title": "Set of Installed Fonts",
+        "Version": "0.2.1",
+        "Authors@R": "c(\n    person(\"Lionel\", \"Henry\", , \"lionel@rstudio.com\", c(\"cre\", \"aut\")),\n    person(\"RStudio\", role = \"cph\"),\n    person(\"George Douros\", role = \"cph\", comment = \"Symbola font\"))",
+        "Description": "Provides a set of fonts with permissive licences. This is\n    useful when you want to avoid system fonts to make sure your\n    outputs are reproducible.",
+        "Depends": "R (>= 3.0.0)",
+        "Imports": "fontBitstreamVera (>= 0.1.0), fontLiberation (>= 0.1.0)",
+        "Suggests": "testthat, htmltools",
+        "License": "GPL-3 | file LICENSE",
+        "Encoding": "UTF-8",
+        "LazyData": "true",
+        "RoxygenNote": "5.0.1",
+        "Collate": "'font-getters.R' 'fontset.R' 'fontset-bitstream-vera.R'\n'fontset-dejavu.R' 'fontset-liberation.R' 'fontset-symbola.R'\n'html-dependency.R' 'utils.R'",
+        "NeedsCompilation": "no",
+        "Packaged": "2017-01-31 20:11:24 UTC; lionel",
+        "Author": "Lionel Henry [cre, aut],\n  RStudio [cph],\n  George Douros [cph] (Symbola font)",
+        "Maintainer": "Lionel Henry <lionel@rstudio.com>",
+        "Repository": "CRAN",
+        "Date/Publication": "2017-02-01 00:52:56",
+        "Built": "R 4.6.0; ; 2026-04-25 23:16:19 UTC; unix"
       }
     },
     "forcats": {
@@ -2010,6 +1984,35 @@
         "RemoteSha": "2.1.0"
       }
     },
+    "gdtools": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "gdtools",
+        "Title": "Font Metrics and Font Management Utilities for R Graphics",
+        "Version": "0.5.1",
+        "Authors@R": "c(\n    person(\"David\", \"Gohel\", , \"david.gohel@ardata.fr\", role = c(\"aut\", \"cre\")),\n    person(\"Hadley\", \"Wickham\", , \"hadley@rstudio.com\", role = \"aut\"),\n    person(\"Lionel\", \"Henry\", , \"lionel@rstudio.com\", role = \"aut\"),\n    person(\"Jeroen\", \"Ooms\", , \"jeroen@berkeley.edu\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Yixuan\", \"Qiu\", role = \"ctb\"),\n    person(\"R Core Team\", role = \"cph\",\n           comment = \"Cairo code from X11 device\"),\n    person(\"ArData\", role = \"cph\"),\n    person(\"RStudio\", role = \"cph\")\n  )",
+        "Description": "Compute text metrics (width, ascent, descent) using 'Cairo'\n    and 'FreeType', independently of the active graphic device. Font\n    lookup is delegated to 'systemfonts'. Additional utilities let users\n    register 'Google Fonts' or bundled 'Liberation' fonts, check font\n    availability, and assemble 'htmlDependency' objects so that fonts are\n    correctly embedded in 'Shiny' applications, 'R Markdown' documents,\n    and 'htmlwidgets' outputs such as 'ggiraph'.",
+        "License": "GPL-3 | file LICENSE",
+        "URL": "https://davidgohel.github.io/gdtools/",
+        "BugReports": "https://github.com/davidgohel/gdtools/issues",
+        "Depends": "R (>= 4.0.0)",
+        "Imports": "fontquiver (>= 0.2.0), htmltools, Rcpp (>= 0.12.12),\nsystemfonts (>= 1.3.1), tools",
+        "Suggests": "curl, gfonts, methods, testthat",
+        "LinkingTo": "Rcpp",
+        "Encoding": "UTF-8",
+        "SystemRequirements": "cairo, freetype2, fontconfig",
+        "Config/roxygen2/version": "8.0.0",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-05-25 16:16:18 UTC; davidgohel",
+        "Author": "David Gohel [aut, cre],\n  Hadley Wickham [aut],\n  Lionel Henry [aut],\n  Jeroen Ooms [aut] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Yixuan Qiu [ctb],\n  R Core Team [cph] (Cairo code from X11 device),\n  ArData [cph],\n  RStudio [cph]",
+        "Maintainer": "David Gohel <david.gohel@ardata.fr>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-05-25 17:10:02 UTC",
+        "Built": "R 4.6.0; aarch64-apple-darwin23; 2026-05-25 17:44:01 UTC; unix",
+        "Archs": "gdtools.so.dSYM"
+      }
+    },
     "generics": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -2041,6 +2044,38 @@
         "RemoteRef": "generics",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "0.1.4"
+      }
+    },
+    "ggiraph": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Type": "Package",
+        "Package": "ggiraph",
+        "Title": "Make 'ggplot2' Graphics Interactive",
+        "Version": "0.9.6",
+        "Authors@R": "c(\n    person(\"David\", \"Gohel\", , \"david.gohel@ardata.fr\", role = c(\"aut\", \"cre\")),\n    person(\"Panagiotis\", \"Skintzos\", , \"sigmapi@posteo.net\", role = \"aut\"),\n    person(\"Mike\", \"Bostock\", role = \"cph\",\n           comment = \"d3.js\"),\n    person(\"Speros\", \"Kokenes\", role = \"cph\",\n           comment = \"d3-lasso\"),\n    person(\"Eric\", \"Shull\", role = \"cph\",\n           comment = \"saveSvgAsPng js library\"),\n    person(\"Lee\", \"Thomason\", role = \"cph\",\n           comment = \"TinyXML2\"),\n    person(\"Vladimir\", \"Agafonkin\", role = \"cph\",\n           comment = \"Flatbush\"),\n    person(\"Eric\", \"Book\", role = \"ctb\",\n           comment = \"hline and vline geoms\")\n  )",
+        "Description": "Create interactive 'ggplot2' graphics using 'htmlwidgets'.",
+        "License": "GPL-3",
+        "URL": "https://davidgohel.github.io/ggiraph/",
+        "BugReports": "https://github.com/davidgohel/ggiraph/issues",
+        "Imports": "cli, dplyr, gdtools (>= 0.5.0), ggplot2 (>= 4.0.0), grid,\nhtmltools, htmlwidgets (>= 1.5), MASS, purrr, Rcpp (>= 1.1.0),\nrlang, S7 (>= 0.2.0), stats, systemfonts (>= 1.3.1), vctrs",
+        "Suggests": "ggbeeswarm, ggrepel (>= 0.9.1), hexbin, knitr, maps,\nquantreg, rmarkdown, sf (>= 1.0), shiny, tinytest, xml2 (>=\n1.0)",
+        "LinkingTo": "Rcpp, systemfonts",
+        "VignetteBuilder": "knitr",
+        "Copyright": "See file COPYRIGHTS.",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.3",
+        "SystemRequirements": "libpng",
+        "Collate": "'RcppExports.R' 'ipar.R' 'utils_ggplot2_performance.R'\n'utils_ggplot2.R' 'utils.R' 'annotate_interactive.R'\n'annotation_raster_interactive.R' 'utils_css.R' 'fonts.R'\n'girafe_options.R' 'default.R' 'dsvg.R' 'dsvg_view.R'\n'element_interactive.R' 'facet_interactive.R'\n'geom_abline_interactive.R' 'geom_path_interactive.R'\n'geom_polygon_interactive.R' 'geom_rect_interactive.R'\n'geom_bar_interactive.R' 'geom_bin_2d_interactive.R'\n'geom_boxplot_interactive.R' 'geom_col_interactive.R'\n'geom_contour_interactive.R' 'geom_count_interactive.R'\n'geom_crossbar_interactive.R' 'geom_curve_interactive.R'\n'geom_density_2d_interactive.R' 'geom_density_interactive.R'\n'geom_dotplot_interactive.R' 'geom_errorbar_interactive.R'\n'geom_errorbarh_interactive.R' 'geom_freqpoly_interactive.R'\n'geom_hex_interactive.R' 'geom_histogram_interactive.R'\n'geom_hline_interactive.R' 'geom_jitter_interactive.R'\n'geom_label_interactive.R' 'geom_linerange_interactive.R'\n'geom_map_interactive.R' 'geom_point_interactive.R'\n'geom_pointrange_interactive.R' 'geom_quantile_interactive.R'\n'geom_quasirandom_interactive.R' 'geom_raster_interactive.R'\n'geom_ribbon_interactive.R' 'geom_segment_interactive.R'\n'geom_sf_interactive.R' 'geom_smooth_interactive.R'\n'geom_spoke_interactive.R' 'geom_text_interactive.R'\n'geom_text_repel_interactive.R' 'geom_tile_interactive.R'\n'geom_violin_interactive.R' 'geom_vline_interactive.R'\n'ggiraph.R' 'girafe.R' 'girafe_class.R' 'grob_interactive.R'\n'guide_bins_interactive.R' 'guide_colourbar_interactive.R'\n'guide_coloursteps_interactive.R' 'guide_interactive.R'\n'guide_legend_interactive.R' 'interactive_circle_grob.R'\n'interactive_curve_grob.R' 'interactive_path_grob.R'\n'interactive_points_grob.R' 'interactive_polygon_grob.R'\n'interactive_polyline_grob.R' 'interactive_raster_grob.R'\n'interactive_rect_grob.R' 'interactive_roundrect_grob.R'\n'interactive_segments_grob.R' 'interactive_text_grob.R'\n'labeller_interactive.R' 'layer_interactive.R'\n'scale_alpha_interactive.R' 'scale_brewer_interactive.R'\n'scale_colour_interactive.R' 'scale_gradient_interactive.R'\n'scale_interactive.R' 'scale_linetype_interactive.R'\n'scale_manual_interactive.R' 'scale_shape_interactive.R'\n'scale_size_interactive.R' 'scale_steps_interactive.R'\n'scale_viridis_interactive.R' 'tracers.R' 'utils_data.r'",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-02-20 10:33:18 UTC; davidgohel",
+        "Author": "David Gohel [aut, cre],\n  Panagiotis Skintzos [aut],\n  Mike Bostock [cph] (d3.js),\n  Speros Kokenes [cph] (d3-lasso),\n  Eric Shull [cph] (saveSvgAsPng js library),\n  Lee Thomason [cph] (TinyXML2),\n  Vladimir Agafonkin [cph] (Flatbush),\n  Eric Book [ctb] (hline and vline geoms)",
+        "Maintainer": "David Gohel <david.gohel@ardata.fr>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-02-21 10:50:02 UTC",
+        "Built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-26 15:52:01 UTC; unix",
+        "Archs": "ggiraph.so.dSYM"
       }
     },
     "ggplot2": {
@@ -2081,36 +2116,6 @@
         "RemoteSha": "4.0.3"
       }
     },
-    "ggpubr": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "ggpubr",
-        "Type": "Package",
-        "Title": "'ggplot2' Based Publication Ready Plots",
-        "Version": "1.0.0",
-        "Date": "2026-07-06",
-        "Authors@R": "c(\n    person(\"Alboukadel\", \"Kassambara\", role = c(\"aut\", \"cre\"), email = \"alboukadel.kassambara@gmail.com\"),\n    person(\"Laszlo\", \"Erdey\", role = \"ctb\", email = \"erdey.laszlo@econ.unideb.hu\",\n           comment = \"Faculty of Economics and Business, University of Debrecen, Hungary\"))",
-        "Author": "Alboukadel Kassambara [aut, cre],\n  Laszlo Erdey [ctb] (Faculty of Economics and Business, University of\n    Debrecen, Hungary)",
-        "Maintainer": "Alboukadel Kassambara <alboukadel.kassambara@gmail.com>",
-        "Description": "The 'ggplot2' package is excellent and flexible for elegant data\n    visualization in R. However the default generated plots require some formatting\n    before we can send them for publication. Furthermore, to customize a 'ggplot',\n    the syntax is opaque and this raises the level of difficulty for researchers\n    with no advanced R programming skills. 'ggpubr' provides some easy-to-use\n    functions for creating and customizing 'ggplot2'-based publication ready plots.\n    This version includes modern R ecosystem compatibility updates and customizable\n    p-value formatting presets (APA, AMA, NEJM, Lancet, GraphPad, and scientific\n    notation) for publication workflows, plus robust sparse-subset handling in\n    statistical annotation layers such as 'stat_compare_means()' and 'geom_pwc()',\n    with informative per-group skip diagnostics for non-comparable subsets.",
-        "License": "GPL (>= 2)",
-        "LazyData": "TRUE",
-        "Encoding": "UTF-8",
-        "Depends": "R (>= 4.1.0), ggplot2 (>= 3.5.2)",
-        "Imports": "ggrepel (>= 0.9.2), grid, ggsci, stats, utils, tidyr (>=\n1.3.2), purrr, dplyr (>= 1.2.0), cowplot (>= 1.2.0), ggsignif,\nscales, gridExtra, glue, polynom, rlang (>= 1.1.7), rstatix (>=\n1.0.0), tibble, magrittr",
-        "Suggests": "grDevices, knitr, RColorBrewer, gtable, testthat",
-        "URL": "https://rpkgs.datanovia.com/ggpubr/,\nhttps://github.com/kassambara/ggpubr",
-        "BugReports": "https://github.com/kassambara/ggpubr/issues",
-        "RoxygenNote": "7.3.3",
-        "Collate": "'utilities_color.R' 'utilities_base.R' 'desc_statby.R'\n'utilities.R' 'add_summary.R' 'annotate_figure.R' 'as_ggplot.R'\n'as_npc.R' 'axis_scale.R' 'background_image.R' 'bgcolor.R'\n'border.R' 'p_format_utils.R' 'compare_means.R' 'create_aes.R'\n'diff_express.R' 'facet.R' 'font.R' 'gene_citation.R'\n'gene_expression.R' 'geom_bracket.R' 'geom_exec.R'\n'utils-aes.R' 'utils_stat_test_label.R' 'geom_pwc.R'\n'get_breaks.R' 'get_coord.R' 'get_legend.R' 'get_palette.R'\n'ggadd.R' 'ggadjust_pvalue.R' 'ggarrange.R' 'ggballoonplot.R'\n'ggpar.R' 'ggbarplot.R' 'ggboxplot.R' 'ggdensity.R' 'ggpie.R'\n'ggdonutchart.R' 'stat_conf_ellipse.R' 'stat_chull.R'\n'ggdotchart.R' 'ggdotplot.R' 'ggecdf.R' 'ggerrorplot.R'\n'ggexport.R' 'gghistogram.R' 'ggline.R' 'ggmaplot.R'\n'ggpaired.R' 'ggparagraph.R' 'ggpubr-package.R' 'ggpubr_args.R'\n'ggpubr_options.R' 'ggqqplot.R' 'utilities_label.R'\n'stat_cor.R' 'stat_stars.R' 'ggscatter.R' 'ggscatterhist.R'\n'ggstripchart.R' 'ggsummarystats.R' 'ggtext.R' 'ggtexttable.R'\n'ggviolin.R' 'gradient_color.R' 'grids.R' 'npc_to_data_coord.R'\n'reexports.R' 'rotate.R' 'rotate_axis_text.R' 'rremove.R'\n'set_palette.R' 'shared_docs.R' 'show_line_types.R'\n'show_point_shapes.R' 'stat_anova_test.R'\n'stat_central_tendency.R' 'stat_compare_means.R'\n'stat_friedman_test.R' 'stat_kruskal_test.R' 'stat_mean.R'\n'stat_overlay_normal_density.R' 'stat_pvalue_manual.R'\n'stat_regline_equation.R' 'stat_welch_anova_test.R'\n'text_grob.R' 'theme_pubr.R' 'theme_transparent.R'\n'utils-geom-signif.R' 'utils-pipe.R' 'utils-tidyr.R' 'zzz.R'",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-07-06 10:18:45 UTC; kassambara",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-07-06 15:00:02 UTC",
-        "Built": "R 4.6.1; ; 2026-07-06 19:23:37 UTC; unix"
-      }
-    },
     "ggrepel": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -2143,68 +2148,6 @@
         "RemoteRef": "ggrepel",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "0.9.8"
-      }
-    },
-    "ggsci": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "ggsci",
-        "Type": "Package",
-        "Title": "Scientific Journal and Sci-Fi Themed Color Palettes for\n'ggplot2'",
-        "Version": "5.2.0",
-        "Authors@R": "c(\n    person(\"Nan\", \"Xiao\", email = \"me@nanx.me\", role = c(\"aut\", \"cre\", \"cph\"),\n           comment = c(ORCID = \"0000-0002-0250-5673\")),\n    person(\"Joshua\", \"Cook\", email = \"joshuacook0023@gmail.com\", role = \"ctb\"),\n    person(\"Clara\", \"Jégousse\", email = \"cat3@hi.is\", role = \"ctb\"),\n    person(\"Hui\", \"Chen\", email = \"huichen@zju.edu.cn\", role = \"ctb\"),\n    person(\"Miaozhu\", \"Li\", email = \"miaozhu.li@duke.edu\", role = \"ctb\"),\n    person(\"iTerm2-Color-Schemes contributors\", role = c(\"ctb\", \"cph\"),\n           comment = \"iTerm2-Color-Schemes project\"),\n    person(\"Winston\", \"Chang\", role = c(\"ctb\", \"cph\"),\n           comment = \"staticimports.R\")\n    )",
-        "Maintainer": "Nan Xiao <me@nanx.me>",
-        "Description": "A collection of 'ggplot2' color palettes inspired by\n    plots in scientific journals, data visualization libraries,\n    science fiction movies, and TV shows.",
-        "License": "GPL (>= 3)",
-        "URL": "https://nanx.me/ggsci/, https://github.com/nanxstats/ggsci",
-        "BugReports": "https://github.com/nanxstats/ggsci/issues",
-        "Depends": "R (>= 3.5.0)",
-        "Imports": "ggplot2 (>= 2.0.0), grDevices, rlang, scales",
-        "Suggests": "gridExtra, knitr, ragg, rmarkdown",
-        "VignetteBuilder": "knitr",
-        "Encoding": "UTF-8",
-        "Config/roxygen2/version": "8.0.0",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-07-30 05:46:42 UTC; nanx",
-        "Author": "Nan Xiao [aut, cre, cph] (ORCID:\n    <https://orcid.org/0000-0002-0250-5673>),\n  Joshua Cook [ctb],\n  Clara Jégousse [ctb],\n  Hui Chen [ctb],\n  Miaozhu Li [ctb],\n  iTerm2-Color-Schemes contributors [ctb, cph] (iTerm2-Color-Schemes\n    project),\n  Winston Chang [ctb, cph] (staticimports.R)",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-07-30 14:00:08 UTC",
-        "Built": "R 4.6.1; ; 2026-07-30 18:13:50 UTC; unix"
-      }
-    },
-    "ggsignif": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Type": "Package",
-        "Package": "ggsignif",
-        "Title": "Significance Brackets for 'ggplot2'",
-        "Version": "0.6.4",
-        "Authors@R": "\n  c(\n    person(given = \"Constantin\",\n           family = \"Ahlmann-Eltze\",\n           role = c(\"aut\", \"cre\", \"ctb\"),\n           email = \"artjom31415@googlemail.com\",\n           comment = c(ORCID = \"0000-0002-3762-068X\", Twitter = \"@const_ae\")),\n    person(given = \"Indrajeet\",\n           family = \"Patil\",\n           role = c(\"aut\", \"ctb\"),\n           email = \"patilindrajeet.science@gmail.com\",\n           comment = c(ORCID = \"0000-0003-1995-6531\", Twitter = \"@patilindrajeets\"))\n  )",
-        "Description": "Enrich your 'ggplots' with group-wise comparisons.\n    This package provides an easy way to indicate if two groups are\n    significantly different. Commonly this is shown by a bracket on top\n    connecting the groups of interest which itself is annotated with the\n    level of significance (NS, *, **, ***).  The package provides a single\n    layer (geom_signif()) that takes the groups for comparison and the\n    test (t.test(), wilcox.text() etc.) as arguments and adds the\n    annotation to the plot.",
-        "License": "GPL-3 | file LICENSE",
-        "URL": "https://const-ae.github.io/ggsignif/,\nhttps://github.com/const-ae/ggsignif",
-        "VignetteBuilder": "knitr",
-        "Encoding": "UTF-8",
-        "Language": "en-US",
-        "Imports": "ggplot2 (>= 3.3.5)",
-        "Suggests": "knitr, rmarkdown, testthat, vdiffr (>= 1.0.2)",
-        "RoxygenNote": "7.2.1",
-        "Config/testthat/edition": "3",
-        "Config/testthat/parallel": "true",
-        "NeedsCompilation": "no",
-        "Packaged": "2022-10-13 13:31:09 UTC; ahlmanne",
-        "Author": "Constantin Ahlmann-Eltze [aut, cre, ctb]\n    (<https://orcid.org/0000-0002-3762-068X>, @const_ae),\n  Indrajeet Patil [aut, ctb] (<https://orcid.org/0000-0003-1995-6531>,\n    @patilindrajeets)",
-        "Maintainer": "Constantin Ahlmann-Eltze <artjom31415@googlemail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2022-10-13 14:41:57 UTC",
-        "Built": "R 4.6.0; ; 2026-04-26 11:08:12 UTC; unix",
-        "RemoteType": "standard",
-        "RemotePkgRef": "ggsignif",
-        "RemoteRef": "ggsignif",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "0.6.4"
       }
     },
     "glue": {
@@ -3062,6 +3005,39 @@
         "RemoteSha": "1.2.8"
       }
     },
+    "mirai": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Type": "Package",
+        "Package": "mirai",
+        "Title": "Minimalist Async Evaluation Framework for R",
+        "Version": "2.7.3",
+        "Authors@R": "c(\n    person(\"Charlie\", \"Gao\", , \"charlie.gao@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-0750-061X\")),\n    person(\"Joe\", \"Cheng\", , \"joe@posit.co\", role = \"ctb\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\")),\n    person(\"Hibiki AI Limited\", role = \"cph\")\n  )",
+        "Description": "Evaluates R expressions asynchronously and in parallel,\n    locally or distributed across networks. An official parallel cluster\n    type for R. Built on 'nanonext' and 'NNG', its non-polling,\n    event-driven architecture scales from a laptop to thousands of\n    processes across high-performance computing clusters and cloud\n    platforms. Features FIFO scheduling with task cancellation and bounded\n    queues, promises for reactive programming, 'OpenTelemetry' distributed\n    tracing, and custom serialization for cross-language data types.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://mirai.r-lib.org, https://github.com/r-lib/mirai",
+        "BugReports": "https://github.com/r-lib/mirai/issues",
+        "Depends": "R (>= 3.6)",
+        "Imports": "nanonext (>= 1.10.3)",
+        "Suggests": "cli, litedown, mori, otel, otelsdk, secretbase",
+        "Enhances": "parallel, promises",
+        "VignetteBuilder": "litedown",
+        "Config/Needs/coverage": "rlang",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/roxygen2/markdown": "TRUE",
+        "Config/roxygen2/version": "8.1.0",
+        "Config/usethis/last-upkeep": "2026-07-11",
+        "Encoding": "UTF-8",
+        "NeedsCompilation": "no",
+        "Packaged": "2026-09-24 08:01:42 UTC; cg334",
+        "Author": "Charlie Gao [aut, cre] (ORCID: <https://orcid.org/0000-0002-0750-061X>),\n  Joe Cheng [ctb],\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>),\n  Hibiki AI Limited [cph]",
+        "Maintainer": "Charlie Gao <charlie.gao@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-24 11:20:19 UTC",
+        "Built": "R 4.6.1; ; 2026-09-24 12:46:40 UTC; unix"
+      }
+    },
     "modelr": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -3182,6 +3158,41 @@
         "RemoteRef": "naniar",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "1.1.0"
+      }
+    },
+    "nanonext": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Type": "Package",
+        "Package": "nanonext",
+        "Title": "Lightweight Toolkit for Messaging, Concurrency and the Web",
+        "Version": "1.10.3",
+        "Authors@R": "c(\n    person(\"Charlie\", \"Gao\", , \"charlie.gao@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-0750-061X\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\")),\n    person(\"Hibiki AI Limited\", role = \"cph\"),\n    person(\"Staysail Systems, Inc.\", role = \"cph\",\n           comment = \"NNG library\"),\n    person(\"Capitar IT Group BV\", role = \"cph\",\n           comment = \"NNG library\"),\n    person(\"The Mbed TLS Contributors\", role = \"cph\",\n           comment = \"Mbed TLS library\"),\n    person(\"Pierre\", \"L'Ecuyer\", role = \"cph\",\n           comment = \"RngStreams library\"),\n    person(\"sakura authors\", role = \"cph\",\n           comment = \"Serialization hooks\"),\n    person(\"R Consortium\", role = \"fnd\",\n           comment = c(ROR = \"01z833950\"))\n  )",
+        "Description": "R binding for NNG (Nanomsg Next Gen), a successor to ZeroMQ.\n    A toolkit for messaging, concurrency and the web. High-performance\n    socket messaging over in-process, IPC, TCP, WebSocket and secure TLS\n    transports implements 'Scalability Protocols', a standard for common\n    communications patterns including publish/subscribe, request/reply and\n    survey. A threaded concurrency framework with intuitive 'aio' objects\n    that resolve automatically upon completion of asynchronous operations,\n    and synchronisation primitives that allow R to wait on events\n    signalled by concurrent threads. A unified HTTP server hosting REST\n    endpoints, WebSocket connections and streaming on a single port, with\n    a built-in HTTP client.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://nanonext.r-lib.org, https://github.com/r-lib/nanonext",
+        "BugReports": "https://github.com/r-lib/nanonext/issues",
+        "Depends": "R (>= 3.6)",
+        "Suggests": "later, litedown, yaml",
+        "Enhances": "promises",
+        "VignetteBuilder": "litedown",
+        "Biarch": "true",
+        "Config/build/compilation-database": "true",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/roxygen2/markdown": "TRUE",
+        "Config/roxygen2/version": "8.1.0",
+        "Config/usethis/last-upkeep": "2026-07-11",
+        "Encoding": "UTF-8",
+        "SystemRequirements": "'libnng' >= 1.12 and 'libmbedtls' >= 3.0 (optional,\nbundled sources compiled otherwise)",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-09-23 07:37:45 UTC; cg334",
+        "Author": "Charlie Gao [aut, cre] (ORCID: <https://orcid.org/0000-0002-0750-061X>),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>),\n  Hibiki AI Limited [cph],\n  Staysail Systems, Inc. [cph] (NNG library),\n  Capitar IT Group BV [cph] (NNG library),\n  The Mbed TLS Contributors [cph] (Mbed TLS library),\n  Pierre L'Ecuyer [cph] (RngStreams library),\n  sakura authors [cph] (Serialization hooks),\n  R Consortium [fnd] (ROR: <https://ror.org/01z833950>)",
+        "Maintainer": "Charlie Gao <charlie.gao@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-09-23 08:10:01 UTC",
+        "Built": "R 4.6.1; aarch64-apple-darwin23; 2026-09-23 10:13:45 UTC; unix",
+        "Archs": "nanonext.so.dSYM"
       }
     },
     "nlme": {
@@ -3492,33 +3503,6 @@
         "RemoteRef": "plyr",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "1.8.9"
-      }
-    },
-    "polynom": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "polynom",
-        "Version": "1.4-1",
-        "Title": "A Collection of Functions to Implement a Class for Univariate\nPolynomial Manipulations",
-        "Authors@R": "c(person(\"Bill\", \"Venables\", role = c(\"aut\", \"cre\"),\n                    email = \"Bill.Venables@gmail.com\",\n                    comment = \"S original\"),\n             person(\"Kurt\", \"Hornik\", role = \"aut\",\n                    email = \"Kurt.Hornik@R-project.org\",\n                    comment = \"R port\"),\n             person(\"Martin\", \"Maechler\", role = \"aut\",\n                    email = \"maechler@stat.math.ethz.ch\",\n                    comment = \"R port\"))",
-        "Description": "A collection of functions to implement a class for univariate\n  polynomial manipulations.",
-        "Imports": "stats, graphics",
-        "License": "GPL-2",
-        "NeedsCompilation": "no",
-        "Author": "Bill Venables [aut, cre] (S original),\n  Kurt Hornik [aut] (R port),\n  Martin Maechler [aut] (R port)",
-        "Maintainer": "Bill Venables <Bill.Venables@gmail.com>",
-        "Suggests": "knitr, rmarkdown",
-        "VignetteBuilder": "knitr",
-        "Packaged": "2022-04-11 02:34:34 UTC; Bill",
-        "Repository": "CRAN",
-        "Date/Publication": "2022-04-11 03:00:02 UTC",
-        "Built": "R 4.6.0; ; 2026-04-25 15:41:17 UTC; unix",
-        "RemoteType": "standard",
-        "RemotePkgRef": "polynom",
-        "RemoteRef": "polynom",
-        "RemoteRepos": "https://cran.rstudio.com",
-        "RemoteSha": "1.4-1"
       }
     },
     "prettyunits": {
@@ -4012,37 +3996,6 @@
         "RemoteSha": "0.99-7"
       }
     },
-    "rstatix": {
-      "Source": "CRAN",
-      "Repository": "https://cloud.r-project.org",
-      "description": {
-        "Package": "rstatix",
-        "Type": "Package",
-        "Title": "Pipe-Friendly Framework for Basic Statistical Tests",
-        "Version": "1.1.0",
-        "Date": "2026-07-23",
-        "Authors@R": "c(\n    person(\"Alboukadel\", \"Kassambara\", role = c(\"aut\", \"cre\"), email = \"alboukadel.kassambara@gmail.com\"))",
-        "Description": "Provides a simple and intuitive pipe-friendly framework, coherent with the 'tidyverse' design philosophy, \n    for performing basic statistical tests, including t-test, Wilcoxon test, ANOVA, Kruskal-Wallis and correlation analyses. \n    The output of each test is automatically transformed into a tidy data frame to facilitate visualization. \n    Additional functions are available for reshaping, reordering, manipulating and visualizing correlation matrix.  \n    Functions are also included to facilitate the analysis of factorial experiments, including purely 'within-Ss' designs \n    (repeated measures), purely 'between-Ss' designs, and mixed 'within-and-between-Ss' designs. \n    It's also possible to compute several effect size metrics, including \"eta squared\" for ANOVA, \"Cohen's d\" for t-test and \n    'Cramer V' for the association between categorical variables. \n    The package contains helper functions for identifying univariate and multivariate outliers, assessing normality and homogeneity of variances.",
-        "License": "GPL-2",
-        "Encoding": "UTF-8",
-        "Depends": "R (>= 3.3.0)",
-        "Imports": "stats, utils, tidyr (>= 1.0.0), purrr, broom (>= 0.7.4), rlang\n(>= 0.3.1), tibble (>= 2.1.3), dplyr (>= 0.7.1), magrittr,\ncorrplot, tidyselect (>= 1.2.0), car, generics (>= 0.0.2)",
-        "Suggests": "knitr, rmarkdown, ggpubr, graphics, emmeans, coin, boot,\ntestthat (>= 3.1.7), spelling",
-        "VignetteBuilder": "knitr",
-        "URL": "https://rpkgs.datanovia.com/rstatix/",
-        "BugReports": "https://github.com/kassambara/rstatix/issues",
-        "Collate": "'utilities.R' 'add_cld.R' 'add_significance.R'\n'adjust_pvalue.R' 'factorial_design.R'\n'utilities_two_sample_test.R' 'anova_summary.R' 'anova_test.R'\n'as_cor_mat.R' 'binom_test.R' 'box_m.R' 'posthoc_test.R'\n'check_test_assumptions.R' 'chisq_test.R' 'cliff_delta.R'\n'cochran_qtest.R' 'cohens_d.R' 't_test.R' 'dunn_test.R'\n'conover_test.R' 'cor_as_symbols.R' 'replace_triangle.R'\n'pull_triangle.R' 'cor_mark_significant.R' 'cor_mat.R'\n'cor_plot.R' 'cor_reorder.R' 'cor_reshape.R' 'cor_select.R'\n'cor_test.R' 'counts_to_cases.R' 'cramer_v.R' 'df.R' 'doo.R'\n'emmeans_test.R' 'dunnett_test.R' 'eta_squared.R' 'factors.R'\n'fisher_test.R' 'fligner_test.R' 'freq_table.R'\n'friedman_test.R' 'friedman_conover_test.R'\n'friedman_effsize.R' 'friedman_nemenyi_test.R'\n'games_howell_test.R' 'get_comparisons.R' 'get_mode.R'\n'get_pvalue_position.R' 'get_summary_stats.R'\n'get_test_label.R' 'kruskal_effesize.R' 'kruskal_test.R'\n'ks_test.R' 'levene_test.R' 'mahalanobis_distance.R'\n'make_clean_names.R' 'mcnemar_test.R' 'multinom_test.R'\n'omega_squared.R' 'outliers.R' 'p_value.R' 'prop_test.R'\n'prop_trend_test.R' 'reexports.R' 'remove_ns.R'\n'rstatix-programming.R' 'rstatix-references.R' 'sample_n_by.R'\n'shapiro_test.R' 'sign_test.R' 'tidy_glance.R' 'tukey_hsd.R'\n'utils-manova.R' 'utils-pipe.R' 'welch_anova_test.R'\n'wilcox_effsize.R' 'wilcox_test.R'",
-        "Language": "en-US",
-        "Config/roxygen2/version": "8.0.0",
-        "NeedsCompilation": "no",
-        "Packaged": "2026-07-23 20:46:22 UTC; kassambara",
-        "Author": "Alboukadel Kassambara [aut, cre]",
-        "Maintainer": "Alboukadel Kassambara <alboukadel.kassambara@gmail.com>",
-        "Repository": "CRAN",
-        "Date/Publication": "2026-07-23 21:20:02 UTC",
-        "Built": "R 4.6.1; ; 2026-07-23 21:33:32 UTC; unix"
-      }
-    },
     "sass": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -4377,6 +4330,45 @@
         "Archs": "survival.so.dSYM"
       }
     },
+    "svglite": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "svglite",
+        "Title": "An 'SVG' Graphics Device",
+        "Version": "2.2.2",
+        "Authors@R": "c(\n    person(\"Hadley\", \"Wickham\", , \"hadley@posit.co\", role = \"aut\"),\n    person(\"Lionel\", \"Henry\", , \"lionel@posit.co\", role = \"aut\"),\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"cre\", \"aut\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"T Jake\", \"Luciani\", , \"jake@apache.org\", role = \"aut\"),\n    person(\"Matthieu\", \"Decorde\", , \"matthieu.decorde@ens-lyon.fr\", role = \"aut\"),\n    person(\"Vaudor\", \"Lise\", , \"lise.vaudor@ens-lyon.fr\", role = \"aut\"),\n    person(\"Tony\", \"Plate\", role = \"ctb\",\n           comment = \"Early line dashing code\"),\n    person(\"David\", \"Gohel\", role = \"ctb\",\n           comment = \"Line dashing code and early raster code\"),\n    person(\"Yixuan\", \"Qiu\", role = \"ctb\",\n           comment = \"Improved styles; polypath implementation\"),\n    person(\"Håkon\", \"Malmedal\", role = \"ctb\",\n           comment = \"Opacity code\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
+        "Description": "A graphics device for R that produces 'Scalable Vector\n    Graphics'. 'svglite' is a fork of the older 'RSvgDevice' package.",
+        "License": "GPL (>= 2)",
+        "URL": "https://svglite.r-lib.org, https://github.com/r-lib/svglite",
+        "BugReports": "https://github.com/r-lib/svglite/issues",
+        "Depends": "R (>= 4.1)",
+        "Imports": "base64enc, cli, lifecycle, rlang (>= 1.1.0), systemfonts (>=\n1.3.0), textshaping (>= 0.3.0)",
+        "Suggests": "covr, fontquiver (>= 0.2.0), htmltools, knitr, rmarkdown,\ntestthat (>= 3.0.0), xml2 (>= 1.0.0)",
+        "LinkingTo": "cpp11, systemfonts, textshaping",
+        "VignetteBuilder": "knitr",
+        "Config/build/compilation-database": "true",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/testthat/edition": "3",
+        "Config/usethis/last-upkeep": "2025-04-25",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "SystemRequirements": "libpng",
+        "NeedsCompilation": "yes",
+        "Packaged": "2025-10-20 15:57:25 UTC; thomas",
+        "Author": "Hadley Wickham [aut],\n  Lionel Henry [aut],\n  Thomas Lin Pedersen [cre, aut] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  T Jake Luciani [aut],\n  Matthieu Decorde [aut],\n  Vaudor Lise [aut],\n  Tony Plate [ctb] (Early line dashing code),\n  David Gohel [ctb] (Line dashing code and early raster code),\n  Yixuan Qiu [ctb] (Improved styles; polypath implementation),\n  Håkon Malmedal [ctb] (Opacity code),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
+        "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2025-10-21 16:10:02 UTC",
+        "Built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-26 02:23:12 UTC; unix",
+        "Archs": "svglite.so.dSYM",
+        "RemoteType": "standard",
+        "RemotePkgRef": "svglite",
+        "RemoteRef": "svglite",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteSha": "2.2.2"
+      }
+    },
     "sysfonts": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -4405,6 +4397,45 @@
         "Archs": "sysfonts.so.dSYM"
       }
     },
+    "systemfonts": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Type": "Package",
+        "Package": "systemfonts",
+        "Title": "System Native Font Finding",
+        "Version": "1.3.2",
+        "Authors@R": "c(\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"aut\", \"cre\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Jeroen\", \"Ooms\", , \"jeroen@berkeley.edu\", role = \"aut\",\n           comment = c(ORCID = \"0000-0002-4035-0289\")),\n    person(\"Devon\", \"Govett\", role = \"aut\",\n           comment = \"Author of font-manager\"),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
+        "Description": "Provides system native access to the font catalogue. As font\n    handling varies between systems it is difficult to correctly locate\n    installed fonts across different operating systems. The 'systemfonts'\n    package provides bindings to the native libraries on Windows, macOS\n    and Linux for finding font files that can then be used further by e.g.\n    graphic devices. The main use is intended to be from compiled code but\n    'systemfonts' also provides access from R.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://github.com/r-lib/systemfonts,\nhttps://systemfonts.r-lib.org",
+        "BugReports": "https://github.com/r-lib/systemfonts/issues",
+        "Depends": "R (>= 3.2.0)",
+        "Imports": "base64enc, grid, jsonlite, lifecycle, tools, utils",
+        "Suggests": "covr, farver, ggplot2, graphics, knitr, ragg, rmarkdown,\nsvglite, testthat (>= 2.1.0)",
+        "LinkingTo": "cpp11 (>= 0.2.1)",
+        "VignetteBuilder": "knitr",
+        "Config/build/compilation-database": "true",
+        "Config/Needs/website": "tidyverse/tidytemplate",
+        "Config/usethis/last-upkeep": "2025-04-23",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "SystemRequirements": "fontconfig, freetype2",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-03-05 12:24:52 UTC; thomas",
+        "Author": "Thomas Lin Pedersen [aut, cre] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Jeroen Ooms [aut] (ORCID: <https://orcid.org/0000-0002-4035-0289>),\n  Devon Govett [aut] (Author of font-manager),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
+        "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-03-05 13:10:02 UTC",
+        "Built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 23:16:44 UTC; unix",
+        "Archs": "systemfonts.so.dSYM",
+        "RemoteType": "standard",
+        "RemotePkgRef": "systemfonts",
+        "RemoteRef": "systemfonts",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteSha": "1.3.2"
+      }
+    },
     "tensorA": {
       "Source": "CRAN",
       "Repository": "https://cloud.r-project.org",
@@ -4430,6 +4461,44 @@
         "RemoteRef": "tensorA",
         "RemoteRepos": "https://cran.rstudio.com",
         "RemoteSha": "0.36.2.1"
+      }
+    },
+    "textshaping": {
+      "Source": "CRAN",
+      "Repository": "https://cloud.r-project.org",
+      "description": {
+        "Package": "textshaping",
+        "Title": "Bindings to the 'HarfBuzz' and 'Fribidi' Libraries for Text\nShaping",
+        "Version": "1.0.5",
+        "Authors@R": "c(\n    person(\"Thomas Lin\", \"Pedersen\", , \"thomas.pedersen@posit.co\", role = c(\"cre\", \"aut\"),\n           comment = c(ORCID = \"0000-0002-5147-4711\")),\n    person(\"Posit Software, PBC\", role = c(\"cph\", \"fnd\"),\n           comment = c(ROR = \"03wc8by49\"))\n  )",
+        "Description": "Provides access to the text shaping functionality in the\n    'HarfBuzz' library and the bidirectional algorithm in the 'Fribidi'\n    library. 'textshaping' is a low-level utility package mainly for\n    graphic devices that expands upon the font tool-set provided by the\n    'systemfonts' package.",
+        "License": "MIT + file LICENSE",
+        "URL": "https://github.com/r-lib/textshaping",
+        "BugReports": "https://github.com/r-lib/textshaping/issues",
+        "Depends": "R (>= 3.2.0)",
+        "Imports": "lifecycle, stats, stringi, systemfonts (>= 1.3.0), utils",
+        "Suggests": "covr, grDevices, grid, knitr, rmarkdown, testthat (>= 3.0.0)",
+        "LinkingTo": "cpp11 (>= 0.2.1), systemfonts (>= 1.0.0)",
+        "VignetteBuilder": "knitr",
+        "Config/build/compilation-database": "true",
+        "Config/testthat/edition": "3",
+        "Config/usethis/last-upkeep": "2025-04-23",
+        "Encoding": "UTF-8",
+        "RoxygenNote": "7.3.2",
+        "SystemRequirements": "freetype2, harfbuzz, fribidi",
+        "NeedsCompilation": "yes",
+        "Packaged": "2026-03-06 09:57:58 UTC; thomas",
+        "Author": "Thomas Lin Pedersen [cre, aut] (ORCID:\n    <https://orcid.org/0000-0002-5147-4711>),\n  Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
+        "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
+        "Repository": "CRAN",
+        "Date/Publication": "2026-03-06 10:40:02 UTC",
+        "Built": "R 4.6.0; aarch64-apple-darwin23; 2026-04-25 23:19:28 UTC; unix",
+        "Archs": "textshaping.so.dSYM",
+        "RemoteType": "standard",
+        "RemotePkgRef": "textshaping",
+        "RemoteRef": "textshaping",
+        "RemoteRepos": "https://cran.rstudio.com",
+        "RemoteSha": "1.0.5"
       }
     },
     "tibble": {
@@ -5084,19 +5153,46 @@
       "checksum": "87f9d4ec0ffedff42d9aa1a7e04c6c96"
     },
     "app.R": {
-      "checksum": "87444c41b9a3eabd535f84403764cac3"
+      "checksum": "2551db2a6d80160060c08a76b5ca6283"
     },
     "DESCRIPTION": {
-      "checksum": "fa42706fc5b5844ab11df7872a00a158"
+      "checksum": "4ae871a867c04e4f9a18dd573f94219d"
+    },
+    "inst/extdata/kidney_fields.csv": {
+      "checksum": "ad7377f1aeba529c4e3a82f52a920efa"
+    },
+    "inst/extdata/leukocytes.csv": {
+      "checksum": "d718baf3311fec4b3f5fb45a2db6c156"
+    },
+    "inst/extdata/nuclear_abnormalities.csv": {
+      "checksum": "518ba4c81e948224450894151b8e1ee0"
+    },
+    "inst/extdata/spleen_fields.csv": {
+      "checksum": "6a01451a7bb38db31cfbc670d2ac0b88"
     },
     "inst/golem-config.yml": {
-      "checksum": "db2527271240c690630c2884b629eeb3"
+      "checksum": "01aafe301a1ce25ed197ab7127b0527e"
+    },
+    "inst/i18n/translations.csv": {
+      "checksum": "080852d7bed6c97279b819e8a84acf9b"
     },
     "inst/logo/codastreo_logo.png": {
       "checksum": "deea8091f39cb8e99a90e567f9abdb48"
     },
     "inst/logo/codastreo_logo.svg": {
       "checksum": "4df50f82e1b6e502e3fe375fae4af584"
+    },
+    "inst/logo/FONTS.md": {
+      "checksum": "59026b91a1637a08b008eec7a5a32b19"
+    },
+    "inst/logo/fonts/RygaRegular.otf": {
+      "checksum": "18b9ca10a65279015e4cab0d9ed18be3"
+    },
+    "inst/logo/logo.png": {
+      "checksum": "d7d584e6d238365962ac43def1eabca6"
+    },
+    "inst/logo/logo.svg": {
+      "checksum": "c517c63406b614b73fc7148793eb2fb1"
     },
     "LICENSE": {
       "checksum": "ea235343d57592bf4bbace2adea47927"
@@ -5105,37 +5201,52 @@
       "checksum": "5f95aa1f6027667603dcf891a71cb818"
     },
     "R/app_server.R": {
-      "checksum": "4d4a5734ade5e5352331b24a437b632e"
+      "checksum": "479dfef628d1c1a01a830c701b7ddf6d"
     },
     "R/app_ui.R": {
-      "checksum": "0342a32ecd27af65324e73a6b735fe3d"
+      "checksum": "e5abaffe69d13bded71dddeff32fb833"
     },
     "R/CoDaStereo-package.R": {
       "checksum": "63be19fe6582b977dba95b0b59a3be0a"
     },
     "R/fct_helpers.R": {
-      "checksum": "4843a23a7f57f1606c0060ae3d4bdb82"
+      "checksum": "320c8489b8f672370990964392c11e1e"
+    },
+    "R/fct_i18n.R": {
+      "checksum": "ff85d503e204aaebf37fb9abfc7a861b"
+    },
+    "R/fct_models.R": {
+      "checksum": "02ca473589454838fa42358a4438588c"
+    },
+    "R/fct_plots.R": {
+      "checksum": "8e9b81099c63202dcbbf338a1facc3b4"
+    },
+    "R/fct_reproducibility.R": {
+      "checksum": "65f2bdc2551301edb255354d45b4e63d"
     },
     "R/mod_analysis.R": {
-      "checksum": "e6432b3ea2dc0b25f732a666be9a3c1b"
+      "checksum": "dd8ca8f99fb862e735182952a50cc02e"
     },
     "R/mod_balances.R": {
-      "checksum": "6d1c7b62f9bd4de88f5d2c42b650646b"
+      "checksum": "3ad134c748cdcc89e3986761481cab6e"
     },
     "R/mod_data.R": {
-      "checksum": "452598384e1fbea4637e27eb36a53248"
+      "checksum": "4d254e6be36125f6b5a4a607193c5c31"
+    },
+    "R/mod_export.R": {
+      "checksum": "ff70755da5c9b784d5c094539d1bccc1"
     },
     "R/mod_imputation.R": {
-      "checksum": "ea37d98e699179a670e6f49652509c74"
+      "checksum": "408a4f62d56ad4f06cc1f88bc87c52bc"
     },
     "R/mod_stats.R": {
-      "checksum": "d51ea8be429dc8ffd934b4fc0e5921d7"
+      "checksum": "de98a418b889beffef57949c5a9d9951"
     },
     "R/mod_tutorial.R": {
-      "checksum": "34a1f80db5c67da5e4ad8799cfc467a4"
+      "checksum": "dde4d12d63688a3b4af8e7bc194790a4"
     },
     "R/run_app.R": {
-      "checksum": "0fb3e0b591f8254d445461ace1a65a26"
+      "checksum": "ef4a3d2d3cc6312347193cfe4d0fecc9"
     },
     "www/logo/codastreo_logo.svg": {
       "checksum": "4df50f82e1b6e502e3fe375fae4af584"

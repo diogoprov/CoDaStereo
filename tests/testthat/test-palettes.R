@@ -46,11 +46,17 @@ test_that("analysis module renders all plots for each palette", {
     {
       for (pal in plot_palettes) {
         session$setInputs(group_var = "Group", palette = pal,
-                          tern_mode = "direct", tern_vars = part_names[1:3])
-        expect_s3_class(ternary_obj(), "ggplot")
-        expect_s3_class(biplot_obj(), "ggplot")
+                          tern_mode = "direct", tern_vars = part_names[1:3],
+                          tern_regions = "confidence", tern_centre = TRUE,
+                          bp_x = "1", bp_y = "2", bp_shape = "", bp_labels = FALSE,
+                          interactive = FALSE)
+        expect_s3_class(ternary_build(FALSE), "ggplot")
+        expect_s3_class(biplot_build(TRUE), "ggplot")
         expect_no_error(output$ternary_plot)
         expect_no_error(output$biplot)
+        if (has_ggiraph()) expect_no_error(output$biplot_i)
+        expect_no_error(output$variation_plot)
+        expect_no_error(output$scree)
         expect_no_error(output$center_barplot)
         expect_no_error(output$totvar_barplot)
       }

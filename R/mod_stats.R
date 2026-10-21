@@ -3,80 +3,109 @@
 # ==============================================================================
 
 #' @noRd
-mod_stats_ui <- function(id) {
+mod_stats_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "stats",
     fluidRow(
-      box(title = "Permutational MANOVA (RRPP)", width = 12, status = "primary",
-          p("Build a factorial model on the ilr coordinates. Select one or more ",
-            "factors. With two or more factors, choose between an additive model ",
-            "(main effects only) or a full factorial (with all interactions)."),
-          uiOutput(ns("factors_ui")),
-          uiOutput(ns("interaction_ui")),
-          checkboxInput(ns("include_total"),
-                        "Include the total (composition + total)", value = FALSE),
+      box(title = t("Permutational MANOVA (RRPP)"), width = 12, status = "primary",
+          p(t("Build a factorial model on the ilr coordinates. Select one or more factors. With two or more factors, choose between an additive model (main effects only) or a full factorial (with all interactions).")),
+          fluidRow(
+            column(6,
+              uiOutput(ns("factors_ui")),
+              uiOutput(ns("interaction_ui")),
+              uiOutput(ns("covariates_ui")),
+              uiOutput(ns("block_ui"))
+            ),
+            column(6,
+              radioButtons(ns("ss_type"), t("Sums of squares:"),
+                           choices = tr_choices(c("Type I (sequential)" = "I",
+                                                  "Type II" = "II", "Type III" = "III"), lang),
+                           selected = "I", inline = TRUE),
+              selectInput(ns("iter"), t("Permutations:"),
+                          choices = tr_choices(c("199 (quick look)" = 199,
+                                                 "999 (default)" = 999,
+                                                 "9999 (final analysis)" = 9999), lang),
+                          selected = 999),
+              radioButtons(ns("total_mode"), t("Total (size):"),
+                           choices = tr_choices(c(
+                             "Not used (composition only)" = "none",
+                             "Joint response (composition + total)" = "joint",
+                             "Covariate (does composition change with size?)" = "covariate"), lang),
+                           selected = "none")
+            )
+          ),
           conditionalPanel(
-            condition = sprintf("input['%s']", ns("include_total")),
-            radioButtons(ns("total_type"), "Total:",
-                         choices = c("Sum of parts (Ts; recommended)" = "sum",
-                                     "Product of parts^(1/sqrt(D)) (Tp; same as log of each part)" = "product"),
-                         selected = "sum"),
+            condition = sprintf("input['%s'] != 'none'", ns("total_mode")),
+            radioButtons(ns("total_type"), t("Total:"),
+                         choices = tr_choices(c(
+                           "Sum of parts (Ts; recommended)" = "sum",
+                           "Product of parts^(1/sqrt(D)) (Tp; same as log of each part)" = "product"), lang),
+                         selected = "sum", inline = TRUE),
             p(style = "color: #666; font-size: 90%;",
-              "Adds the log-total as one more response coordinate, so the model ",
-              "tests differences in composition and in size jointly ",
-              "(Pawlowsky-Glahn, Egozcue & Lovell 2015, Statistical Modelling ",
-              "15:175-190). Use it only when parts are on an absolute scale ",
-              "(e.g., absolute volumes, cells per microlitre). Point counts with a ",
-              "fixed number of grid points or cells have a total fixed by design."),
+              t("Uses the log-total of each specimen (Pawlowsky-Glahn, Egozcue & Lovell 2015, Statistical Modelling 15:175-190). As a joint response it tests composition and size together; as a covariate it asks whether the composition shifts with size. Use it only when parts are on an absolute scale (e.g., absolute volumes, cells per microlitre). Point counts with a fixed number of grid points or cells have a total fixed by design.")),
             uiOutput(ns("total_warning"))
           ),
           verbatimTextOutput(ns("formula_preview")),
-          actionButton(ns("run_manova"), "Run Model", icon = icon("play")),
-          downloadButton(ns("dl_manova"), "Download ANOVA table (CSV)"),
+          actionButton(ns("run_manova"), t("Run Model"), icon = icon("play")),
+          downloadButton(ns("dl_manova"), t("Download ANOVA table (CSV)")),
+          uiOutput(ns("run_status")),
           hr(),
           verbatimTextOutput(ns("manova_results"))
       )
     ),
     conditionalPanel(
-      condition = sprintf("input['%s']", ns("include_total")),
+      condition = sprintf("input['%s'] == 'joint'", ns("total_mode")),
       fluidRow(
-        box(title = "Total (size) alone", width = 12, status = "info",
-            p("Univariate permutational ANOVA of the log-total with the same ",
-              "factors, to separate the size effect from the compositional one."),
+        box(title = t("Total (size) alone"), width = 12, status = "info",
+            p(t("Univariate permutational ANOVA of the log-total with the same factors, to separate the size effect from the compositional one.")),
             fluidRow(
               column(6, verbatimTextOutput(ns("total_results"))),
-              column(6, plotOutput(ns("total_plot"), height = "300px"))
+              column(6, plotOutput(ns("total_plot"), height = "300px"),
+                     downloadButton(ns("dl_total_plot"), t("Download figure")))
             ))
       )
     ),
     fluidRow(
-      box(title = "Pairwise comparisons", width = 6, status = "info",
-          p("Permutational pairwise tests on Euclidean distances in ilr space ",
-            "(plus the log-total when included)."),
+      box(title = t("Pairwise comparisons"), width = 6, status = "info",
+          p(t("Permutational pairwise tests between group means (Euclidean distances in ilr space, plus the log-total when included) and between group dispersions (compositional disparity). Z is the standardised effect size.")),
           uiOutput(ns("pairwise_group_ui")),
-          actionButton(ns("run_pairwise"), "Run Pairwise", icon = icon("exchange-alt")),
-          downloadButton(ns("dl_pairwise"), "Download pairwise (CSV)"),
+          actionButton(ns("run_pairwise"), t("Run Pairwise"), icon = icon("exchange-alt")),
+          downloadButton(ns("dl_pairwise"), t("Download pairwise (CSV)")),
+          uiOutput(ns("pw_status")),
           hr(),
-          verbatimTextOutput(ns("pairwise_results"))
+          h5(strong(t("Differences in means"))),
+          verbatimTextOutput(ns("pairwise_results")),
+          h5(strong(t("Differences in dispersion"))),
+          verbatimTextOutput(ns("dispersion_results"))
       ),
-      box(title = "Model diagnostics", width = 6, status = "warning",
-          p("Residual plots from the fitted RRPP model."),
+      box(title = t("Model diagnostics"), width = 6, status = "warning",
+          p(t("Residual plots from the fitted RRPP model.")),
           plotOutput(ns("diag_resid"), height = "300px"),
-          plotOutput(ns("diag_pc"), height = "300px")
+          downloadButton(ns("dl_diag_resid"), t("Download figure")),
+          plotOutput(ns("diag_pc"), height = "300px"),
+          downloadButton(ns("dl_diag_pc"), t("Download figure")),
+          hr(),
+          export_settings_ui(ns, lang)
       )
     )
   )
 }
 
 #' @noRd
-mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
+mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
+                             restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    rv <- reactiveValues(model = NULL, manova_out = NULL,
-                         pairwise_out = NULL, formula_used = NULL,
-                         total_out = NULL, total_df = NULL)
+    take <- restore_pending(restore, "stats")
+    t    <- session_tr(session)
+    rv <- reactiveValues(fit = NULL, pairwise = NULL)
+    # Results come back from a worker: register RRPP's print/plot S3 methods here
+    loadNamespace("RRPP")
 
-    use_total <- reactive(isTRUE(input$include_total) && !is.null(raw))
+    total_mode <- reactive({
+      if (is.null(raw)) "none" else input$total_mode %||% "none"
+    })
 
     output$total_warning <- renderUI({
       req(raw, raw())
@@ -84,128 +113,250 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       if (cv >= 0.05) return(NULL)
       tags$p(style = "color: #856404; background: #fff3cd; padding: 8px; border-radius: 4px;",
              icon("exclamation-triangle"),
-             sprintf(paste0(" Totals are almost constant (CV = %.1f%%): they are probably ",
-                            "fixed by the sampling design and carry no biological information. ",
-                            "Do not include the total."), cv * 100))
+             sprintf(t(" Totals are almost constant (CV = %.1f%%): they are probably fixed by the sampling design and carry no biological information. Do not include the total."), cv * 100))
     })
 
     output$factors_ui <- renderUI({
       req(df(), parts())
       cands <- factor_candidates(df(), parts())
-      selectInput(ns("factors"), "Factor(s) for the model:",
-                  choices = cands, selected = head(cands, 1),
+      selectInput(ns("factors"), t("Factor(s) for the model:"),
+                  choices = cands, selected = take("factors") %||% head(cands, 1),
                   multiple = TRUE, width = "100%")
     })
 
     output$interaction_ui <- renderUI({
       req(input$factors)
       if (length(input$factors) < 2) return(NULL)
-      radioButtons(ns("interaction_type"), "Model design:",
-                   choices = c("Additive (main effects only)" = "+",
-                               "Factorial (with interactions)" = "*"),
-                   selected = "+", inline = TRUE)
+      radioButtons(ns("interaction_type"), t("Model design:"),
+                   choices = tr_choices(c("Additive (main effects only)" = "+",
+                                          "Factorial (with interactions)" = "*"), ui_lang(session)),
+                   selected = take("design") %||% "+", inline = TRUE)
     })
 
-    manova_formula <- reactive({
+    output$covariates_ui <- renderUI({
+      req(df(), parts())
+      cands <- covariate_candidates(df(), parts())
+      if (length(cands) == 0) return(NULL)
+      selectInput(ns("covariates"), t("Numeric covariate(s) (ANCOVA):"),
+                  choices = cands, multiple = TRUE, width = "100%",
+                  selected = take("covariates"))
+    })
+
+    output$block_ui <- renderUI({
+      req(df(), parts())
+      cands <- setdiff(names(df()), c(parts(), input$factors))
+      selectInput(ns("block"), t("Block (permutations restricted within blocks):"),
+                  choices = c(stats::setNames("", t("None")), cands), selected = take("block") %||% "",
+                  width = "100%")
+    })
+
+    model_spec_rhs <- reactive({
       req(input$factors)
-      sep <- if (length(input$factors) >= 2 && !is.null(input$interaction_type)) {
-        input$interaction_type
-      } else { "+" }
-      rhs <- paste(input$factors, collapse = paste0(" ", sep, " "))
-      stats::as.formula(paste("y ~", rhs))
+      design <- if (length(input$factors) >= 2) input$interaction_type %||% "+" else "+"
+      model_rhs(input$factors, design, input$covariates %||% character(0),
+                log_total_cov = total_mode() == "covariate")
     })
 
     output$formula_preview <- renderPrint({
       req(input$factors)
-      cat("Formula:  ", deparse(manova_formula()), "\n",
-          if (use_total()) {
-            sprintf("(y = ilr coordinates of the imputed composition + log-total [%s])",
-                    input$total_type)
-          } else {
-            "(y = ilr coordinates of the imputed composition)"
-          }, sep = "")
+      cat(t("Formula:"), " y ~ ", model_spec_rhs(), "\n",
+          switch(total_mode(),
+            joint = sprintf(t("(y = ilr coordinates of the imputed composition + log-total [%s])"),
+                            input$total_type),
+            covariate = sprintf(t("(y = ilr coordinates; log-total [%s] as covariate)"),
+                                input$total_type),
+            t("(y = ilr coordinates of the imputed composition)")),
+          if (nzchar(input$block %||% "")) sprintf(t("\nBlock: %s"), input$block),
+          sep = "")
     })
 
     output$pairwise_group_ui <- renderUI({
       req(input$factors)
-      selectInput(ns("pw_group"), "Grouping factor for pairwise tests:",
-                  choices = input$factors, selected = input$factors[1])
+      selectInput(ns("pw_group"), t("Grouping factor for pairwise tests:"),
+                  choices = input$factors, selected = take("pw_group") %||% input$factors[1])
     })
 
-    observeEvent(input$run_manova, {
+    # -- Model fitting (background worker when available) ----------------------
+    build_spec <- function() {
+      kr   <- keep_rows()
+      cols <- unique(c(input$factors, input$covariates,
+                       if (nzchar(input$block %||% "")) input$block))
+      d <- df()[kr, cols, drop = FALSE]
+      d[] <- purrr::map(names(d), \(v) if (v %in% input$covariates) d[[v]] else as.factor(d[[v]]))
+      list(y          = unclass(compositions::ilr(comp())),
+           data       = d,
+           rhs        = model_spec_rhs(),
+           iter       = as.integer(input$iter),
+           seed       = 42,
+           ss_type    = input$ss_type,
+           block      = if (nzchar(input$block %||% "")) input$block,
+           total_mode = total_mode(),
+           log_total  = if (total_mode() != "none") log_total_coord(raw(), comp(), input$total_type))
+    }
+
+    fit_task <- ExtendedTask$new(function(spec) run_in_worker(fit_models, spec))
+    pw_task  <- ExtendedTask$new(function(arg) run_in_worker(fit_pairwise, arg))
+
+    run_fit <- function() {
       req(comp(), keep_rows(), input$factors)
-      fmla <- manova_formula()
-      y <- unclass(compositions::ilr(comp()))
-      factor_list <- lapply(input$factors, function(f) as.factor(df()[[f]][keep_rows()]))
-      names(factor_list) <- input$factors
-      rv$total_out <- NULL
-      rv$total_df  <- NULL
-      if (use_total()) {
-        log_total <- log_total_coord(raw(), comp(), input$total_type)
-        y <- cbind(y, log_total = log_total)
-        df_tot <- do.call(RRPP::rrpp.data.frame,
-                          c(list(y = log_total), factor_list))
-        rv$total_out <- anova(RRPP::lm.rrpp(fmla, data = df_tot, iter = 999,
-                                            print.progress = FALSE))
-        rv$total_df  <- data.frame(group = factor_list[[1]], log_total = log_total)
+      spec <- build_spec()
+      rv$pairwise <- NULL
+      if (use_async()) {
+        fit_task$invoke(spec)
+      } else {
+        withProgress(message = t("Running permutations..."), {
+          rv$fit <- fit_models(spec)
+        })
       }
-      df_rrpp <- do.call(RRPP::rrpp.data.frame,
-                         c(list(y = as.matrix(y)), factor_list))
-      rv$model <- RRPP::lm.rrpp(fmla, data = df_rrpp, iter = 999, print.progress = FALSE)
-      rv$manova_out  <- anova(rv$model)
-      rv$formula_used <- paste0(deparse(fmla),
-                                if (use_total()) paste0("  [y includes log-total: ", input$total_type, "]"))
-      rv$pairwise_out <- NULL
+    }
+    observeEvent(input$run_manova, run_fit())
+
+    observeEvent(fit_task$status(), {
+      if (fit_task$status() == "success") rv$fit <- fit_task$result()
+      if (fit_task$status() == "error") {
+        showNotification(paste(t("Model failed:"), conditionMessage(
+          tryCatch(fit_task$result(), error = identity))), type = "error", duration = 10)
+      }
     })
+
+    status_badge <- function(task) {
+      renderUI({
+        if (use_async() && task$status() == "running") {
+          tags$p(style = "color: #31708f; margin-top: 8px;",
+                 icon("spinner", class = "fa-spin"),
+                 sprintf(t(" Running %s permutations in the background..."), input$iter))
+        }
+      })
+    }
+    output$run_status <- status_badge(fit_task)
+    output$pw_status  <- status_badge(pw_task)
 
     output$manova_results <- renderPrint({
-      req(rv$manova_out)
-      cat("Fitted formula:", rv$formula_used, "\n\n")
-      print(rv$manova_out)
+      req(rv$fit)
+      cat(t("Fitted formula:"), "y ~", rv$fit$rhs, "\n\n")
+      print(rv$fit$anova)
     })
 
-    observeEvent(input$run_pairwise, {
-      req(rv$model, input$pw_group, keep_rows())
-      group_vec <- as.factor(df()[[input$pw_group]][keep_rows()])
-      rv$pairwise_out <- RRPP::pairwise(rv$model, groups = group_vec)
+    run_pw <- function() {
+      req(rv$fit, input$pw_group, keep_rows())
+      arg <- list(model  = rv$fit$model,
+                  groups = as.factor(df()[[input$pw_group]][keep_rows()]))
+      if (use_async()) {
+        pw_task$invoke(arg)
+      } else {
+        withProgress(message = t("Running pairwise tests..."), {
+          rv$pairwise <- fit_pairwise(arg)
+        })
+      }
+    }
+    observeEvent(input$run_pairwise, run_pw())
+
+    observeEvent(pw_task$status(), {
+      if (pw_task$status() == "success") rv$pairwise <- pw_task$result()
     })
 
     output$total_results <- renderPrint({
-      req(rv$total_out)
-      cat("log-total ~", paste(input$factors, collapse = ", "), "\n\n")
-      print(rv$total_out)
+      req(rv$fit$total_anova)
+      cat("log-total ~", rv$fit$rhs, "\n\n")
+      print(rv$fit$total_anova)
     })
 
-    output$total_plot <- renderPlot({
-      req(rv$total_df)
-      ggplot2::ggplot(rv$total_df, ggplot2::aes(x = .data$group, y = .data$log_total)) +
+    total_plot_build <- function() {
+      req(rv$fit$total_df)
+      ggplot2::ggplot(rv$fit$total_df, ggplot2::aes(x = .data$group, y = .data$log_total)) +
         ggplot2::geom_boxplot(outlier.shape = NA, width = 0.5) +
         ggplot2::geom_jitter(width = 0.1, height = 0, alpha = 0.6) +
         ggplot2::labs(x = input$factors[1], y = "log-total") +
         ggplot2::theme_minimal(base_size = 14)
-    })
+    }
+    output$total_plot    <- renderPlot(total_plot_build())
+    output$dl_total_plot <- plot_download(input, "log_total", total_plot_build)
 
     output$pairwise_results <- renderPrint({
-      req(rv$pairwise_out)
-      cat("Pairwise distances (Euclidean in ilr space)\n\n")
-      summary(rv$pairwise_out, test.type = "dist")
+      req(rv$pairwise)
+      rv$pairwise$dist
     })
 
-    output$diag_resid <- renderPlot({ req(rv$model); plot(rv$model, type = "diagnostics") })
-    output$diag_pc    <- renderPlot({ req(rv$model); plot(rv$model, type = "PC", pch = 19) })
+    output$dispersion_results <- renderPrint({
+      req(rv$pairwise)
+      rv$pairwise$var
+    })
+
+    diag_resid_draw <- function() plot(rv$fit$model, type = "diagnostics")
+    diag_pc_draw    <- function() plot(rv$fit$model, type = "PC", pch = 19)
+    output$diag_resid <- renderPlot({ req(rv$fit); diag_resid_draw() })
+    output$diag_pc    <- renderPlot({ req(rv$fit); diag_pc_draw() })
+    output$dl_diag_resid <- plot_download(input, "diagnostics", function() { req(rv$fit); diag_resid_draw })
+    output$dl_diag_pc    <- plot_download(input, "fitted_pcs", function() { req(rv$fit); diag_pc_draw })
 
     output$dl_manova <- downloadHandler(
       filename = function() paste0("manova_", Sys.Date(), ".csv"),
-      content  = function(file) { req(rv$manova_out); utils::write.csv(rv$manova_out$table, file) }
+      content  = function(file) { req(rv$fit); utils::write.csv(rv$fit$anova$table, file) }
     )
 
     output$dl_pairwise <- downloadHandler(
       filename = function() paste0("pairwise_", Sys.Date(), ".csv"),
       content  = function(file) {
-        req(rv$pairwise_out)
-        tbl <- summary(rv$pairwise_out, test.type = "dist")$summary.table
-        utils::write.csv(tbl, file)
+        req(rv$pairwise)
+        tbl <- rbind(
+          data.frame(test = "means", comparison = rownames(rv$pairwise$dist$summary.table),
+                     rv$pairwise$dist$summary.table, check.names = FALSE, row.names = NULL),
+          data.frame(test = "dispersion", comparison = rownames(rv$pairwise$var$summary.table),
+                     rv$pairwise$var$summary.table, check.names = FALSE, row.names = NULL))
+        utils::write.csv(tbl, file, row.names = FALSE)
       }
     )
+
+    observeEvent(restore(), {
+      st <- restore()$stats
+      updateRadioButtons(session, "ss_type", selected = st$ss_type)
+      updateSelectInput(session, "iter", selected = st$iter)
+      updateRadioButtons(session, "total_mode", selected = st$total_mode)
+      updateRadioButtons(session, "total_type", selected = st$total_type)
+      rv$fit <- NULL
+      rv$pairwise <- NULL
+      if (isTRUE(st$fitted) && length(st$factors)) pending_fit(st)
+    })
+
+    # Restore: refit once every restored input has come back from the browser
+    pending_fit <- reactiveVal(NULL)
+    pending_pw  <- reactiveVal(NULL)
+    same <- function(a, b) identical(as.character(a %||% character(0)),
+                                     as.character(b %||% character(0)))
+    observe({
+      st <- pending_fit()
+      req(st, comp(), keep_rows())
+      req(same(input$factors, st$factors), same(input$covariates, st$covariates),
+          same(input$block, st$block %||% ""), same(input$iter, st$iter),
+          same(input$ss_type, st$ss_type), same(total_mode(), st$total_mode),
+          length(st$factors) < 2 || same(input$interaction_type, st$design))
+      pending_fit(NULL)
+      run_fit()
+      if (isTRUE(st$pairwise_run)) pending_pw(st$pw_group)
+    })
+    observe({
+      g <- pending_pw()
+      req(g, rv$fit, same(input$pw_group, g))
+      pending_pw(NULL)
+      run_pw()
+    })
+
+    state <- reactive(list(
+      factors = input$factors, design = input$interaction_type,
+      covariates = input$covariates, block = input$block,
+      rhs = if (length(input$factors)) model_spec_rhs(),
+      iter = input$iter, ss_type = input$ss_type, total_mode = total_mode(),
+      total_type = input$total_type, pw_group = input$pw_group,
+      fitted = !is.null(rv$fit), pairwise_run = !is.null(rv$pairwise),
+      fit = rv$fit, pairwise = rv$pairwise))
+
+
+    # Inputs built by renderUI must exist even in hidden tabs (session restore)
+    outputOptions(output, "factors_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "interaction_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "covariates_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "block_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "pairwise_group_ui", suspendWhenHidden = FALSE)
+    list(fit = reactive(rv$fit), pairwise = reactive(rv$pairwise), state = state)
   })
 }

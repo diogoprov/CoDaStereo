@@ -1,6 +1,6 @@
 Package: CoDaStereo
 Title: Compositional Data Analysis for Stereological and Histomorphometric Data
-Version: 3.0.0
+Version: 3.1.0
 Authors@R: person("Diogo B.", "Provete", email = "diogo.provete@ufms.br",
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0002-0097-0651"))
@@ -14,7 +14,7 @@ Description: Interactive 'shiny' application for compositional data
     log-transformed total as described by Pawlowsky-Glahn, Egozcue and
     Lovell (2015) <doi:10.1177/1471082X14535526>.
 License: MIT + file LICENSE
-URL: https://github.com/diogoprov/CoDaStereo
+URL: https://github.com/diogoprov/CoDaStereo, https://diogoprov.github.io/CoDaStereo/
 BugReports: https://github.com/diogoprov/CoDaStereo/issues
 Depends:
     R (>= 4.1.0)
@@ -33,19 +33,24 @@ Imports:
     compositions,
     zCompositions,
     RRPP,
-    factoextra,
     FactoMineR,
     rintrojs (>= 0.3.0),
     golem (>= 0.4.0),
     rlang,
     purrr,
+    ggiraph,
+    htmltools,
+    jsonlite,
+    knitr,
+    ggrepel,
+    svglite,
+    mirai,
     graphics,
     stats,
     utils,
     grDevices,
     tools
 Suggests:
-    knitr,
     pkgload,
     rmarkdown,
     testthat (>= 3.0.0)

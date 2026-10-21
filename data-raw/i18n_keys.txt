@@ -1,0 +1,238 @@
+Next
+Back
+Done
+Tour
+Introduction
+Data Upload
+Data Inspection
+Zero Handling
+Compositional Analysis
+Balances (SBP)
+Statistical Modeling
+Reproducibility
+Welcome to CoDa Stereo
+This tool implements the Aitchison geometry for stereological and histomorphometric data.
+Follow the sidebar from top to bottom to complete the PPDAC cycle.
+The interface is available in English, Portuguese and Spanish (EN / PT / ES at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication.
+Start guided tour
+At least 2 parts are required for compositional analysis.
+'%s' has mean = %.2f, which is %.0f× the median part mean (%.2f). Is it really a compositional part?
+'%s' contains negative values, which are undefined in the simplex.
+Row sums have high variability (CV = %.1f%%). Parts may not form a closed composition, or a non-compositional column may be included.
+%d parts need exactly %d balances.
+Balance %s needs at least one +1 and one -1 part.
+Exactly one balance (the first split) must involve all parts.
+Balances %s and %s are not nested: each balance must split one group of its parent.
+Figure export settings
+Format:
+Width (cm):
+Height (cm):
+DPI:
+Font size (pt):
+Plot settings
+Colour palette:
+Interactive plots (hover shows the sample)
+Ternary Plot
+Ternary mode:
+Select 3 parts
+Amalgamate into 3 groups
+Group 1:
+Group 2:
+Group 3:
+Group regions:
+Convex hull
+95% confidence (mean)
+95% predictive
+None
+Show group centres
+Download figure
+Compositional PCA (clr-Biplot)
+X axis:
+Y axis:
+Label samples
+How to read this biplot
+<strong>Rays</strong> (arrows) are the parts, as clr variables. Ray length is proportional to the clr standard deviation: longer rays are parts whose share varies more relative to the geometric mean.
+<strong>Links</strong> are the (imaginary) segments joining two ray tips. Link length is proportional to the standard deviation of the log-ratio of those two parts. A short link means the two parts stay nearly proportional across samples.
+The cosine of the angle between two links approximates the correlation between the two log-ratios; links at right angles indicate uncorrelated log-ratios.
+Do <em>not</em> read the angle between two rays as a correlation between the parts themselves.
+<strong>Points</strong> are samples; points lying toward a ray tend to have relatively more of that part. Polygons are the convex hulls of each group.
+All of this is a planar approximation: rely on it only when the two axes explain a large share of the total variance (shown in the axis titles and the scree plot).
+Scree plot and ray lengths
+Variation matrix
+Variance of the log-ratio of each pair of parts. Values near zero mean the two parts stay proportional; high values mark the trade-offs that drive compositional change. These are the squared link lengths of the biplot, in full dimension.
+Download matrix (CSV)
+Compositional center (geometric mean) by group
+Stacked bars showing the closed geometric mean composition per group. Unlike arithmetic means, the compositional center respects the simplex geometry.
+Total variance by group
+Total metric variance (mvar) of the composition per group. Higher values indicate greater internal dispersion in the simplex.
+Download imputed data
+Download imputed data (CSV)
+Colour / group by:
+Select 3 Parts:
+Parts:
+Shape by:
+Add log-total (T-space biplot):
+No
+none
+Sum of parts (Ts)
+Product total (Tp)
+Choose two different axes.
+Sequential binary partition (SBP)
+The SBP is built automatically by Ward clustering of the parts on clr distances. Edit any cell to define your own balances: +1 = numerator, -1 = denominator, 0 = not in this balance.
+Reset to automatic SBP
+Download SBP (CSV)
+CoDa dendrogram
+Each horizontal axis is one balance. The vertical bar above it is the balance variance, and where the bar meets the axis is the balance mean. Coloured boxes show the balance distribution per group.
+Balances by group
+Each panel is one balance (numerator / denominator parts). Positive values mean the numerator parts dominate. Test each balance with a univariate permutational ANOVA; Z is the standardised effect size. With several balances, interpret P-values with the multiple comparisons in mind.
+Test balances (999 permutations)
+Download tests (CSV)
+font-size: 85%;
+65px
+ Valid SBP.
+Invalid SBP:
+Fix the SBP to draw the dendrogram.
+Testing balances...
+Data Input
+Choose CSV or Excel File
+Browse...
+No file selected
+First row is header
+CSV separator (ignored for Excel)
+Or try it out:
+Example dataset:
+Simulated liver (2 groups)
+Spleen, point counts per field (case study 1)
+Kidney, point counts per field (case study 2)
+Leukocyte differential counts (case study 3)
+Erythrocyte nuclear abnormalities (case study 4)
+Load example
+Data Preview
+Specimens (nested designs)
+When rows are fields of view (or sections) nested within specimens, analyse one composition per specimen: fields of the same animal are not independent replicates. Point counts are summed; areas or proportions are averaged.
+Aggregate rows by specimen
+Combine parts by:
+Sum (counts)
+Mean (areas, proportions)
+Compositional parts
+<strong>Select which numeric columns are the compositional parts.</strong> Columns whose name looks like an ID are deselected by default; non-compositional covariates (body weight, biochemical assays on a different scale, etc.) should also be unchecked.
+Pre-flight check
+Automatic diagnostics for the selected parts:
+Pattern of zeros and missing values
+Each column is a sample, each row a compositional part. Cells are coloured according to whether the value was <span style='color:#7570B3; font-weight:bold;'>observed</span>, a <span style='color:#D95F02; font-weight:bold;'>structural zero</span> or <span style='color:#1B9E77; font-weight:bold;'>missing (NA)</span>.
+Missing values (naniar::vis_miss)
+Counts per part
+Excel sheet:
+Unsupported file type:
+Specimen column:
+The specimen column cannot be a compositional part.
+ %d rows aggregated into %d specimens (%s).
+ Columns not constant within specimens were dropped: %s.
+Compositional parts (numeric columns to analyse):
+ All checks passed.
+%d parts selected. Row sums look consistent.
+ Issues detected:
+ Consider unchecking: %s
+R script
+An R script that reproduces the steps you ran in the app (data, aggregation, zero replacement, balances and the permutational MANOVA), for the supplementary material of a paper.
+Download R script
+Report and session
+Report
+A self-contained HTML report with the settings, figures, tables, model output and the R script.
+Download HTML report
+Session
+Save the data and every setting to a file and load it later to resume the analysis. Results are recomputed on loading (the same seed gives the same results).
+Save session
+Load session (.json)
+Load data to generate the script.
+Building report...
+Session loaded: recomputing results...
+Zero-replacement method
+Compositional data may carry different kinds of zeros:
+<strong>CZM</strong>: Bayesian-multiplicative replacement for <em>count zeros</em> (multinomial sampling). Use with point counts.
+<strong>multRepl</strong>: multiplicative replacement for <em>rounded zeros</em> (below detection limit). Use with percentages.
+<strong>lrEM</strong>: log-ratio EM algorithm, also for <em>rounded zeros</em>. More efficient for moderate to large n.
+Choose method:
+CZM (count zeros)
+multRepl (rounded zeros)
+lrEM (rounded zeros)
+Missing values (NA) handling
+If selected parts contain <code>NA</code> values, choose how to deal with them <em>before</em> zero imputation.
+Drop rows containing NAs (listwise deletion)
+Replace NAs with column geometric mean
+Run Imputation
+no NAs detected
+Replacing zeros (%s)...
+Zero method:
+NA handling:
+Rows analysed: %d of %d
+Parts analysed:
+First five imputed rows (closed composition):
+Permutational MANOVA (RRPP)
+Build a factorial model on the ilr coordinates. Select one or more factors. With two or more factors, choose between an additive model (main effects only) or a full factorial (with all interactions).
+Sums of squares:
+Type I (sequential)
+Type II
+II
+Type III
+Permutations:
+199 (quick look)
+999 (default)
+9999 (final analysis)
+Total (size):
+Not used (composition only)
+Joint response (composition + total)
+Covariate (does composition change with size?)
+Total:
+Sum of parts (Ts; recommended)
+Product of parts^(1/sqrt(D)) (Tp; same as log of each part)
+Uses the log-total of each specimen (Pawlowsky-Glahn, Egozcue & Lovell 2015, Statistical Modelling 15:175-190). As a joint response it tests composition and size together; as a covariate it asks whether the composition shifts with size. Use it only when parts are on an absolute scale (e.g., absolute volumes, cells per microlitre). Point counts with a fixed number of grid points or cells have a total fixed by design.
+Run Model
+Download ANOVA table (CSV)
+Total (size) alone
+Univariate permutational ANOVA of the log-total with the same factors, to separate the size effect from the compositional one.
+Pairwise comparisons
+Permutational pairwise tests between group means (Euclidean distances in ilr space, plus the log-total when included) and between group dispersions (compositional disparity). Z is the standardised effect size.
+Run Pairwise
+Download pairwise (CSV)
+Differences in means
+Differences in dispersion
+Model diagnostics
+Residual plots from the fitted RRPP model.
+ Totals are almost constant (CV = %.1f%%): they are probably fixed by the sampling design and carry no biological information. Do not include the total.
+Factor(s) for the model:
+Model design:
+Additive (main effects only)
+Factorial (with interactions)
+Numeric covariate(s) (ANCOVA):
+Block (permutations restricted within blocks):
+Formula:
+(y = ilr coordinates of the imputed composition + log-total [%s])
+(y = ilr coordinates; log-total [%s] as covariate)
+(y = ilr coordinates of the imputed composition)
+
+Block: %s
+Grouping factor for pairwise tests:
+Running permutations...
+Model failed:
+ Running %s permutations in the background...
+Fitted formula:
+Running pairwise tests...
+<b>Welcome to CoDa Stereo!</b><br><br> This app implements the Aitchison geometry for stereological and histomorphometric data.<br><br> Follow the sidebar <b>top to bottom</b> to complete the PPDAC cycle. Click <b>Next</b> to continue.
+<b>1 &mdash; Data Upload</b><br><br> Upload a <b>CSV or Excel file</b>, or load one of the <b>example datasets</b> (the four case studies of the companion paper).<br><br> If rows are fields of view, <b>aggregate them by specimen</b>.<br><br> After uploading, the <b>Compositional parts</b> selector lets you choose which numeric columns are the parts of the composition. ID columns are excluded automatically.<br><br> A <b>Pre-flight check</b> alerts you if a selected column has an incompatible scale (e.g., Glycogen measured separately).
+<b>Parts selector &mdash; what to include</b><br><br> Select <em>only</em> columns that form a <b>closed composition</b> (volume fractions, area percentages, or cell counts summing to a constant).<br><br> Non-compositional covariates (body weight, biochemical assays on a different scale) must be unchecked.
+<b>2 &mdash; Data Inspection</b><br><br> Before any transformation, visualise:<br> <ul> <li><b>Structural zeros</b> &mdash; rare tissue compartments</li> <li><b>Missing values (NA)</b></li> </ul> The three-state heatmap distinguishes observed values, zeros, and NAs &mdash; a critical distinction for choosing the right imputation method.
+<b>3 &mdash; Zero and NA handling</b><br><br> Choose the imputation method before running:<br> <ul> <li><b>CZM</b> &mdash; count zeros (point-counting stereology)</li> <li><b>multRepl</b> &mdash; rounded zeros (percentages)</li> <li><b>lrEM</b> &mdash; rounded zeros, larger samples</li> </ul> If the data has NAs, choose <em>drop rows</em> or <em>geometric-mean imputation</em> first.
+<b>4 &mdash; Compositional Analysis</b><br><br> <b>Ternary plot</b>: visualise 3 parts in the simplex. Use <em>Amalgamate</em> if D &gt; 3. Convex hulls or 95% regions delimit each group.<br><br> <b>clr-PCA Biplot</b>: ray length ~ clr standard deviation; the distance between two ray tips ~ standard deviation of their log-ratio. Open <em>How to read this biplot</em> for details.<br><br> <b>Variation matrix</b> and <b>compositional descriptives</b>: log-ratio variances, geometric-mean composition and total variance per group.<br><br> Use <b>Colour palette</b> to switch between high-contrast colour schemes, including colour-blind-safe options.
+<b>5 &mdash; Balances (SBP)</b><br><br> A <b>sequential binary partition</b> splits the parts into nested groups; each split defines one <b>balance</b> (an ilr coordinate). <br><br> The SBP is built automatically from the data, and you can edit any cell (+1 / -1 / 0).<br><br> The <b>CoDa dendrogram</b> shows each balance's variance (bar height), mean, and per-group distribution; each balance can be tested between groups.
+<b>6 &mdash; Statistical Modeling</b><br><br> Fits a permutational MANOVA on <b>ilr coordinates</b> via RRPP. <br><br> Select one or more factors; toggle additive or factorial design. The formula is previewed before fitting.<br><br> Covariates, a block term and the <b>total (size)</b> can be added when parts are on an absolute scale.<br><br> After fitting: run <b>pairwise tests</b> of means and dispersions and inspect <b>residual diagnostics</b>.
+<b>7 &mdash; Reproducibility</b><br><br> Download an <b>R script</b> that reproduces your analysis, a self-contained <b>HTML report</b>, or <b>save the session</b> to resume it later.
+<b>You're ready!</b><br><br> That covers the full PPDAC cycle.<br><br> Start by loading an example (<em>Load example</em> in the Data Upload tab) or uploading your own file.<br><br> Click this button anytime to restart the tour.
+Okabe-Ito (colour-blind safe)
+Dark2 (ColorBrewer)
+Viridis
+sum
+mean
+This file is not a CoDa Stereo session.
+The session has no data.
+The session's parts are not numeric columns of its data.

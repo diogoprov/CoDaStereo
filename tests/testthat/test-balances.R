@@ -54,7 +54,12 @@ test_that("balances module renders, validates edits and resets", {
     {
       session$setInputs(group_var = "Group", palette = "okabe_ito")
       expect_equal(sbp_current(), sbp_auto(x5))
+      session$elapse(600)
       expect_no_error(output$dendrogram)
+      expect_no_error(output$balance_plot)
+      session$setInputs(test_balances = 1)
+      expect_equal(nrow(tests()), 4)
+      expect_true(all(c("Z", "P") %in% names(tests())))
 
       # Make b2 one-sided: every non-zero cell becomes +1
       b2 <- sbp_current()[2, ]
@@ -62,6 +67,7 @@ test_that("balances module renders, validates edits and resets", {
         as.list(rep("1", sum(b2 != 0))),
         paste0("sbp_2_", which(b2 != 0)))
       do.call(session$setInputs, edits)
+      session$elapse(600)  # SBP edits are debounced
       expect_true(length(sbp_issues()) > 0)
       expect_error(output$dendrogram, "Fix the SBP")
     }

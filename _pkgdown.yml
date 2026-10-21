@@ -1,0 +1,31 @@
+url: https://diogoprov.github.io/CoDaStereo/
+
+template:
+  bootstrap: 5
+  bslib:
+    primary: "#0072B2"
+
+home:
+  title: "CoDa Stereo: Compositional Data Analysis for Stereology"
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+
+reference:
+  - title: "Run the app"
+    contents:
+      - run_app
+  - title: "Package"
+    contents:
+      - CoDaStereo-package
+
+articles:
+  - title: "Guides"
+    navbar: ~
+    contents:
+      - CoDaStereo
+
+news:
+  cran_dates: false
