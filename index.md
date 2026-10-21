@@ -13,10 +13,10 @@
 > Analysis in Tissue Stereology and Blood Cell Profile*. **Physiological
 > Reports** (in review).
 
-See [NEWS.md](https://diogoprov.github.io/CoDaStereo/NEWS.md) for the
-changes in each version and the [package
-website](https://diogoprov.github.io/CoDaStereo/) for the
-getting-started guide.
+See [NEWS.md](https://provetelab.org/CoDaStereo/NEWS.md) for the changes
+in each version and the [package
+website](https://provetelab.org/CoDaStereo/) for the getting-started
+guide.
 
 ------------------------------------------------------------------------
 

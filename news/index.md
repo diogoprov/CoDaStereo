@@ -108,11 +108,11 @@
 
 - The compositional descriptives and the CoDa dendrogram no longer fail
   when the app runs from the installed package
-  ([`run_app()`](https://diogoprov.github.io/CoDaStereo/reference/run_app.md)).
+  ([`run_app()`](https://provetelab.org/CoDaStereo/reference/run_app.md)).
   `compositions` reads `getOption("robust")`, which is only set when the
   package is attached.
 - The logo is now shown when the app is launched with
-  [`run_app()`](https://diogoprov.github.io/CoDaStereo/reference/run_app.md).
+  [`run_app()`](https://provetelab.org/CoDaStereo/reference/run_app.md).
 - The deployment entry point (`app.R`) loads `rintrojs` instead of the
   removed `cicerone`.
 

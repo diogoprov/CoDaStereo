@@ -13,10 +13,10 @@
 > Analysis in Tissue Stereology and Blood Cell Profile*. **Physiological
 > Reports** (in review).
 
-See [NEWS.md](https://diogoprov.github.io/CoDaStereo/NEWS.md) for the
-changes in each version and the [package
-website](https://diogoprov.github.io/CoDaStereo/) for the
-getting-started guide.
+See [NEWS.md](https://provetelab.org/CoDaStereo/NEWS.md) for the changes
+in each version and the [package
+website](https://provetelab.org/CoDaStereo/) for the getting-started
+guide.
 
 ------------------------------------------------------------------------
 
@@ -191,13 +191,13 @@ MIT © Diogo B. Provete
 
 ## Run the app
 
-- [`run_app()`](https://diogoprov.github.io/CoDaStereo/reference/run_app.md)
+- [`run_app()`](https://provetelab.org/CoDaStereo/reference/run_app.md)
   : Run the CoDa Stereo Application
 
 ## Package
 
-- [`CoDaStereo`](https://diogoprov.github.io/CoDaStereo/reference/CoDaStereo-package.md)
-  [`CoDaStereo-package`](https://diogoprov.github.io/CoDaStereo/reference/CoDaStereo-package.md)
+- [`CoDaStereo`](https://provetelab.org/CoDaStereo/reference/CoDaStereo-package.md)
+  [`CoDaStereo-package`](https://provetelab.org/CoDaStereo/reference/CoDaStereo-package.md)
   : CoDaStereo: Compositional Data Analysis for Stereological and
   Histomorphometric Data
 
@@ -206,4 +206,4 @@ MIT © Diogo B. Provete
 ### Guides
 
 - [Getting started with CoDa
-  Stereo](https://diogoprov.github.io/CoDaStereo/articles/CoDaStereo.md):
+  Stereo](https://provetelab.org/CoDaStereo/articles/CoDaStereo.md):

@@ -3,4 +3,4 @@
 ### Guides
 
 - [Getting started with CoDa
-  Stereo](https://diogoprov.github.io/CoDaStereo/articles/CoDaStereo.md):
+  Stereo](https://provetelab.org/CoDaStereo/articles/CoDaStereo.md):
