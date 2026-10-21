@@ -1,0 +1,9 @@
+pandoc: 3.8.3
+pkgdown: 2.2.1
+pkgdown_sha: ~
+articles:
+  CoDaStereo: CoDaStereo.html
+last_built: 2026-10-21T22:07Z
+urls:
+  reference: https://diogoprov.github.io/CoDaStereo/reference
+  article: https://diogoprov.github.io/CoDaStereo/articles
