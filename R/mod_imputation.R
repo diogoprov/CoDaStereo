@@ -3,37 +3,33 @@
 # ==============================================================================
 
 #' @noRd
-mod_imputation_ui <- function(id) {
+mod_imputation_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "zeros",
     fluidRow(
-      box(title = "Zero-replacement method", width = 6,
-          p("Compositional data may carry different kinds of zeros:"),
+      box(title = t("Zero-replacement method"), width = 6,
+          p(t("Compositional data may carry different kinds of zeros:")),
           tags$ul(
-            tags$li(strong("CZM"), ": Bayesian-Multiplicative replacement for ",
-                    em("count zeros"), " (multinomial sampling). Use with point counts."),
-            tags$li(strong("multRepl"), ": multiplicative replacement for ",
-                    em("rounded zeros"), " (below detection limit). Use with percentages."),
-            tags$li(strong("lrEM"), ": log-ratio EM algorithm, also for ",
-                    em("rounded zeros"), ". More efficient for moderate to large n.")
+            tags$li(HTML(t("<strong>CZM</strong>: Bayesian-multiplicative replacement for <em>count zeros</em> (multinomial sampling). Use with point counts."))),
+            tags$li(HTML(t("<strong>multRepl</strong>: multiplicative replacement for <em>rounded zeros</em> (below detection limit). Use with percentages."))),
+            tags$li(HTML(t("<strong>lrEM</strong>: log-ratio EM algorithm, also for <em>rounded zeros</em>. More efficient for moderate to large n.")))
           ),
-          radioButtons(ns("zero_method"), "Choose method:",
-                       choices = c("CZM (count zeros)"        = "CZM",
-                                   "multRepl (rounded zeros)" = "multRepl",
-                                   "lrEM (rounded zeros)"     = "lrEM"),
+          radioButtons(ns("zero_method"), t("Choose method:"),
+                       choices = tr_choices(c("CZM (count zeros)"        = "CZM",
+                                              "multRepl (rounded zeros)" = "multRepl",
+                                              "lrEM (rounded zeros)"     = "lrEM"), lang),
                        selected = "multRepl"),
           hr(),
-          h4("Missing values (NA) handling"),
-          p("If selected parts contain ", code("NA"),
-            " values, choose how to deal with them ",
-            em("before"), " zero imputation."),
+          h4(t("Missing values (NA) handling")),
+          p(HTML(t("If selected parts contain <code>NA</code> values, choose how to deal with them <em>before</em> zero imputation."))),
           radioButtons(ns("na_handling"), NULL,
-                       choices = c(
+                       choices = tr_choices(c(
                          "Drop rows containing NAs (listwise deletion)" = "drop",
                          "Replace NAs with column geometric mean"       = "geomean"
-                       ), selected = "drop"),
+                       ), lang), selected = "drop"),
           hr(),
-          actionButton(ns("run"), "Run Imputation", icon = icon("magic")),
+          actionButton(ns("run"), t("Run Imputation"), icon = icon("magic")),
           hr(),
           verbatimTextOutput(ns("report"))
       )
@@ -42,71 +38,106 @@ mod_imputation_ui <- function(id) {
 }
 
 #' @noRd
-mod_imputation_server <- function(id, df, parts) {
+mod_imputation_server <- function(id, df, parts, restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
-    rv <- reactiveValues(comp = NULL, imputed = NULL, keep_rows = NULL,
+    t  <- session_tr(session)
+    # English text for the report, translated text for notifications
+    note <- function(type, tmpl, ...) {
+      rv$na_ui <- sprintf(t(tmpl), ...)
+      showNotification(rv$na_ui, type = type, duration = 6)
+      sprintf(tmpl, ...)
+    }
+    rv <- reactiveValues(comp = NULL, imputed = NULL, raw = NULL, keep_rows = NULL,
                          method_used = NULL, na_action = NULL)
 
-    observeEvent(input$run, {
-      req(df(), input$zero_method, input$na_handling, parts())
+    run_impute <- function(zero_method, na_handling) {
+      req(df(), parts())
       mat       <- as.matrix(df()[, parts(), drop = FALSE])
       keep_rows <- rep(TRUE, nrow(mat))
       na_action <- "no NAs detected"
+      rv$na_ui  <- t("no NAs detected")
 
       if (anyNA(mat)) {
         n_na_rows  <- sum(!complete.cases(mat))
         n_na_cells <- sum(is.na(mat))
-        if (input$na_handling == "drop") {
+        if (na_handling == "drop") {
           keep_rows <- complete.cases(mat)
           mat <- mat[keep_rows, , drop = FALSE]
-          na_action <- sprintf("%d row(s) (%d NA cell(s)) dropped via listwise deletion",
-                               n_na_rows, n_na_cells)
-          showNotification(na_action, type = "warning", duration = 6)
+          na_action <- note("warning", "%d row(s) (%d NA cell(s)) dropped via listwise deletion",
+                            n_na_rows, n_na_cells)
         } else {
           mat <- gmean_impute(mat)
           if (anyNA(mat)) {
             keep_rows <- complete.cases(mat)
             mat <- mat[keep_rows, , drop = FALSE]
-            na_action <- sprintf("%d NA cell(s) partially imputed; %d residual row(s) dropped",
-                                 n_na_cells, sum(!keep_rows))
+            na_action <- note("message", "%d NA cell(s) partially imputed; %d residual row(s) dropped",
+                              n_na_cells, sum(!keep_rows))
           } else {
-            na_action <- sprintf("%d NA cell(s) imputed via column geometric mean", n_na_cells)
+            na_action <- note("message", "%d NA cell(s) imputed via column geometric mean",
+                              n_na_cells)
           }
-          showNotification(na_action, type = "message", duration = 6)
         }
       }
       rv$keep_rows <- keep_rows
       rv$na_action <- na_action
+      rv$raw       <- mat  # after NA handling, before zero replacement
 
       if (!any(mat == 0, na.rm = TRUE)) {
-        showNotification("No zeros detected. Using raw composition.", type = "message", duration = 6)
+        note("message", "No zeros detected. Using raw composition.")
         rv$imputed     <- mat
         rv$comp        <- compositions::acomp(mat)
         rv$method_used <- "none (no zeros)"
         return()
       }
 
-      rv$imputed <- switch(input$zero_method,
-        "CZM" = zCompositions::cmultRepl(mat, method = "CZM", output = "p-counts",
-                                          label = 0, z.warning = 0.99),
-        "multRepl" = { dl <- compute_dl(mat); zCompositions::multRepl(mat, label = 0, dl = dl$mat, z.warning = 0.99) },
-        "lrEM"     = { dl <- compute_dl(mat); zCompositions::lrEM(mat, label = 0, dl = dl$mat, ini.cov = "multRepl", z.warning = 0.99) }
-      )
+      withProgress(message = sprintf(t("Replacing zeros (%s)..."), zero_method), {
+        rv$imputed <- switch(zero_method,
+          "CZM" = zCompositions::cmultRepl(mat, method = "CZM", output = "p-counts",
+                                            label = 0, z.warning = 0.99),
+          "multRepl" = { dl <- compute_dl(mat); zCompositions::multRepl(mat, label = 0, dl = dl$mat, z.warning = 0.99) },
+          "lrEM"     = { dl <- compute_dl(mat); zCompositions::lrEM(mat, label = 0, dl = dl$mat, ini.cov = "multRepl", z.warning = 0.99) }
+        )
+      })
       rv$comp        <- compositions::acomp(rv$imputed)
-      rv$method_used <- input$zero_method
-    })
+      rv$method_used <- zero_method
+    }
+    observeEvent(input$run, run_impute(input$zero_method, input$na_handling))
 
     output$report <- renderPrint({
       req(rv$comp)
-      cat("Zero method:    ", rv$method_used, "\n")
-      cat("NA handling:    ", rv$na_action, "\n")
-      cat("Rows analysed:  ", sum(rv$keep_rows), "of", length(rv$keep_rows), "\n")
-      cat("Parts analysed: ", paste(parts(), collapse = ", "), "\n\n")
-      cat("First five imputed rows (closed composition):\n")
+      cat(t("Zero method:"), rv$method_used, "\n")
+      cat(t("NA handling:"), rv$na_ui %||% rv$na_action, "\n")
+      cat(sprintf(t("Rows analysed: %d of %d"), sum(rv$keep_rows), length(rv$keep_rows)), "\n")
+      cat(t("Parts analysed:"), paste(parts(), collapse = ", "), "\n\n")
+      cat(t("First five imputed rows (closed composition):"), "\n")
       print(round(rv$comp[1:min(5, nrow(rv$comp)), ], 4))
     })
 
-    list(comp = reactive(rv$comp), imputed = reactive(rv$imputed),
+    # Restore: re-run the saved imputation once the restored parts arrive
+    pending <- reactiveVal(NULL)
+    observeEvent(restore(), {
+      st <- restore()$imputation
+      updateRadioButtons(session, "zero_method", selected = st$zero_method)
+      updateRadioButtons(session, "na_handling", selected = st$na_handling)
+      rv$comp <- NULL
+      if (!is.null(st$method_used)) pending(list(st = st, parts = restore()$data$parts))
+    })
+    observe({
+      p <- pending()
+      req(p, df(), parts(), setequal(parts(), p$parts))
+      pending(NULL)
+      run_impute(p$st$zero_method, p$st$na_handling)
+    })
+
+    state <- reactive(list(
+      zero_method = input$zero_method, na_handling = input$na_handling,
+      method_used = rv$method_used,
+      result = list(comp = rv$comp, imputed = rv$imputed, raw = rv$raw,
+                    keep_rows = rv$keep_rows, method_used = rv$method_used,
+                    na_action = rv$na_action)))
+
+    list(comp = reactive(rv$comp), imputed = reactive(rv$imputed), state = state,
+         raw = reactive(rv$raw),
          keep_rows = reactive(rv$keep_rows), method_used = reactive(rv$method_used))
   })
 }

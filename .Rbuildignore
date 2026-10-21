@@ -9,3 +9,12 @@
 ^rsconnect$
 ^www$
 ^\.Rprofile$
+^\.DS_Store$
+^CoDaStereo_v3_plan\.md$
+^CLAUDE\.md$
+^cran-comments\.md$
+^data-raw$
+^Rplots\.pdf$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

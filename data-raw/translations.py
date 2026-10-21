@@ -1,0 +1,253 @@
+# -*- coding: utf-8 -*-
+# UI translations: Portuguese (pt-BR, below) and Spanish (data-raw/
+# translations_es.py). Keys are the English strings extracted by
+# data-raw/extract_i18n_keys.R. Run:  python3 data-raw/translations.py
+import csv, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from translations_es import ES
+
+PT = {
+"Next": "Próximo", "Back": "Voltar", "Done": "Concluir", "Tour": "Tour",
+"Introduction": "Introdução", "Data Upload": "Carregar dados", "Data Inspection": "Inspeção dos dados",
+"Zero Handling": "Tratamento de zeros", "Compositional Analysis": "Análise composicional",
+"Balances (SBP)": "Balanços (SBP)", "Statistical Modeling": "Modelagem estatística",
+"Reproducibility": "Reprodutibilidade",
+"Welcome to CoDa Stereo": "Bem-vindo ao CoDa Stereo",
+"This tool implements the Aitchison geometry for stereological and histomorphometric data.":
+  "Esta ferramenta implementa a geometria de Aitchison para dados estereológicos e histomorfométricos.",
+"Follow the sidebar from top to bottom to complete the PPDAC cycle.":
+  "Siga o menu lateral de cima para baixo para completar o ciclo PPDAC.",
+"The interface is available in English, Portuguese and Spanish (EN / PT / ES at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication.":
+  "A interface está disponível em inglês, português e espanhol (EN / PT / ES no topo). Trocar o idioma recarrega o app: salve sua sessão antes. As figuras, o relatório e o script R permanecem em inglês, para publicação.",
+"Start guided tour": "Iniciar tour guiado",
+"At least 2 parts are required for compositional analysis.": "A análise composicional exige pelo menos 2 partes.",
+"'%s' has mean = %.2f, which is %.0f× the median part mean (%.2f). Is it really a compositional part?":
+  "'%s' tem média = %.2f, que é %.0f× a mediana das médias das partes (%.2f). É mesmo uma parte da composição?",
+"'%s' contains negative values, which are undefined in the simplex.":
+  "'%s' contém valores negativos, que não são definidos no simplex.",
+"Row sums have high variability (CV = %.1f%%). Parts may not form a closed composition, or a non-compositional column may be included.":
+  "As somas das linhas variam muito (CV = %.1f%%). As partes podem não formar uma composição fechada, ou uma coluna não composicional foi incluída.",
+"%d parts need exactly %d balances.": "%d partes exigem exatamente %d balanços.",
+"Balance %s needs at least one +1 and one -1 part.": "O balanço %s precisa de pelo menos uma parte +1 e uma -1.",
+"Exactly one balance (the first split) must involve all parts.":
+  "Exatamente um balanço (a primeira divisão) deve envolver todas as partes.",
+"Balances %s and %s are not nested: each balance must split one group of its parent.":
+  "Os balanços %s e %s não são aninhados: cada balanço deve dividir um dos grupos do balanço anterior.",
+"Figure export settings": "Configurações de exportação de figuras",
+"Format:": "Formato:", "Width (cm):": "Largura (cm):", "Height (cm):": "Altura (cm):", "DPI:": "DPI:",
+"Font size (pt):": "Tamanho da fonte (pt):", "Plot settings": "Configurações dos gráficos",
+"Colour palette:": "Paleta de cores:",
+"Interactive plots (hover shows the sample)": "Gráficos interativos (passe o mouse para ver a amostra)",
+"Ternary Plot": "Diagrama ternário", "Ternary mode:": "Modo do ternário:",
+"Select 3 parts": "Selecionar 3 partes", "Amalgamate into 3 groups": "Amalgamar em 3 grupos",
+"Group 1:": "Grupo 1:", "Group 2:": "Grupo 2:", "Group 3:": "Grupo 3:",
+"Group regions:": "Regiões dos grupos:", "Convex hull": "Envoltória convexa",
+"95% confidence (mean)": "Confiança de 95% (média)", "95% predictive": "Predição de 95%",
+"None": "Nenhum", "Show group centres": "Mostrar centros dos grupos",
+"Download figure": "Baixar figura",
+"Compositional PCA (clr-Biplot)": "PCA composicional (biplot clr)",
+"X axis:": "Eixo X:", "Y axis:": "Eixo Y:", "Label samples": "Rotular amostras",
+"How to read this biplot": "Como ler este biplot",
+"<strong>Rays</strong> (arrows) are the parts, as clr variables. Ray length is proportional to the clr standard deviation: longer rays are parts whose share varies more relative to the geometric mean.":
+  "<strong>Raios</strong> (setas) são as partes, como variáveis clr. O comprimento do raio é proporcional ao desvio-padrão clr: raios mais longos são partes cuja proporção varia mais em relação à média geométrica.",
+"<strong>Links</strong> are the (imaginary) segments joining two ray tips. Link length is proportional to the standard deviation of the log-ratio of those two parts. A short link means the two parts stay nearly proportional across samples.":
+  "<strong>Links</strong> são os segmentos (imaginários) que unem as pontas de dois raios. O comprimento do link é proporcional ao desvio-padrão do log-ratio dessas duas partes. Um link curto indica que as duas partes se mantêm quase proporcionais entre as amostras.",
+"The cosine of the angle between two links approximates the correlation between the two log-ratios; links at right angles indicate uncorrelated log-ratios.":
+  "O cosseno do ângulo entre dois links aproxima a correlação entre os dois log-ratios; links em ângulo reto indicam log-ratios não correlacionados.",
+"Do <em>not</em> read the angle between two rays as a correlation between the parts themselves.":
+  "<em>Não</em> leia o ângulo entre dois raios como correlação entre as próprias partes.",
+"<strong>Points</strong> are samples; points lying toward a ray tend to have relatively more of that part. Polygons are the convex hulls of each group.":
+  "<strong>Pontos</strong> são amostras; pontos na direção de um raio tendem a ter relativamente mais daquela parte. Os polígonos são as envoltórias convexas de cada grupo.",
+"All of this is a planar approximation: rely on it only when the two axes explain a large share of the total variance (shown in the axis titles and the scree plot).":
+  "Tudo isso é uma aproximação no plano: confie nela apenas quando os dois eixos explicam grande parte da variância total (mostrada nos títulos dos eixos e no scree plot).",
+"Scree plot and ray lengths": "Scree plot e comprimento dos raios",
+"Variation matrix": "Matriz de variação",
+"Variance of the log-ratio of each pair of parts. Values near zero mean the two parts stay proportional; high values mark the trade-offs that drive compositional change. These are the squared link lengths of the biplot, in full dimension.":
+  "Variância do log-ratio de cada par de partes. Valores próximos de zero indicam que as duas partes se mantêm proporcionais; valores altos marcam os trade-offs que movem a mudança composicional. São os comprimentos ao quadrado dos links do biplot, na dimensão completa.",
+"Download matrix (CSV)": "Baixar matriz (CSV)",
+"Compositional center (geometric mean) by group": "Centro composicional (média geométrica) por grupo",
+"Stacked bars showing the closed geometric mean composition per group. Unlike arithmetic means, the compositional center respects the simplex geometry.":
+  "Barras empilhadas com a composição média geométrica (fechada) de cada grupo. Ao contrário da média aritmética, o centro composicional respeita a geometria do simplex.",
+"Total variance by group": "Variância total por grupo",
+"Total metric variance (mvar) of the composition per group. Higher values indicate greater internal dispersion in the simplex.":
+  "Variância métrica total (mvar) da composição em cada grupo. Valores maiores indicam maior dispersão interna no simplex.",
+"Download imputed data": "Baixar dados imputados", "Download imputed data (CSV)": "Baixar dados imputados (CSV)",
+"Colour / group by:": "Colorir / agrupar por:", "Select 3 Parts:": "Selecione 3 partes:", "Parts:": "Partes:",
+"Shape by:": "Forma por:", "Add log-total (T-space biplot):": "Adicionar log-total (biplot no espaço T):",
+"No": "Não", "Sum of parts (Ts)": "Soma das partes (Ts)", "Product total (Tp)": "Total produto (Tp)",
+"Choose two different axes.": "Escolha dois eixos diferentes.",
+"Sequential binary partition (SBP)": "Partição binária sequencial (SBP)",
+"The SBP is built automatically by Ward clustering of the parts on clr distances. Edit any cell to define your own balances: +1 = numerator, -1 = denominator, 0 = not in this balance.":
+  "A SBP é construída automaticamente por agrupamento de Ward das partes com distâncias clr. Edite qualquer célula para definir seus próprios balanços: +1 = numerador, -1 = denominador, 0 = fora deste balanço.",
+"Reset to automatic SBP": "Voltar à SBP automática", "Download SBP (CSV)": "Baixar SBP (CSV)",
+"CoDa dendrogram": "Dendrograma CoDa",
+"Each horizontal axis is one balance. The vertical bar above it is the balance variance, and where the bar meets the axis is the balance mean. Coloured boxes show the balance distribution per group.":
+  "Cada eixo horizontal é um balanço. A barra vertical acima dele é a variância do balanço, e o ponto onde a barra encontra o eixo é a média do balanço. As caixas coloridas mostram a distribuição do balanço em cada grupo.",
+"Balances by group": "Balanços por grupo",
+"Each panel is one balance (numerator / denominator parts). Positive values mean the numerator parts dominate. Test each balance with a univariate permutational ANOVA; Z is the standardised effect size. With several balances, interpret P-values with the multiple comparisons in mind.":
+  "Cada painel é um balanço (partes do numerador / denominador). Valores positivos indicam que as partes do numerador dominam. Teste cada balanço com uma ANOVA permutacional univariada; Z é o tamanho de efeito padronizado. Com vários balanços, interprete os valores de P considerando as comparações múltiplas.",
+"Test balances (999 permutations)": "Testar balanços (999 permutações)", "Download tests (CSV)": "Baixar testes (CSV)",
+" Valid SBP.": " SBP válida.", "Invalid SBP:": "SBP inválida:",
+"Fix the SBP to draw the dendrogram.": "Corrija a SBP para desenhar o dendrograma.",
+"Testing balances...": "Testando balanços...",
+"Data Input": "Entrada de dados", "Choose CSV or Excel File": "Escolha um arquivo CSV ou Excel",
+"Browse...": "Procurar...", "No file selected": "Nenhum arquivo selecionado",
+"First row is header": "A primeira linha é o cabeçalho",
+"CSV separator (ignored for Excel)": "Separador do CSV (ignorado para Excel)",
+"Comma": "Vírgula", "Semicolon": "Ponto e vírgula", "Tab": "Tabulação",
+"Or try it out:": "Ou experimente:", "Example dataset:": "Conjunto de dados de exemplo:",
+"Simulated liver (2 groups)": "Fígado simulado (2 grupos)",
+"Spleen, point counts per field (case study 1)": "Baço, contagem de pontos por campo (estudo de caso 1)",
+"Kidney, point counts per field (case study 2)": "Rim, contagem de pontos por campo (estudo de caso 2)",
+"Leukocyte differential counts (case study 3)": "Contagem diferencial de leucócitos (estudo de caso 3)",
+"Erythrocyte nuclear abnormalities (case study 4)": "Anormalidades nucleares em eritrócitos (estudo de caso 4)",
+"Load example": "Carregar exemplo", "Data Preview": "Pré-visualização dos dados",
+"Specimens (nested designs)": "Espécimes (delineamentos aninhados)",
+"When rows are fields of view (or sections) nested within specimens, analyse one composition per specimen: fields of the same animal are not independent replicates. Point counts are summed; areas or proportions are averaged.":
+  "Quando as linhas são campos de visão (ou cortes) aninhados em espécimes, analise uma composição por espécime: campos do mesmo animal não são réplicas independentes. Contagens de pontos são somadas; áreas ou proporções são promediadas.",
+"Aggregate rows by specimen": "Agregar linhas por espécime", "Combine parts by:": "Combinar partes por:",
+"Sum (counts)": "Soma (contagens)", "Mean (areas, proportions)": "Média (áreas, proporções)",
+"Compositional parts": "Partes da composição",
+"<strong>Select which numeric columns are the compositional parts.</strong> Columns whose name looks like an ID are deselected by default; non-compositional covariates (body weight, biochemical assays on a different scale, etc.) should also be unchecked.":
+  "<strong>Selecione quais colunas numéricas são as partes da composição.</strong> Colunas cujo nome parece um ID vêm desmarcadas; covariáveis não composicionais (peso corporal, dosagens bioquímicas em outra escala etc.) também devem ser desmarcadas.",
+"Pre-flight check": "Verificação prévia",
+"Automatic diagnostics for the selected parts:": "Diagnóstico automático das partes selecionadas:",
+"Pattern of zeros and missing values": "Padrão de zeros e valores ausentes",
+"Each column is a sample, each row a compositional part. Cells are coloured according to whether the value was <span style='color:#7570B3; font-weight:bold;'>observed</span>, a <span style='color:#D95F02; font-weight:bold;'>structural zero</span> or <span style='color:#1B9E77; font-weight:bold;'>missing (NA)</span>.":
+  "Cada coluna é uma amostra, cada linha uma parte da composição. As células são coloridas conforme o valor seja <span style='color:#7570B3; font-weight:bold;'>observado</span>, um <span style='color:#D95F02; font-weight:bold;'>zero estrutural</span> ou <span style='color:#1B9E77; font-weight:bold;'>ausente (NA)</span>.",
+"Missing values (naniar::vis_miss)": "Valores ausentes (naniar::vis_miss)", "Counts per part": "Contagens por parte",
+"Excel sheet:": "Planilha do Excel:", "Unsupported file type:": "Tipo de arquivo não suportado:",
+"Specimen column:": "Coluna do espécime:",
+"The specimen column cannot be a compositional part.": "A coluna do espécime não pode ser uma parte da composição.",
+" %d rows aggregated into %d specimens (%s).": " %d linhas agregadas em %d espécimes (%s).",
+" Columns not constant within specimens were dropped: %s.": " Colunas que variam dentro dos espécimes foram removidas: %s.",
+"Compositional parts (numeric columns to analyse):": "Partes da composição (colunas numéricas a analisar):",
+" All checks passed.": " Todas as verificações passaram.",
+"%d parts selected. Row sums look consistent.": "%d partes selecionadas. As somas das linhas parecem consistentes.",
+" Issues detected:": " Problemas encontrados:", " Consider unchecking: %s": " Considere desmarcar: %s",
+"R script": "Script R",
+"An R script that reproduces the steps you ran in the app (data, aggregation, zero replacement, balances and the permutational MANOVA), for the supplementary material of a paper.":
+  "Um script R que reproduz as etapas executadas no app (dados, agregação, substituição de zeros, balanços e a MANOVA permutacional), para o material suplementar de um artigo.",
+"Download R script": "Baixar script R", "Report and session": "Relatório e sessão", "Report": "Relatório",
+"A self-contained HTML report with the settings, figures, tables, model output and the R script.":
+  "Um relatório HTML autocontido com as configurações, figuras, tabelas, saídas do modelo e o script R.",
+"Download HTML report": "Baixar relatório HTML", "Session": "Sessão",
+"Save the data and every setting to a file and load it later to resume the analysis. Results are recomputed on loading (the same seed gives the same results).":
+  "Salve os dados e todas as configurações em um arquivo e carregue-o depois para retomar a análise. Os resultados são recalculados ao carregar (a mesma semente gera os mesmos resultados).",
+"Save session": "Salvar sessão", "Load session (.json)": "Carregar sessão (.json)",
+"Load data to generate the script.": "Carregue dados para gerar o script.",
+"Building report...": "Gerando relatório...",
+"Session loaded: recomputing results...": "Sessão carregada: recalculando resultados...",
+"Zero-replacement method": "Método de substituição de zeros",
+"Compositional data may carry different kinds of zeros:": "Dados composicionais podem ter diferentes tipos de zeros:",
+"<strong>CZM</strong>: Bayesian-multiplicative replacement for <em>count zeros</em> (multinomial sampling). Use with point counts.":
+  "<strong>CZM</strong>: substituição bayesiana-multiplicativa para <em>zeros de contagem</em> (amostragem multinomial). Use com contagem de pontos.",
+"<strong>multRepl</strong>: multiplicative replacement for <em>rounded zeros</em> (below detection limit). Use with percentages.":
+  "<strong>multRepl</strong>: substituição multiplicativa para <em>zeros arredondados</em> (abaixo do limite de detecção). Use com porcentagens.",
+"<strong>lrEM</strong>: log-ratio EM algorithm, also for <em>rounded zeros</em>. More efficient for moderate to large n.":
+  "<strong>lrEM</strong>: algoritmo EM em log-ratios, também para <em>zeros arredondados</em>. Mais eficiente para n moderado a grande.",
+"Choose method:": "Escolha o método:", "CZM (count zeros)": "CZM (zeros de contagem)",
+"multRepl (rounded zeros)": "multRepl (zeros arredondados)", "lrEM (rounded zeros)": "lrEM (zeros arredondados)",
+"Missing values (NA) handling": "Tratamento de valores ausentes (NA)",
+"If selected parts contain <code>NA</code> values, choose how to deal with them <em>before</em> zero imputation.":
+  "Se as partes selecionadas tiverem valores <code>NA</code>, escolha como tratá-los <em>antes</em> da imputação de zeros.",
+"Drop rows containing NAs (listwise deletion)": "Remover linhas com NA (exclusão listwise)",
+"Replace NAs with column geometric mean": "Substituir NA pela média geométrica da coluna",
+"Run Imputation": "Executar imputação", "no NAs detected": "nenhum NA encontrado",
+"Replacing zeros (%s)...": "Substituindo zeros (%s)...", "Zero method:": "Método para zeros:",
+"NA handling:": "Tratamento de NA:", "Rows analysed: %d of %d": "Linhas analisadas: %d de %d",
+"Parts analysed:": "Partes analisadas:",
+"First five imputed rows (closed composition):": "Primeiras cinco linhas imputadas (composição fechada):",
+"%d row(s) (%d NA cell(s)) dropped via listwise deletion": "%d linha(s) (%d célula(s) NA) removida(s) por exclusão listwise",
+"%d NA cell(s) partially imputed; %d residual row(s) dropped": "%d célula(s) NA parcialmente imputada(s); %d linha(s) restante(s) removida(s)",
+"%d NA cell(s) imputed via column geometric mean": "%d célula(s) NA imputada(s) pela média geométrica da coluna",
+"No zeros detected. Using raw composition.": "Nenhum zero encontrado. Usando a composição observada.",
+"Permutational MANOVA (RRPP)": "MANOVA permutacional (RRPP)",
+"Build a factorial model on the ilr coordinates. Select one or more factors. With two or more factors, choose between an additive model (main effects only) or a full factorial (with all interactions).":
+  "Monte um modelo fatorial sobre as coordenadas ilr. Selecione um ou mais fatores. Com dois ou mais fatores, escolha entre um modelo aditivo (só efeitos principais) ou um fatorial completo (com todas as interações).",
+"Sums of squares:": "Somas de quadrados:", "Type I (sequential)": "Tipo I (sequencial)",
+"Type II": "Tipo II", "Type III": "Tipo III", "Permutations:": "Permutações:",
+"199 (quick look)": "199 (olhada rápida)", "999 (default)": "999 (padrão)", "9999 (final analysis)": "9999 (análise final)",
+"Total (size):": "Total (tamanho):", "Not used (composition only)": "Não usar (só a composição)",
+"Joint response (composition + total)": "Resposta conjunta (composição + total)",
+"Covariate (does composition change with size?)": "Covariável (a composição muda com o tamanho?)",
+"Total:": "Total:", "Sum of parts (Ts; recommended)": "Soma das partes (Ts; recomendado)",
+"Product of parts^(1/sqrt(D)) (Tp; same as log of each part)": "Produto das partes^(1/sqrt(D)) (Tp; equivale ao log de cada parte)",
+"Uses the log-total of each specimen (Pawlowsky-Glahn, Egozcue & Lovell 2015, Statistical Modelling 15:175-190). As a joint response it tests composition and size together; as a covariate it asks whether the composition shifts with size. Use it only when parts are on an absolute scale (e.g., absolute volumes, cells per microlitre). Point counts with a fixed number of grid points or cells have a total fixed by design.":
+  "Usa o log-total de cada espécime (Pawlowsky-Glahn, Egozcue & Lovell 2015, Statistical Modelling 15:175-190). Como resposta conjunta, testa composição e tamanho juntos; como covariável, pergunta se a composição muda com o tamanho. Use apenas quando as partes estão em escala absoluta (por exemplo, volumes absolutos, células por microlitro). Contagens com número fixo de pontos de grade ou de células têm total fixado pelo delineamento.",
+"Run Model": "Ajustar modelo", "Download ANOVA table (CSV)": "Baixar tabela da ANOVA (CSV)",
+"Total (size) alone": "Total (tamanho) isoladamente",
+"Univariate permutational ANOVA of the log-total with the same factors, to separate the size effect from the compositional one.":
+  "ANOVA permutacional univariada do log-total com os mesmos fatores, para separar o efeito de tamanho do efeito composicional.",
+"Pairwise comparisons": "Comparações par a par",
+"Permutational pairwise tests between group means (Euclidean distances in ilr space, plus the log-total when included) and between group dispersions (compositional disparity). Z is the standardised effect size.":
+  "Testes permutacionais par a par entre médias dos grupos (distâncias euclidianas no espaço ilr, mais o log-total quando incluído) e entre dispersões dos grupos (disparidade composicional). Z é o tamanho de efeito padronizado.",
+"Run Pairwise": "Executar comparações", "Download pairwise (CSV)": "Baixar comparações (CSV)",
+"Differences in means": "Diferenças entre médias", "Differences in dispersion": "Diferenças de dispersão",
+"Model diagnostics": "Diagnóstico do modelo", "Residual plots from the fitted RRPP model.": "Gráficos de resíduos do modelo RRPP ajustado.",
+" Totals are almost constant (CV = %.1f%%): they are probably fixed by the sampling design and carry no biological information. Do not include the total.":
+  " Os totais são quase constantes (CV = %.1f%%): provavelmente foram fixados pelo delineamento amostral e não carregam informação biológica. Não inclua o total.",
+"Factor(s) for the model:": "Fator(es) do modelo:", "Model design:": "Delineamento do modelo:",
+"Additive (main effects only)": "Aditivo (só efeitos principais)", "Factorial (with interactions)": "Fatorial (com interações)",
+"Numeric covariate(s) (ANCOVA):": "Covariável(is) numérica(s) (ANCOVA):",
+"Block (permutations restricted within blocks):": "Bloco (permutações restritas dentro dos blocos):",
+"Formula:": "Fórmula:",
+"(y = ilr coordinates of the imputed composition + log-total [%s])": "(y = coordenadas ilr da composição imputada + log-total [%s])",
+"(y = ilr coordinates; log-total [%s] as covariate)": "(y = coordenadas ilr; log-total [%s] como covariável)",
+"(y = ilr coordinates of the imputed composition)": "(y = coordenadas ilr da composição imputada)",
+"\nBlock: %s": "\nBloco: %s",
+"Grouping factor for pairwise tests:": "Fator de agrupamento para as comparações:",
+"Running permutations...": "Executando permutações...", "Model failed:": "O modelo falhou:",
+" Running %s permutations in the background...": " Executando %s permutações em segundo plano...",
+"Fitted formula:": "Fórmula ajustada:", "Running pairwise tests...": "Executando comparações par a par...",
+"<b>Welcome to CoDa Stereo!</b><br><br> This app implements the Aitchison geometry for stereological and histomorphometric data.<br><br> Follow the sidebar <b>top to bottom</b> to complete the PPDAC cycle. Click <b>Next</b> to continue.":
+  "<b>Bem-vindo ao CoDa Stereo!</b><br><br> Este app implementa a geometria de Aitchison para dados estereológicos e histomorfométricos.<br><br> Siga o menu lateral <b>de cima para baixo</b> para completar o ciclo PPDAC. Clique em <b>Próximo</b> para continuar.",
+"<b>1 &mdash; Data Upload</b><br><br> Upload a <b>CSV or Excel file</b>, or load one of the <b>example datasets</b> (the four case studies of the companion paper).<br><br> If rows are fields of view, <b>aggregate them by specimen</b>.<br><br> After uploading, the <b>Compositional parts</b> selector lets you choose which numeric columns are the parts of the composition. ID columns are excluded automatically.<br><br> A <b>Pre-flight check</b> alerts you if a selected column has an incompatible scale (e.g., Glycogen measured separately).":
+  "<b>1 &mdash; Carregar dados</b><br><br> Envie um <b>arquivo CSV ou Excel</b>, ou carregue um dos <b>conjuntos de exemplo</b> (os quatro estudos de caso do artigo associado).<br><br> Se as linhas forem campos de visão, <b>agregue-as por espécime</b>.<br><br> Depois de carregar, o seletor de <b>Partes da composição</b> permite escolher quais colunas numéricas são as partes. Colunas de ID são excluídas automaticamente.<br><br> A <b>Verificação prévia</b> avisa se alguma coluna selecionada está em escala incompatível (por exemplo, glicogênio medido à parte).",
+"<b>Parts selector &mdash; what to include</b><br><br> Select <em>only</em> columns that form a <b>closed composition</b> (volume fractions, area percentages, or cell counts summing to a constant).<br><br> Non-compositional covariates (body weight, biochemical assays on a different scale) must be unchecked.":
+  "<b>Seletor de partes &mdash; o que incluir</b><br><br> Selecione <em>apenas</em> colunas que formam uma <b>composição fechada</b> (frações de volume, porcentagens de área ou contagens de células que somam uma constante).<br><br> Covariáveis não composicionais (peso corporal, dosagens bioquímicas em outra escala) devem ser desmarcadas.",
+"<b>2 &mdash; Data Inspection</b><br><br> Before any transformation, visualise:<br> <ul> <li><b>Structural zeros</b> &mdash; rare tissue compartments</li> <li><b>Missing values (NA)</b></li> </ul> The three-state heatmap distinguishes observed values, zeros, and NAs &mdash; a critical distinction for choosing the right imputation method.":
+  "<b>2 &mdash; Inspeção dos dados</b><br><br> Antes de qualquer transformação, visualize:<br> <ul> <li><b>Zeros estruturais</b> &mdash; compartimentos teciduais raros</li> <li><b>Valores ausentes (NA)</b></li> </ul> O mapa de calor de três estados distingue valores observados, zeros e NAs &mdash; uma distinção essencial para escolher o método de imputação.",
+"<b>3 &mdash; Zero and NA handling</b><br><br> Choose the imputation method before running:<br> <ul> <li><b>CZM</b> &mdash; count zeros (point-counting stereology)</li> <li><b>multRepl</b> &mdash; rounded zeros (percentages)</li> <li><b>lrEM</b> &mdash; rounded zeros, larger samples</li> </ul> If the data has NAs, choose <em>drop rows</em> or <em>geometric-mean imputation</em> first.":
+  "<b>3 &mdash; Tratamento de zeros e NA</b><br><br> Escolha o método de imputação antes de executar:<br> <ul> <li><b>CZM</b> &mdash; zeros de contagem (estereologia por contagem de pontos)</li> <li><b>multRepl</b> &mdash; zeros arredondados (porcentagens)</li> <li><b>lrEM</b> &mdash; zeros arredondados, amostras maiores</li> </ul> Se houver NAs, escolha antes <em>remover linhas</em> ou <em>imputação pela média geométrica</em>.",
+"<b>4 &mdash; Compositional Analysis</b><br><br> <b>Ternary plot</b>: visualise 3 parts in the simplex. Use <em>Amalgamate</em> if D &gt; 3. Convex hulls or 95% regions delimit each group.<br><br> <b>clr-PCA Biplot</b>: ray length ~ clr standard deviation; the distance between two ray tips ~ standard deviation of their log-ratio. Open <em>How to read this biplot</em> for details.<br><br> <b>Variation matrix</b> and <b>compositional descriptives</b>: log-ratio variances, geometric-mean composition and total variance per group.<br><br> Use <b>Colour palette</b> to switch between high-contrast colour schemes, including colour-blind-safe options.":
+  "<b>4 &mdash; Análise composicional</b><br><br> <b>Diagrama ternário</b>: visualize 3 partes no simplex. Use <em>Amalgamar</em> se D &gt; 3. Envoltórias convexas ou regiões de 95% delimitam cada grupo.<br><br> <b>Biplot clr-PCA</b>: comprimento do raio ~ desvio-padrão clr; a distância entre as pontas de dois raios ~ desvio-padrão do log-ratio entre eles. Abra <em>Como ler este biplot</em> para detalhes.<br><br> <b>Matriz de variação</b> e <b>descritivas composicionais</b>: variâncias dos log-ratios, composição média geométrica e variância total por grupo.<br><br> Use a <b>Paleta de cores</b> para alternar entre esquemas de alto contraste, incluindo opções seguras para daltonismo.",
+"<b>5 &mdash; Balances (SBP)</b><br><br> A <b>sequential binary partition</b> splits the parts into nested groups; each split defines one <b>balance</b> (an ilr coordinate). <br><br> The SBP is built automatically from the data, and you can edit any cell (+1 / -1 / 0).<br><br> The <b>CoDa dendrogram</b> shows each balance's variance (bar height), mean, and per-group distribution; each balance can be tested between groups.":
+  "<b>5 &mdash; Balanços (SBP)</b><br><br> Uma <b>partição binária sequencial</b> divide as partes em grupos aninhados; cada divisão define um <b>balanço</b> (uma coordenada ilr). <br><br> A SBP é construída automaticamente a partir dos dados, e você pode editar qualquer célula (+1 / -1 / 0).<br><br> O <b>dendrograma CoDa</b> mostra a variância (altura da barra), a média e a distribuição por grupo de cada balanço; cada balanço pode ser testado entre grupos.",
+"<b>6 &mdash; Statistical Modeling</b><br><br> Fits a permutational MANOVA on <b>ilr coordinates</b> via RRPP. <br><br> Select one or more factors; toggle additive or factorial design. The formula is previewed before fitting.<br><br> Covariates, a block term and the <b>total (size)</b> can be added when parts are on an absolute scale.<br><br> After fitting: run <b>pairwise tests</b> of means and dispersions and inspect <b>residual diagnostics</b>.":
+  "<b>6 &mdash; Modelagem estatística</b><br><br> Ajusta uma MANOVA permutacional sobre as <b>coordenadas ilr</b> via RRPP. <br><br> Selecione um ou mais fatores; escolha delineamento aditivo ou fatorial. A fórmula é mostrada antes do ajuste.<br><br> Covariáveis, um termo de bloco e o <b>total (tamanho)</b> podem ser incluídos quando as partes estão em escala absoluta.<br><br> Depois do ajuste: execute <b>comparações par a par</b> de médias e dispersões e examine o <b>diagnóstico dos resíduos</b>.",
+"<b>7 &mdash; Reproducibility</b><br><br> Download an <b>R script</b> that reproduces your analysis, a self-contained <b>HTML report</b>, or <b>save the session</b> to resume it later.":
+  "<b>7 &mdash; Reprodutibilidade</b><br><br> Baixe um <b>script R</b> que reproduz sua análise, um <b>relatório HTML</b> autocontido, ou <b>salve a sessão</b> para retomá-la depois.",
+"<b>You're ready!</b><br><br> That covers the full PPDAC cycle.<br><br> Start by loading an example (<em>Load example</em> in the Data Upload tab) or uploading your own file.<br><br> Click this button anytime to restart the tour.":
+  "<b>Tudo pronto!</b><br><br> Isso cobre o ciclo PPDAC completo.<br><br> Comece carregando um exemplo (<em>Carregar exemplo</em> na aba Carregar dados) ou enviando seu próprio arquivo.<br><br> Clique neste botão a qualquer momento para reiniciar o tour.",
+"Okabe-Ito (colour-blind safe)": "Okabe-Ito (seguro para daltonismo)", "Dark2 (ColorBrewer)": "Dark2 (ColorBrewer)",
+"Viridis": "Viridis", "sum": "soma", "mean": "média",
+"This file is not a CoDa Stereo session.": "Este arquivo não é uma sessão do CoDa Stereo.",
+"The session has no data.": "A sessão não contém dados.",
+"The session's parts are not numeric columns of its data.": "As partes da sessão não são colunas numéricas dos seus dados.",
+}
+
+# strings that are not text (CSS, values) are deliberately left untranslated
+SKIP = {"font-size: 85%;", "65px", "none", "II"}
+
+keys = [k for k in open("data-raw/i18n_keys.txt", encoding="utf-8").read().split("\n") if k]
+# the extractor writes "\nBlock: %s" as two lines; restore it
+keys = [("\nBlock: %s" if k == "Block: %s" else k) for k in keys]
+extra   = ["%d row(s) (%d NA cell(s)) dropped via listwise deletion",
+           "%d NA cell(s) partially imputed; %d residual row(s) dropped",
+           "%d NA cell(s) imputed via column geometric mean",
+           "No zeros detected. Using raw composition.", "Comma", "Semicolon", "Tab"]
+wanted = [k for k in dict.fromkeys(keys + extra) if k not in SKIP and k.strip()]
+for name, tab in (("pt", PT), ("es", ES)):
+    missing = [k for k in wanted if k not in tab]
+    if missing:
+        print("MISSING", name, *missing, sep="\n  "); sys.exit(1)
+    # placeholders must match in order
+    for en, tr in tab.items():
+        if re.findall(r"%[.0-9]*[sdf%]", en) != re.findall(r"%[.0-9]*[sdf%]", tr):
+            print("PLACEHOLDER MISMATCH", name, en); sys.exit(1)
+with open("inst/i18n/translations.csv", "w", newline="", encoding="utf-8") as f:
+    w = csv.writer(f, quoting=csv.QUOTE_ALL)
+    w.writerow(["en", "pt", "es"])
+    w.writerows((k, PT[k], ES[k]) for k in wanted)
+print(len(wanted), "strings written (pt, es)")

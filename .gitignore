@@ -25,3 +25,9 @@ rsconnect/
 # OS files
 Thumbs.db
 .DS_Store
+
+# Local planning / agent notes
+CoDaStereo_v3_plan.md
+CLAUDE.md
+Rplots.pdf
+docs/
