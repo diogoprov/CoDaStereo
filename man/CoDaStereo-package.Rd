@@ -14,6 +14,7 @@ Interactive 'shiny' application for compositional data analysis of stereological
 Useful links:
 \itemize{
   \item \url{https://github.com/diogoprov/CoDaStereo}
+  \item \url{https://diogoprov.github.io/CoDaStereo/}
   \item Report bugs at \url{https://github.com/diogoprov/CoDaStereo/issues}
 }
 

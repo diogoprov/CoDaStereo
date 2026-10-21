@@ -87,7 +87,15 @@ use_async <- function() {
 #' @noRd
 start_workers <- function(n = 2) {
   if (!use_async()) return(invisible(FALSE))
-  if (mirai::status()$connections == 0) mirai::daemons(n)
+  ok <- tryCatch({
+    if (mirai::status()$connections == 0) mirai::daemons(n)
+    TRUE
+  }, error = function(e) FALSE)
+  if (!ok) {
+    # e.g. a host that does not allow extra processes: fit synchronously
+    options(CoDaStereo.async = FALSE)
+    return(invisible(FALSE))
+  }
   shiny::onStop(function() mirai::daemons(0))
   invisible(TRUE)
 }

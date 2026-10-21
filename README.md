@@ -1,11 +1,10 @@
-<p align="center">
-  <img src="man/figures/logo.png" width="250" alt="CoDa Stereo logo"/>
-</p>
-
-# CoDa Stereo <img src="https://img.shields.io/badge/version-3.0.0-blue" alt="version"/> <img src="https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R" alt="R"/>
+# CoDa Stereo <img src="man/figures/logo.png" align="right" height="139" alt="CoDa Stereo logo"/>
 
 <!-- badges: start -->
+[![version](https://img.shields.io/badge/version-3.1.0-blue)](NEWS.md)
+[![R >= 4.1](https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R)](https://www.r-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![R-CMD-check](https://github.com/diogoprov/CoDaStereo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/diogoprov/CoDaStereo/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 > **Compositional Data Analysis for Stereological, Histomorphometric and Blood-Cell Data**
@@ -13,13 +12,16 @@
 > A Shiny application implementing the Aitchison geometry for the full
 > data analysis cycle: data upload, zero/NA handling, compositional
 > visualisation, balances, and permutational MANOVA with post-hoc tests.
+> Interface in English and Portuguese.
 >
 > Developed alongside:
 > Provete, D.B., Severgnini, M.R., Fernandes, C.E. & Franco-Belussi, L.
 > *A Practical Guide to using Compositional Data Analysis in Tissue Stereology
 > and Blood Cell Profile*. **Physiological Reports** (in review).
 
-See [NEWS.md](NEWS.md) for the changes in each version.
+See [NEWS.md](NEWS.md) for the changes in each version and the
+[package website](https://diogoprov.github.io/CoDaStereo/) for the
+getting-started guide.
 
 ---
 
@@ -27,13 +29,14 @@ See [NEWS.md](NEWS.md) for the changes in each version.
 
 | Module | Capabilities |
 |---|---|
-| **Data Upload** | CSV and Excel (.xlsx/.xls) with sheet selector; smart parts selector that auto-excludes ID columns |
+| **Data Upload** | CSV and Excel (.xlsx/.xls) with sheet selector; the four case-study datasets of the companion paper as examples; aggregation of fields of view into specimens (nested designs); smart parts selector; pre-flight check |
 | **Data Inspection** | Zero/NA heatmap (observed vs. structural zero vs. missing); `naniar::vis_miss` plot; counts per part |
 | **Zero Handling** | Three methods via `zCompositions`: CZM (count zeros), multRepl (rounded zeros), lrEM (rounded zeros); NA handling via listwise deletion or geometric-mean imputation |
-| **Compositional Analysis** | Manual ternary plot (pure ggplot2, no ggtern dependency); amalgamation of D > 3 parts into 3 groups; clr-PCA biplot on unscaled clr coordinates with a "how to read" note; compositional centre and total variance per group; selectable colour palettes (Okabe-Ito, Dark2, viridis) |
-| **Balances (SBP)** | Automatic sequential binary partition (Ward clustering on clr distances), editable cell by cell with on-the-fly validation; balance definitions table; CoDa dendrogram with per-group boxplots |
-| **Statistical Modeling** | Factorial permutational MANOVA via `RRPP::lm.rrpp`; optional log-total as an extra coordinate (composition + total; Pawlowsky-Glahn, Egozcue & Lovell 2015) with a warning when totals are fixed by design; pairwise post-hoc via `RRPP::pairwise`; residual diagnostics; formula preview before fitting |
-| **Downloads** | Ternary, biplot and CoDa dendrogram as PDF; imputed data, SBP, ANOVA and pairwise tables as CSV |
+| **Compositional Analysis** | Ternary plot in pure ggplot2 with amalgamation, convex hulls or 95% confidence/predictive regions and group centres; clr-biplot on unscaled clr coordinates (axis choice, shapes, labels, optional log-total as in a T-space biplot) with a "how to read" note, scree plot and ray lengths; variation-matrix heatmap; compositional centre and total variance per group; colour palettes (Okabe-Ito, Dark2, viridis); interactive hover (`ggiraph`) |
+| **Balances (SBP)** | Automatic sequential binary partition (Ward clustering on clr distances), editable cell by cell with on-the-fly validation; CoDa dendrogram; boxplots and permutational tests (Z, P) of each balance by group |
+| **Statistical Modeling** | Permutational MANOVA via `RRPP::lm.rrpp` with factors, covariates (ANCOVA), a block term, SS type I/II/III and 199-9999 permutations (fixed seed); the log-total as a joint response or a covariate (Pawlowsky-Glahn, Egozcue & Lovell 2015), with a warning when totals are fixed by design; pairwise tests of means and dispersions; residual diagnostics. Fits run in background workers (`mirai`) |
+| **Reproducibility** | R script that reproduces the analysis; self-contained HTML report; save and reload the session (JSON) |
+| **Downloads** | Every figure as PDF, PNG, SVG or TIFF at a chosen size, resolution and font size; imputed data, SBP, variation matrix, ANOVA, balance and pairwise tables as CSV |
 
 ## Installation
 
@@ -60,9 +63,9 @@ run_app()
 ### Dependencies
 
 CoDaStereo depends on: `shiny`, `shinydashboard`, `rintrojs`, `dplyr`,
-`tidyr`, `tibble`, `purrr`, `ggplot2`, `scales`, `readxl`, `naniar`,
-`compositions`, `zCompositions`, `RRPP`, `factoextra`, `FactoMineR`,
-`golem`, `rlang`.
+`tidyr`, `tibble`, `purrr`, `ggplot2`, `ggiraph`, `ggrepel`, `scales`,
+`svglite`, `readxl`, `naniar`, `compositions`, `zCompositions`, `RRPP`,
+`FactoMineR`, `mirai`, `htmltools`, `jsonlite`, `knitr`, `golem`, `rlang`.
 
 All are available on CRAN.
 
@@ -87,6 +90,7 @@ directly from a public GitHub repository with automatic push-to-publish.
    f <- system("git ls-files", intern = TRUE)
    f <- f[grepl("^(app[.]R|DESCRIPTION|NAMESPACE|LICENSE|R/|www/|inst/)", f)]
    rsconnect::writeManifest(appDir = ".", appFiles = f, appPrimaryDoc = "app.R")
+   # (the same code is in dev/write_manifest.R)
    ```
 
    Commit and push the generated `manifest.json`.
@@ -123,24 +127,32 @@ rsconnect::deployApp(appDir = ".", appName = "CoDaStereo")
 ```
 CoDaStereo/
 ├── app.R                  # Entry point for Posit Connect Cloud
-├── DESCRIPTION, NAMESPACE, LICENSE, NEWS.md
+├── DESCRIPTION, NAMESPACE, LICENSE, NEWS.md, _pkgdown.yml
 ├── manifest.json          # Generated by rsconnect::writeManifest()
 ├── R/
 │   ├── run_app.R          # golem entry point: run_app()
 │   ├── app_ui.R           # Dashboard layout (assembles modules)
-│   ├── app_server.R       # Wires module reactives
-│   ├── fct_helpers.R      # Helpers: zeros, ternary plot, palettes, SBP, total, clr-PCA
-│   ├── mod_data.R         # Upload, parts selector, inspection
+│   ├── app_server.R       # Wires modules, session state and restore
+│   ├── fct_helpers.R      # Zeros, ternary plot, palettes, SBP, total, clr-PCA, examples
+│   ├── fct_plots.R        # Biplot, scree, variation matrix, regions, balances, export
+│   ├── fct_models.R       # RRPP model fitting and background workers (mirai)
+│   ├── fct_reproducibility.R  # R script, HTML report, session JSON
+│   ├── fct_i18n.R         # English / Portuguese interface
+│   ├── mod_data.R         # Upload, examples, specimen aggregation, inspection
 │   ├── mod_imputation.R   # Zero/NA imputation
-│   ├── mod_analysis.R     # Ternary, biplot, descriptives
-│   ├── mod_balances.R     # SBP editor and CoDa dendrogram
-│   ├── mod_stats.R        # MANOVA (with optional total), pairwise, diagnostics
+│   ├── mod_analysis.R     # Ternary, biplot, variation matrix, descriptives
+│   ├── mod_balances.R     # SBP editor, CoDa dendrogram, balance tests
+│   ├── mod_stats.R        # MANOVA, pairwise tests, diagnostics
+│   ├── mod_export.R       # Reproducibility tab
 │   └── mod_tutorial.R     # Guided tour (rintrojs)
-├── tests/testthat/        # Unit and module tests
-├── vignettes/             # Getting started
+├── inst/extdata/          # Case-study example datasets
+├── inst/i18n/             # Portuguese translations (UTF-8)
 ├── inst/logo/             # Hex sticker (SVG, PNG)
+├── tests/testthat/        # Unit, module and reproducibility tests
+├── vignettes/             # Getting started
+├── data-raw/              # Scripts that build the examples and translations
 ├── dev/                   # Development scripts (run_dev.R, make_sticker.py)
-└── .github/workflows/     # R CMD check on Linux, macOS and Windows
+└── .github/workflows/     # R CMD check (3 OSes) and pkgdown site
 ```
 
 ## How to cite
@@ -163,7 +175,7 @@ the software:
   year    = {2026},
   url     = {https://github.com/diogoprov/CoDaStereo},
   doi     = {10.5281/zenodo.19928374},
-  version = {3.0.0}
+  version = {3.1.0}
 }
 ```
 

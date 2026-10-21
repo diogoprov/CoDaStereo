@@ -1,3 +1,62 @@
+# CoDaStereo 3.1.0
+
+## Data
+
+* The four case-study datasets of the companion paper (spleen and kidney
+  point counts per field, leukocyte differentials, erythrocyte nuclear
+  abnormalities) are available as examples.
+* Nested designs: fields of view can be aggregated into one composition per
+  specimen (counts summed, areas averaged). A block term in the model
+  restricts permutations within blocks.
+
+## Visualisation
+
+* Every figure can be exported as PDF, PNG, SVG or TIFF at a chosen size
+  (cm), resolution and font size.
+* The clr-biplot is drawn in ggplot2 (factoextra is no longer a dependency).
+  It adds axis choice, shape by a second factor, sample labels, a scree
+  plot and a table of ray lengths. It can include the log-total as an extra
+  variable (T-space biplot; Pawlowsky-Glahn, Egozcue & Lovell 2015).
+* New heatmap of the variation matrix.
+* Ternary plots can show 95% confidence or predictive regions (ilr normal
+  model) and group geometric centres, computed on the zero-replaced
+  composition.
+* Balances tab: boxplots of each balance per group and a permutational test
+  of each balance (F, Z, P).
+* Interactive mode: hovering shows the sample on the ternary plot and
+  biplot (ggiraph).
+
+## Statistics
+
+* Numeric covariates (ANCOVA), block term, sums of squares of type I, II or
+  III, and 199, 999 or 9999 permutations with a fixed seed.
+* The log-total can enter as a covariate ("does composition change with
+  size?") as well as a joint response.
+* Pairwise tests also compare group dispersions (compositional disparity).
+
+## Speed
+
+* Model fits and pairwise tests run in background workers (mirai), so the
+  interface stays responsive. Plots are cached. The SBP grid and
+  amalgamation inputs are debounced. Progress bars show long steps. The
+  deployment entry point starts faster.
+
+## Reproducibility
+
+* New Reproducibility tab with three outputs:
+  * an R script that reproduces the analysis (tested to match the app's
+    results);
+  * a self-contained HTML report;
+  * saving and reloading the session as JSON, with results recomputed on
+    load.
+
+## Interface
+
+* The interface is available in English and Portuguese (EN / PT in the
+  header), including the guided tour. Figures, the report and the R script
+  stay in English.
+* Package website built with pkgdown.
+
 # CoDaStereo 3.0.0
 
 ## New features

@@ -15,3 +15,6 @@
 ^cran-comments\.md$
 ^data-raw$
 ^Rplots\.pdf$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
