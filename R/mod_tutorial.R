@@ -13,8 +13,8 @@
 #'   - the header tour button
 #' Steps for tab content use element = "" (centred floating tooltip).
 #' @noRd
-build_tour_steps <- function() {
-  data.frame(
+build_tour_steps <- function(lang = "en") {
+  steps <- data.frame(
     element = c(
       "#sidebarMenu",                        # 1 welcome
       "a[data-value='data']",                # 2 data upload tab link
@@ -39,7 +39,9 @@ build_tour_steps <- function() {
       # 2 Data Upload
       paste(
         "<b>1 &mdash; Data Upload</b><br><br>",
-        "Upload a <b>CSV or Excel file</b> here.<br><br>",
+        "Upload a <b>CSV or Excel file</b>, or load one of the <b>example",
+        "datasets</b> (the four case studies of the companion paper).<br><br>",
+        "If rows are fields of view, <b>aggregate them by specimen</b>.<br><br>",
         "After uploading, the <b>Compositional parts</b> selector lets you",
         "choose which numeric columns are the parts of the composition.",
         "ID columns are excluded automatically.<br><br>",
@@ -84,12 +86,13 @@ build_tour_steps <- function() {
         "<b>4 &mdash; Compositional Analysis</b><br><br>",
         "<b>Ternary plot</b>: visualise 3 parts in the simplex.",
         "Use <em>Amalgamate</em> if D &gt; 3.",
-        "Convex hulls delimit each group's territory.<br><br>",
+        "Convex hulls or 95% regions delimit each group.<br><br>",
         "<b>clr-PCA Biplot</b>: ray length ~ clr standard deviation;",
         "the distance between two ray tips ~ standard deviation of their",
         "log-ratio. Open <em>How to read this biplot</em> for details.<br><br>",
-        "<b>Compositional descriptives</b>: geometric-mean composition",
-        "and total variance per group.<br><br>",
+        "<b>Variation matrix</b> and <b>compositional descriptives</b>:",
+        "log-ratio variances, geometric-mean composition and total variance",
+        "per group.<br><br>",
         "Use <b>Colour palette</b> to switch between high-contrast colour",
         "schemes, including colour-blind-safe options."
       ),
@@ -102,7 +105,8 @@ build_tour_steps <- function() {
         "The SBP is built automatically from the data, and you can edit",
         "any cell (+1 / -1 / 0).<br><br>",
         "The <b>CoDa dendrogram</b> shows each balance's variance (bar",
-        "height), mean, and per-group distribution."
+        "height), mean, and per-group distribution; each balance can be",
+        "tested between groups."
       ),
       # 7 Statistical Modeling
       paste(
@@ -111,11 +115,10 @@ build_tour_steps <- function() {
         "<br><br>",
         "Select one or more factors; toggle additive or factorial design.",
         "The formula is previewed before fitting.<br><br>",
-        "If parts are on an <b>absolute scale</b>, tick <em>Include the",
-        "total</em> to test composition and size jointly.<br><br>",
-        "After fitting: run <b>pairwise post-hoc tests</b> and inspect",
-        "<b>residual diagnostics</b>.",
-        "All results are downloadable as CSV or PDF."
+        "Covariates, a block term and the <b>total (size)</b> can be added",
+        "when parts are on an absolute scale.<br><br>",
+        "After fitting: run <b>pairwise tests</b> of means and dispersions",
+        "and inspect <b>residual diagnostics</b>."
       ),
       # 7b Reproducibility
       paste(
@@ -128,8 +131,8 @@ build_tour_steps <- function() {
       paste(
         "<b>You're ready!</b><br><br>",
         "That covers the full PPDAC cycle.<br><br>",
-        "Start by loading the built-in example",
-        "(<em>Load Example Data</em> in the Data Upload tab)",
+        "Start by loading an example",
+        "(<em>Load example</em> in the Data Upload tab)",
         "or uploading your own file.<br><br>",
         "Click this button anytime to restart the tour."
       )
@@ -148,6 +151,8 @@ build_tour_steps <- function() {
     ),
     stringsAsFactors = FALSE
   )
+  steps$intro <- tr(steps$intro, lang)
+  steps
 }
 
 #' @noRd

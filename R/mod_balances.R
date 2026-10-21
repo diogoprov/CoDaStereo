@@ -3,46 +3,39 @@
 # ==============================================================================
 
 #' @noRd
-mod_balances_ui <- function(id) {
+mod_balances_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "balances",
     fluidRow(
-      box(title = "Sequential binary partition (SBP)", width = 5,
-          p("The SBP is built automatically by Ward clustering of the parts ",
-            "on clr distances. Edit any cell to define your own balances: ",
-            "+1 = numerator, -1 = denominator, 0 = not in this balance."),
+      box(title = t("Sequential binary partition (SBP)"), width = 5,
+          p(t("The SBP is built automatically by Ward clustering of the parts on clr distances. Edit any cell to define your own balances: +1 = numerator, -1 = denominator, 0 = not in this balance.")),
           uiOutput(ns("group_var_ui")),
-          selectInput(ns("palette"), "Colour palette:", choices = plot_palettes),
-          actionButton(ns("reset_sbp"), "Reset to automatic SBP",
+          selectInput(ns("palette"), t("Colour palette:"), choices = tr_choices(plot_palettes, lang)),
+          actionButton(ns("reset_sbp"), t("Reset to automatic SBP"),
                        icon = icon("rotate-left")),
           hr(),
           uiOutput(ns("sbp_grid")),
           uiOutput(ns("sbp_status")),
           tableOutput(ns("sbp_table")),
-          downloadButton(ns("dl_sbp"), "Download SBP (CSV)")
+          downloadButton(ns("dl_sbp"), t("Download SBP (CSV)"))
       ),
-      box(title = "CoDa dendrogram", width = 7,
-          p("Each horizontal axis is one balance. The vertical bar above it ",
-            "is the balance variance, and where the bar meets the axis is the ",
-            "balance mean. Coloured boxes show the balance distribution per group."),
+      box(title = t("CoDa dendrogram"), width = 7,
+          p(t("Each horizontal axis is one balance. The vertical bar above it is the balance variance, and where the bar meets the axis is the balance mean. Coloured boxes show the balance distribution per group.")),
           plotOutput(ns("dendrogram"), height = "500px"),
-          downloadButton(ns("dl_dendrogram"), "Download figure"),
+          downloadButton(ns("dl_dendrogram"), t("Download figure")),
           hr(),
-          export_settings_ui(ns)
+          export_settings_ui(ns, lang)
       )
     ),
     fluidRow(
-      box(title = "Balances by group", width = 12, status = "info",
-          p("Each panel is one balance (numerator / denominator parts). Positive ",
-            "values mean the numerator parts dominate. Test each balance with a ",
-            "univariate permutational ANOVA; Z is the standardised effect size. ",
-            "With several balances, interpret P-values with the multiple ",
-            "comparisons in mind."),
+      box(title = t("Balances by group"), width = 12, status = "info",
+          p(t("Each panel is one balance (numerator / denominator parts). Positive values mean the numerator parts dominate. Test each balance with a univariate permutational ANOVA; Z is the standardised effect size. With several balances, interpret P-values with the multiple comparisons in mind.")),
           plotOutput(ns("balance_plot"), height = "450px"),
-          downloadButton(ns("dl_balance_plot"), "Download figure"),
-          actionButton(ns("test_balances"), "Test balances (999 permutations)",
+          downloadButton(ns("dl_balance_plot"), t("Download figure")),
+          actionButton(ns("test_balances"), t("Test balances (999 permutations)"),
                        icon = icon("vial")),
-          downloadButton(ns("dl_balance_tests"), "Download tests (CSV)"),
+          downloadButton(ns("dl_balance_tests"), t("Download tests (CSV)")),
           tableOutput(ns("balance_tests"))
       )
     )
@@ -55,6 +48,7 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     take <- restore_pending(restore, "balances")
+    t    <- session_tr(session)
     restored_sbp <- reactiveVal(NULL)
     observeEvent(restore(), {
       updateSelectInput(session, "palette", selected = restore()$balances$palette)
@@ -64,7 +58,7 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
 
     output$group_var_ui <- renderUI({
       req(df(), parts())
-      selectInput(ns("group_var"), "Colour / group by:",
+      selectInput(ns("group_var"), t("Colour / group by:"),
                   choices = factor_candidates(df(), parts()),
                   selected = take("group_var"))
     })
@@ -107,16 +101,16 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
 
     # Wait until the user pauses editing before validating and redrawing
     sbp_settled <- debounce(sbp_current, 500)
-    sbp_issues  <- reactive(sbp_problems(sbp_settled()))
+    sbp_issues  <- reactive(sbp_problems(sbp_settled(), lang = ui_lang(session)))
 
     output$sbp_status <- renderUI({
       issues <- sbp_issues()
       if (length(issues) == 0) {
-        tags$p(icon("check-circle"), " Valid SBP.",
+        tags$p(icon("check-circle"), t(" Valid SBP."),
                style = "color: #28a745; font-weight: bold;")
       } else {
         tags$div(style = "color: #dc3545;",
-                 tags$strong("Invalid SBP:"), tags$ul(purrr::map(issues, tags$li)))
+                 tags$strong(t("Invalid SBP:")), tags$ul(purrr::map(issues, tags$li)))
       }
     })
 
@@ -128,7 +122,7 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
     draw_dendrogram <- function() {
       req(comp(), input$group_var, keep_rows())
       validate(need(length(sbp_issues()) == 0,
-                    "Fix the SBP to draw the dendrogram."))
+                    t("Fix the SBP to draw the dendrogram.")))
       plot_coda_dendrogram(comp(), sbp_settled(),
                            groups  = df()[[input$group_var]][keep_rows()],
                            palette = input$palette)
@@ -158,7 +152,7 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
     tests <- reactiveVal(NULL)
     observeEvent(list(sbp_settled(), input$group_var), tests(NULL))
     observeEvent(input$test_balances, {
-      withProgress(message = "Testing balances...", {
+      withProgress(message = t("Testing balances..."), {
         tests(balance_tests(balances(), bal_groups()))
       })
     })

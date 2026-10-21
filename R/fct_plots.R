@@ -38,17 +38,18 @@ save_plot <- function(file, plot, format = "pdf", width = 17, height = 15,
 
 #' Export settings shown once per tab (format, size, resolution, font)
 #' @noRd
-export_settings_ui <- function(ns) {
+export_settings_ui <- function(ns, lang = "en") {
+  t <- function(x) tr(x, lang)
   tags$details(
-    tags$summary(strong("Figure export settings")),
+    tags$summary(strong(t("Figure export settings"))),
     fluidRow(
-      column(3, selectInput(ns("exp_format"), "Format:",
+      column(3, selectInput(ns("exp_format"), t("Format:"),
                             choices = c("PDF" = "pdf", "PNG" = "png",
                                         "SVG" = "svg", "TIFF" = "tiff"))),
-      column(2, numericInput(ns("exp_width"), "Width (cm):", 17, min = 4, max = 60)),
-      column(2, numericInput(ns("exp_height"), "Height (cm):", 15, min = 4, max = 60)),
-      column(2, selectInput(ns("exp_dpi"), "DPI:", choices = c(300, 600, 1200))),
-      column(3, numericInput(ns("exp_font"), "Font size (pt):", 11, min = 6, max = 24))
+      column(2, numericInput(ns("exp_width"), t("Width (cm):"), 17, min = 4, max = 60)),
+      column(2, numericInput(ns("exp_height"), t("Height (cm):"), 15, min = 4, max = 60)),
+      column(2, selectInput(ns("exp_dpi"), t("DPI:"), choices = c(300, 600, 1200))),
+      column(3, numericInput(ns("exp_font"), t("Font size (pt):"), 11, min = 6, max = 24))
     )
   )
 }

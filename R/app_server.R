@@ -4,29 +4,24 @@
 
 #' @noRd
 app_server <- function(input, output, session) {
+  session$userData$lang <- lang_from_query(isolate(session$clientData$url_search))
+
 
   # -- Guided tour (rintrojs) ------------------------------------------------
   mod_tutorial_server("tutorial")
 
-  observeEvent(input$tour_btn_header, {
+  start_tour <- function() {
+    t <- session_tr(session)
     rintrojs::introjs(session,
-                      options = list(steps        = build_tour_steps(),
+                      options = list(steps        = build_tour_steps(ui_lang(session)),
                                      showBullets  = FALSE,
                                      showProgress = TRUE,
-                                     nextLabel    = "Next &rarr;",
-                                     prevLabel    = "&larr; Back",
-                                     doneLabel    = "Done"))
-  }, ignoreInit = TRUE)
-
-  observeEvent(input$tour_btn_intro, {
-    rintrojs::introjs(session,
-                      options = list(steps        = build_tour_steps(),
-                                     showBullets  = FALSE,
-                                     showProgress = TRUE,
-                                     nextLabel    = "Next &rarr;",
-                                     prevLabel    = "&larr; Back",
-                                     doneLabel    = "Done"))
-  }, ignoreInit = TRUE)
+                                     nextLabel    = paste(t("Next"), "&rarr;"),
+                                     prevLabel    = paste("&larr;", t("Back")),
+                                     doneLabel    = t("Done")))
+  }
+  observeEvent(input$tour_btn_header, start_tour(), ignoreInit = TRUE)
+  observeEvent(input$tour_btn_intro, start_tour(), ignoreInit = TRUE)
 
   # -- Session restore (set by the Reproducibility tab) -----------------------
   restore <- reactiveVal(NULL)

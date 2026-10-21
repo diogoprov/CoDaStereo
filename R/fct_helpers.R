@@ -149,10 +149,11 @@ aggregate_specimens <- function(df, id, parts, fun = c("sum", "mean")) {
 #' @return A list with \code{ok} (logical), \code{warnings} (character vector
 #'   of human-readable warnings), and \code{flagged} (names of flagged parts).
 #' @noRd
-preflight_check <- function(df, parts) {
+preflight_check <- function(df, parts, lang = "en") {
+  t <- function(x) tr(x, lang)
   if (length(parts) < 2) {
     return(list(ok = FALSE,
-                warnings = "At least 2 parts are required for compositional analysis.",
+                warnings = t("At least 2 parts are required for compositional analysis."),
                 flagged = character(0)))
   }
 
@@ -171,7 +172,7 @@ preflight_check <- function(df, parts) {
       if (ratio > 50 || ratio < 0.01) {
         flagged  <- c(flagged, p)
         warnings <- c(warnings, sprintf(
-          "'%s' has mean = %.2f, which is %.0f\u00d7 the median part mean (%.2f). Is it really a compositional part?",
+          t("'%s' has mean = %.2f, which is %.0f\u00d7 the median part mean (%.2f). Is it really a compositional part?"),
           p, m, ratio, median_mean
         ))
       }
@@ -181,7 +182,7 @@ preflight_check <- function(df, parts) {
     if (any(mat[[p]] < 0, na.rm = TRUE)) {
       flagged  <- c(flagged, p)
       warnings <- c(warnings, sprintf(
-        "'%s' contains negative values, which are undefined in the simplex.", p
+        t("'%s' contains negative values, which are undefined in the simplex."), p
       ))
     }
   }
@@ -191,7 +192,7 @@ preflight_check <- function(df, parts) {
   cv_sums  <- stats::sd(row_sums) / mean(row_sums)
   if (cv_sums > 0.20) {
     warnings <- c(warnings, sprintf(
-      "Row sums have high variability (CV = %.1f%%). Parts may not form a closed composition, or a non-compositional column may be included.",
+      t("Row sums have high variability (CV = %.1f%%). Parts may not form a closed composition, or a non-compositional column may be included."),
       cv_sums * 100
     ))
   }
@@ -342,19 +343,20 @@ sbp_auto <- function(comp) {
 
 #' Problems that make a matrix an invalid SBP (empty = valid)
 #' @noRd
-sbp_problems <- function(sbp) {
+sbp_problems <- function(sbp, lang = "en") {
+  t <- function(x) tr(x, lang)
   D <- ncol(sbp)
   if (nrow(sbp) != D - 1) {
-    return(sprintf("%d parts need exactly %d balances.", D, D - 1))
+    return(sprintf(t("%d parts need exactly %d balances."), D, D - 1))
   }
   one_sided <- rownames(sbp)[rowSums(sbp == 1) == 0 | rowSums(sbp == -1) == 0]
   if (length(one_sided) > 0) {
-    return(sprintf("Balance %s needs at least one +1 and one -1 part.",
+    return(sprintf(t("Balance %s needs at least one +1 and one -1 part."),
                    one_sided))
   }
   out <- character(0)
   if (sum(rowSums(sbp != 0) == D) != 1) {
-    out <- c(out, "Exactly one balance (the first split) must involve all parts.")
+    out <- c(out, t("Exactly one balance (the first split) must involve all parts."))
   }
   nested_in <- function(a, b) {  # support of row a lies on one side of row b
     sa <- sbp[a, ] != 0
@@ -366,7 +368,7 @@ sbp_problems <- function(sbp) {
     any(sbp[i, ] != 0 & sbp[j, ] != 0) && !nested_in(i, j) && !nested_in(j, i)
   })
   out <- c(out, purrr::map_chr(clash, \(ij) sprintf(
-    "Balances %s and %s are not nested: each balance must split one group of its parent.",
+    t("Balances %s and %s are not nested: each balance must split one group of its parent."),
     rownames(sbp)[ij[1]], rownames(sbp)[ij[2]])))
   out
 }

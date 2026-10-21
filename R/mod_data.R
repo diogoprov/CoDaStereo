@@ -3,59 +3,55 @@
 # ==============================================================================
 
 #' @noRd
-mod_data_upload_ui <- function(id) {
+mod_data_upload_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "data",
     fluidRow(
-      box(title = "Data Input", width = 4,
-          fileInput(ns("file1"), "Choose CSV or Excel File",
+      box(title = t("Data Input"), width = 4,
+          fileInput(ns("file1"), t("Choose CSV or Excel File"),
                     accept = c(".csv", ".xlsx", ".xls"),
-                    buttonLabel = "Browse..."),
-          checkboxInput(ns("header"), "First row is header", TRUE),
-          radioButtons(ns("sep"), "CSV separator (ignored for Excel)",
-                       choices = c(Comma = ",", Semicolon = ";", Tab = "\t"),
+                    buttonLabel = t("Browse..."), placeholder = t("No file selected")),
+          checkboxInput(ns("header"), t("First row is header"), TRUE),
+          radioButtons(ns("sep"), t("CSV separator (ignored for Excel)"),
+                       choices = tr_choices(c(Comma = ",", Semicolon = ";", Tab = "\t"), lang),
                        selected = ","),
           uiOutput(ns("sheet_selector_ui")),
           hr(),
-          h4("Or try it out:"),
-          selectInput(ns("example"), "Example dataset:",
-                      choices = c("Simulated liver (2 groups)"                    = "liver_sim",
-                                  "Spleen, point counts per field (case study 1)" = "spleen",
-                                  "Kidney, point counts per field (case study 2)" = "kidney",
-                                  "Leukocyte differential counts (case study 3)"  = "leukocytes",
-                                  "Erythrocyte nuclear abnormalities (case study 4)" = "nuclear")),
-          actionButton(ns("load_example"), "Load example",
+          h4(t("Or try it out:")),
+          selectInput(ns("example"), t("Example dataset:"),
+                      choices = tr_choices(c(
+                        "Simulated liver (2 groups)"                       = "liver_sim",
+                        "Spleen, point counts per field (case study 1)"    = "spleen",
+                        "Kidney, point counts per field (case study 2)"    = "kidney",
+                        "Leukocyte differential counts (case study 3)"     = "leukocytes",
+                        "Erythrocyte nuclear abnormalities (case study 4)" = "nuclear"), lang)),
+          actionButton(ns("load_example"), t("Load example"),
                        icon = icon("table"), class = "btn-primary")
       ),
-      box(title = "Data Preview", width = 8, tableOutput(ns("contents")))
+      box(title = t("Data Preview"), width = 8, tableOutput(ns("contents")))
     ),
     fluidRow(
-      box(title = "Specimens (nested designs)", width = 12, status = "info",
-          p("When rows are fields of view (or sections) nested within specimens, ",
-            "analyse one composition per specimen: fields of the same animal are ",
-            "not independent replicates. Point counts are summed; areas or ",
-            "proportions are averaged."),
+      box(title = t("Specimens (nested designs)"), width = 12, status = "info",
+          p(t("When rows are fields of view (or sections) nested within specimens, analyse one composition per specimen: fields of the same animal are not independent replicates. Point counts are summed; areas or proportions are averaged.")),
           fluidRow(
-            column(3, checkboxInput(ns("agg_on"), "Aggregate rows by specimen", FALSE)),
+            column(3, checkboxInput(ns("agg_on"), t("Aggregate rows by specimen"), FALSE)),
             column(4, uiOutput(ns("agg_id_ui"))),
-            column(5, radioButtons(ns("agg_fun"), "Combine parts by:",
-                                   choices = c("Sum (counts)" = "sum",
-                                               "Mean (areas, proportions)" = "mean"),
+            column(5, radioButtons(ns("agg_fun"), t("Combine parts by:"),
+                                   choices = tr_choices(c("Sum (counts)" = "sum",
+                                                          "Mean (areas, proportions)" = "mean"), lang),
                                    inline = TRUE))
           ),
           uiOutput(ns("agg_report"))
       )
     ),
     fluidRow(
-      box(title = "Compositional parts", width = 8, status = "primary",
-          p(strong("Select which numeric columns are the compositional parts."),
-            " Columns whose name looks like an ID are deselected by default; ",
-            "non-compositional covariates (body weight, biochemical assays on ",
-            "a different scale, etc.) should also be unchecked."),
+      box(title = t("Compositional parts"), width = 8, status = "primary",
+          p(HTML(t("<strong>Select which numeric columns are the compositional parts.</strong> Columns whose name looks like an ID are deselected by default; non-compositional covariates (body weight, biochemical assays on a different scale, etc.) should also be unchecked."))),
           uiOutput(ns("select_parts_ui"))
       ),
-      box(title = "Pre-flight check", width = 4, status = "warning",
-          p("Automatic diagnostics for the selected parts:"),
+      box(title = t("Pre-flight check"), width = 4, status = "warning",
+          p(t("Automatic diagnostics for the selected parts:")),
           uiOutput(ns("preflight_ui"))
       )
     )
@@ -63,28 +59,21 @@ mod_data_upload_ui <- function(id) {
 }
 
 #' @noRd
-mod_data_inspect_ui <- function(id) {
+mod_data_inspect_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "inspect",
     fluidRow(
-      box(title = "Pattern of zeros and missing values", width = 12,
+      box(title = t("Pattern of zeros and missing values"), width = 12,
           status = "primary",
-          p("Each column is a sample, each row a compositional part. ",
-            "Cells coloured according to whether the value was ",
-            tags$span(style = "color:#7570B3; font-weight:bold;", "observed"),
-            ", a ",
-            tags$span(style = "color:#D95F02; font-weight:bold;",
-                      "structural zero"),
-            " or ",
-            tags$span(style = "color:#1B9E77; font-weight:bold;",
-                      "missing (NA)"), "."),
+          p(HTML(t("Each column is a sample, each row a compositional part. Cells are coloured according to whether the value was <span style='color:#7570B3; font-weight:bold;'>observed</span>, a <span style='color:#D95F02; font-weight:bold;'>structural zero</span> or <span style='color:#1B9E77; font-weight:bold;'>missing (NA)</span>."))),
           plotOutput(ns("zero_na_heatmap"), height = "260px")
       )
     ),
     fluidRow(
-      box(title = "Missing values (naniar::vis_miss)", width = 6,
+      box(title = t("Missing values (naniar::vis_miss)"), width = 6,
           plotOutput(ns("vis_miss_plot"), height = "320px")),
-      box(title = "Counts per part", width = 6,
+      box(title = t("Counts per part"), width = 6,
           plotOutput(ns("count_plot"), height = "320px"))
     )
   )
@@ -94,6 +83,7 @@ mod_data_inspect_ui <- function(id) {
 mod_data_server <- function(id, restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    t  <- session_tr(session)
     rv <- reactiveValues(df = NULL, default_parts = NULL, source = NULL)
 
     uploaded_ext <- reactive({
@@ -107,7 +97,7 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
       sheets <- tryCatch(readxl::excel_sheets(input$file1$datapath),
                          error = function(e) character(0))
       if (length(sheets) == 0) return(NULL)
-      selectInput(ns("excel_sheet"), "Excel sheet:",
+      selectInput(ns("excel_sheet"), t("Excel sheet:"),
                   choices = sheets, selected = sheets[1])
     })
 
@@ -127,7 +117,7 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
           as.data.frame(readxl::read_excel(input$file1$datapath,
                                            sheet = sheet, col_names = input$header))
         } else {
-          showNotification(paste("Unsupported file type:", ext),
+          showNotification(paste(t("Unsupported file type:"), ext),
                            type = "error", duration = 6)
           return()
         }
@@ -148,7 +138,7 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
       req(rv$df)
       cols <- names(rv$df)
       sel  <- rv$default_specimen %||% cols[1]
-      selectInput(ns("agg_id"), "Specimen column:", choices = cols,
+      selectInput(ns("agg_id"), t("Specimen column:"), choices = cols,
                   selected = if (sel %in% cols) sel else cols[1])
     })
 
@@ -159,7 +149,7 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
         return(rv$df)
       }
       validate(need(!input$agg_id %in% input$parts,
-                    "The specimen column cannot be a compositional part."))
+                    t("The specimen column cannot be a compositional part.")))
       aggregate_specimens(rv$df, input$agg_id, input$parts, input$agg_fun)
     })
 
@@ -167,10 +157,10 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
       req(isTRUE(input$agg_on), df_out())
       dropped <- attr(df_out(), "dropped")
       tags$p(style = "color: #31708f;", icon("layer-group"),
-             sprintf(" %d rows aggregated into %d specimens (%s).",
-                     nrow(rv$df), nrow(df_out()), input$agg_fun),
+             sprintf(t(" %d rows aggregated into %d specimens (%s)."),
+                     nrow(rv$df), nrow(df_out()), t(input$agg_fun)),
              if (length(dropped) > 0) {
-               sprintf(" Columns not constant within specimens were dropped: %s.",
+               sprintf(t(" Columns not constant within specimens were dropped: %s."),
                        paste(dropped, collapse = ", "))
              })
     })
@@ -185,7 +175,7 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
       }
       if (length(default_sel) < 2) default_sel <- num_cols
       selectInput(ns("parts"),
-                  "Compositional parts (numeric columns to analyse):",
+                  t("Compositional parts (numeric columns to analyse):"),
                   choices = num_cols, selected = default_sel,
                   multiple = TRUE, width = "100%")
     })
@@ -193,14 +183,14 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
     # -- Pre-flight check output -----------------------------------------------
     output$preflight_ui <- renderUI({
       req(rv$df, input$parts)
-      check <- preflight_check(df_out(), input$parts)
+      check <- preflight_check(df_out(), input$parts, lang = ui_lang(session))
       if (check$ok) {
         tags$div(
           icon("check-circle", style = "color: #28a745; font-size: 1.3em;"),
           tags$span(style = "color: #28a745; font-weight: bold;",
-                    " All checks passed."),
+                    t(" All checks passed.")),
           tags$p(style = "margin-top: 8px; color: #666;",
-                 sprintf("%d parts selected. Row sums look consistent.",
+                 sprintf(t("%d parts selected. Row sums look consistent."),
                          length(input$parts)))
         )
       } else {
@@ -210,12 +200,12 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
         tags$div(
           icon("exclamation-triangle", style = "color: #dc3545; font-size: 1.3em;"),
           tags$span(style = "color: #dc3545; font-weight: bold;",
-                    " Issues detected:"),
+                    t(" Issues detected:")),
           tags$ul(style = "margin-top: 8px;", warning_items),
           if (length(check$flagged) > 0) {
             tags$p(style = "color: #856404; background: #fff3cd; padding: 8px; border-radius: 4px;",
                    icon("lightbulb"),
-                   sprintf(" Consider unchecking: %s",
+                   sprintf(t(" Consider unchecking: %s"),
                            paste(check$flagged, collapse = ", ")))
           }
         )

@@ -3,31 +3,28 @@
 # ==============================================================================
 
 #' @noRd
-mod_export_ui <- function(id) {
+mod_export_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "export",
     fluidRow(
-      box(title = "R script", width = 7, status = "primary",
-          p("An R script that reproduces the steps you ran in the app (data, ",
-            "aggregation, zero replacement, balances and the permutational ",
-            "MANOVA), for the supplementary material of a paper."),
-          downloadButton(ns("dl_script"), "Download R script"),
+      box(title = t("R script"), width = 7, status = "primary",
+          p(t("An R script that reproduces the steps you ran in the app (data, aggregation, zero replacement, balances and the permutational MANOVA), for the supplementary material of a paper.")),
+          downloadButton(ns("dl_script"), t("Download R script")),
           hr(),
           verbatimTextOutput(ns("script_preview"))
       ),
-      box(title = "Report and session", width = 5, status = "info",
-          h4("Report"),
-          p("A self-contained HTML report with the settings, figures, tables, ",
-            "model output and the R script."),
-          downloadButton(ns("dl_report"), "Download HTML report"),
+      box(title = t("Report and session"), width = 5, status = "info",
+          h4(t("Report")),
+          p(t("A self-contained HTML report with the settings, figures, tables, model output and the R script.")),
+          downloadButton(ns("dl_report"), t("Download HTML report")),
           hr(),
-          h4("Session"),
-          p("Save the data and every setting to a file and load it later to ",
-            "resume the analysis. Results are recomputed on loading (the same ",
-            "seed gives the same results)."),
-          downloadButton(ns("dl_session"), "Save session"),
+          h4(t("Session")),
+          p(t("Save the data and every setting to a file and load it later to resume the analysis. Results are recomputed on loading (the same seed gives the same results).")),
+          downloadButton(ns("dl_session"), t("Save session")),
           br(), br(),
-          fileInput(ns("load_session"), "Load session (.json)", accept = ".json")
+          fileInput(ns("load_session"), t("Load session (.json)"), accept = ".json",
+                    buttonLabel = t("Browse..."), placeholder = t("No file selected"))
       )
     )
   )
@@ -36,10 +33,11 @@ mod_export_ui <- function(id) {
 #' @noRd
 mod_export_server <- function(id, state, restore) {
   moduleServer(id, function(input, output, session) {
+    t <- session_tr(session)
 
     output$script_preview <- renderText({
       validate(need(!is.null(tryCatch(state(), error = function(e) NULL)),
-                    "Load data to generate the script."))
+                    t("Load data to generate the script.")))
       paste(build_r_script(state()), collapse = "\n")
     })
 
@@ -51,7 +49,7 @@ mod_export_server <- function(id, state, restore) {
     output$dl_report <- downloadHandler(
       filename = function() paste0("codastereo_report_", Sys.Date(), ".html"),
       content  = function(file) {
-        withProgress(message = "Building report...", build_report(state(), file))
+        withProgress(message = t("Building report..."), build_report(state(), file))
       }
     )
 
@@ -66,10 +64,10 @@ mod_export_server <- function(id, state, restore) {
                                 collapse = "\n")),
         error = function(e) e)
       if (inherits(st, "error")) {
-        showNotification(conditionMessage(st), type = "error", duration = 8)
+        showNotification(t(conditionMessage(st)), type = "error", duration = 8)
       } else {
         restore(st)
-        showNotification("Session loaded: recomputing results...", type = "message")
+        showNotification(t("Session loaded: recomputing results..."), type = "message")
       }
     })
   })

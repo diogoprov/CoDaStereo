@@ -4,26 +4,28 @@
 # ==============================================================================
 
 #' @noRd
-mod_analysis_ui <- function(id) {
+mod_analysis_ui <- function(id, lang = "en") {
   ns <- NS(id)
+  t  <- function(x) tr(x, lang)
   tabItem(tabName = "analysis",
     fluidRow(
-      box(title = "Plot settings", width = 12, status = "primary",
+      box(title = t("Plot settings"), width = 12, status = "primary",
           fluidRow(
             column(3, uiOutput(ns("group_var_ui"))),
-            column(3, selectInput(ns("palette"), "Colour palette:", choices = plot_palettes)),
+            column(3, selectInput(ns("palette"), t("Colour palette:"),
+                                  choices = tr_choices(plot_palettes, lang))),
             column(3, checkboxInput(ns("interactive"),
-                                    "Interactive plots (hover shows the sample)", FALSE)),
+                                    t("Interactive plots (hover shows the sample)"), FALSE)),
             column(3, NULL)
           ),
-          export_settings_ui(ns)
+          export_settings_ui(ns, lang)
       )
     ),
     fluidRow(
-      box(title = "Ternary Plot", width = 6,
-          radioButtons(ns("tern_mode"), "Ternary mode:",
-                       choices = c("Select 3 parts" = "direct",
-                                   "Amalgamate into 3 groups" = "amalg"),
+      box(title = t("Ternary Plot"), width = 6,
+          radioButtons(ns("tern_mode"), t("Ternary mode:"),
+                       choices = tr_choices(c("Select 3 parts" = "direct",
+                                              "Amalgamate into 3 groups" = "amalg"), lang),
                        selected = "direct", inline = TRUE),
           conditionalPanel(
             condition = sprintf("input['%s'] == 'direct'", ns("tern_mode")),
@@ -32,67 +34,53 @@ mod_analysis_ui <- function(id) {
           conditionalPanel(
             condition = sprintf("input['%s'] == 'amalg'", ns("tern_mode")),
             fluidRow(
-              column(4, textInput(ns("amalg_name1"), "Group 1:", value = "Group_A"),
+              column(4, textInput(ns("amalg_name1"), t("Group 1:"), value = "Group_A"),
                      uiOutput(ns("amalg_parts1_ui"))),
-              column(4, textInput(ns("amalg_name2"), "Group 2:", value = "Group_B"),
+              column(4, textInput(ns("amalg_name2"), t("Group 2:"), value = "Group_B"),
                      uiOutput(ns("amalg_parts2_ui"))),
-              column(4, textInput(ns("amalg_name3"), "Group 3:", value = "Group_C"),
+              column(4, textInput(ns("amalg_name3"), t("Group 3:"), value = "Group_C"),
                      uiOutput(ns("amalg_parts3_ui")))
             )
           ),
           fluidRow(
-            column(8, radioButtons(ns("tern_regions"), "Group regions:",
-                                   choices = c("Convex hull" = "hull",
-                                               "95% confidence (mean)" = "confidence",
-                                               "95% predictive" = "predictive",
-                                               "None" = "none"),
+            column(8, radioButtons(ns("tern_regions"), t("Group regions:"),
+                                   choices = tr_choices(c("Convex hull" = "hull",
+                                                          "95% confidence (mean)" = "confidence",
+                                                          "95% predictive" = "predictive",
+                                                          "None" = "none"), lang),
                                    selected = "hull", inline = TRUE)),
-            column(4, checkboxInput(ns("tern_centre"), "Show group centres", FALSE))
+            column(4, checkboxInput(ns("tern_centre"), t("Show group centres"), FALSE))
           ),
           interactive_plot_ui(ns, "ternary_plot"),
-          downloadButton(ns("dl_ternary"), "Download figure")
+          downloadButton(ns("dl_ternary"), t("Download figure"))
       ),
-      box(title = "Compositional PCA (clr-Biplot)", width = 6,
+      box(title = t("Compositional PCA (clr-Biplot)"), width = 6,
           fluidRow(
-            column(3, selectInput(ns("bp_x"), "X axis:", choices = 1:2, selected = 1)),
-            column(3, selectInput(ns("bp_y"), "Y axis:", choices = 1:2, selected = 2)),
+            column(3, selectInput(ns("bp_x"), t("X axis:"), choices = 1:2, selected = 1)),
+            column(3, selectInput(ns("bp_y"), t("Y axis:"), choices = 1:2, selected = 2)),
             column(6, uiOutput(ns("bp_shape_ui")))
           ),
           fluidRow(
-            column(6, checkboxInput(ns("bp_labels"), "Label samples", FALSE)),
+            column(6, checkboxInput(ns("bp_labels"), t("Label samples"), FALSE)),
             column(6, uiOutput(ns("bp_total_ui")))
           ),
           interactive_plot_ui(ns, "biplot"),
-          downloadButton(ns("dl_biplot"), "Download figure"),
+          downloadButton(ns("dl_biplot"), t("Download figure")),
           tags$details(
             style = "margin-top: 10px;",
-            tags$summary(strong("How to read this biplot")),
+            tags$summary(strong(t("How to read this biplot"))),
             tags$ul(
-              tags$li(strong("Rays"), " (arrows) are the parts, as clr ",
-                      "variables. Ray length is proportional to the clr ",
-                      "standard deviation: longer rays are parts whose share ",
-                      "varies more relative to the geometric mean."),
-              tags$li(strong("Links"), " are the (imaginary) segments joining ",
-                      "two ray tips. Link length is proportional to the ",
-                      "standard deviation of the log-ratio of those two parts. ",
-                      "A short link means the two parts stay nearly ",
-                      "proportional across samples."),
-              tags$li("The cosine of the angle between two links approximates ",
-                      "the correlation between the two log-ratios; links at ",
-                      "right angles indicate uncorrelated log-ratios."),
-              tags$li("Do ", em("not"), " read the angle between two rays as a ",
-                      "correlation between the parts themselves."),
-              tags$li(strong("Points"), " are samples; points lying toward a ",
-                      "ray tend to have relatively more of that part. Polygons ",
-                      "are the convex hulls of each group."),
-              tags$li("All of this is a planar approximation: rely on it only ",
-                      "when the two axes explain a large share of the total ",
-                      "variance (shown in the axis titles and the scree plot).")
+              tags$li(HTML(t("<strong>Rays</strong> (arrows) are the parts, as clr variables. Ray length is proportional to the clr standard deviation: longer rays are parts whose share varies more relative to the geometric mean."))),
+              tags$li(HTML(t("<strong>Links</strong> are the (imaginary) segments joining two ray tips. Link length is proportional to the standard deviation of the log-ratio of those two parts. A short link means the two parts stay nearly proportional across samples."))),
+              tags$li(t("The cosine of the angle between two links approximates the correlation between the two log-ratios; links at right angles indicate uncorrelated log-ratios.")),
+              tags$li(HTML(t("Do <em>not</em> read the angle between two rays as a correlation between the parts themselves."))),
+              tags$li(HTML(t("<strong>Points</strong> are samples; points lying toward a ray tend to have relatively more of that part. Polygons are the convex hulls of each group."))),
+              tags$li(t("All of this is a planar approximation: rely on it only when the two axes explain a large share of the total variance (shown in the axis titles and the scree plot)."))
             )
           ),
           tags$details(
             style = "margin-top: 6px;",
-            tags$summary(strong("Scree plot and ray lengths")),
+            tags$summary(strong(t("Scree plot and ray lengths"))),
             fluidRow(
               column(6, plotOutput(ns("scree"), height = "220px")),
               column(6, tableOutput(ns("ray_table")))
@@ -101,33 +89,28 @@ mod_analysis_ui <- function(id) {
       )
     ),
     fluidRow(
-      box(title = "Variation matrix", width = 6, status = "info",
-          p("Variance of the log-ratio of each pair of parts. Values near zero ",
-            "mean the two parts stay proportional; high values mark the ",
-            "trade-offs that drive compositional change. These are the squared ",
-            "link lengths of the biplot, in full dimension."),
+      box(title = t("Variation matrix"), width = 6, status = "info",
+          p(t("Variance of the log-ratio of each pair of parts. Values near zero mean the two parts stay proportional; high values mark the trade-offs that drive compositional change. These are the squared link lengths of the biplot, in full dimension.")),
           plotOutput(ns("variation_plot"), height = "380px"),
-          downloadButton(ns("dl_variation"), "Download figure"),
-          downloadButton(ns("dl_variation_csv"), "Download matrix (CSV)")
+          downloadButton(ns("dl_variation"), t("Download figure")),
+          downloadButton(ns("dl_variation_csv"), t("Download matrix (CSV)"))
       ),
-      box(title = "Compositional center (geometric mean) by group", width = 6,
+      box(title = t("Compositional center (geometric mean) by group"), width = 6,
           status = "info",
-          p("Stacked bars showing the closed geometric mean composition per group.",
-            " Unlike arithmetic means, the compositional center respects the simplex geometry."),
+          p(t("Stacked bars showing the closed geometric mean composition per group. Unlike arithmetic means, the compositional center respects the simplex geometry.")),
           plotOutput(ns("center_barplot"), height = "350px"),
-          downloadButton(ns("dl_center"), "Download figure")
+          downloadButton(ns("dl_center"), t("Download figure"))
       )
     ),
     fluidRow(
-      box(title = "Total variance by group", width = 6, status = "info",
-          p("Total metric variance (mvar) of the composition per group.",
-            " Higher values indicate greater internal dispersion in the simplex."),
+      box(title = t("Total variance by group"), width = 6, status = "info",
+          p(t("Total metric variance (mvar) of the composition per group. Higher values indicate greater internal dispersion in the simplex.")),
           tableOutput(ns("totvar_table")),
           plotOutput(ns("totvar_barplot"), height = "250px"),
-          downloadButton(ns("dl_totvar"), "Download figure")
+          downloadButton(ns("dl_totvar"), t("Download figure"))
       ),
-      box(title = "Download imputed data", width = 6,
-          downloadButton(ns("dl_imputed"), "Download imputed data (CSV)"))
+      box(title = t("Download imputed data"), width = 6,
+          downloadButton(ns("dl_imputed"), t("Download imputed data (CSV)")))
     )
   )
 }
@@ -149,6 +132,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
     take <- restore_pending(restore, "analysis")
+    t    <- session_tr(session)
     observeEvent(restore(), {
       st <- restore()$analysis
       updateSelectInput(session, "palette", selected = st$palette)
@@ -160,31 +144,31 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
     output$group_var_ui <- renderUI({
       req(df(), parts())
       cands <- factor_candidates(df(), parts())
-      selectInput(ns("group_var"), "Colour / group by:", choices = cands,
+      selectInput(ns("group_var"), t("Colour / group by:"), choices = cands,
                   selected = take("group_var"))
     })
 
     output$select_ternary_ui <- renderUI({
       req(parts())
-      selectInput(ns("tern_vars"), "Select 3 Parts:",
+      selectInput(ns("tern_vars"), t("Select 3 Parts:"),
                   choices = parts(), multiple = TRUE,
                   selected = take("tern_vars") %||% head(parts(), 3))
     })
 
     output$amalg_parts1_ui <- renderUI({
       req(parts())
-      selectInput(ns("amalg_p1"), "Parts:", choices = parts(),
+      selectInput(ns("amalg_p1"), t("Parts:"), choices = parts(),
                   multiple = TRUE, selected = parts()[1])
     })
     output$amalg_parts2_ui <- renderUI({
       req(parts())
-      selectInput(ns("amalg_p2"), "Parts:", choices = parts(),
+      selectInput(ns("amalg_p2"), t("Parts:"), choices = parts(),
                   multiple = TRUE,
                   selected = if (length(parts()) >= 2) parts()[2] else NULL)
     })
     output$amalg_parts3_ui <- renderUI({
       req(parts())
-      selectInput(ns("amalg_p3"), "Parts:", choices = parts(),
+      selectInput(ns("amalg_p3"), t("Parts:"), choices = parts(),
                   multiple = TRUE,
                   selected = if (length(parts()) >= 3) parts()[3] else NULL)
     })
@@ -237,14 +221,14 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
     output$bp_shape_ui <- renderUI({
       req(df(), parts())
       cands <- setdiff(factor_candidates(df(), parts()), input$group_var)
-      selectInput(ns("bp_shape"), "Shape by:", choices = c("None" = "", cands))
+      selectInput(ns("bp_shape"), t("Shape by:"), choices = c(stats::setNames("", t("None")), cands))
     })
 
     output$bp_total_ui <- renderUI({
       if (is.null(raw)) return(NULL)
-      selectInput(ns("bp_total"), "Add log-total (T-space biplot):",
-                  choices = c("No" = "none", "Sum of parts (Ts)" = "sum",
-                              "Product total (Tp)" = "product"),
+      selectInput(ns("bp_total"), t("Add log-total (T-space biplot):"),
+                  choices = tr_choices(c("No" = "none", "Sum of parts (Ts)" = "sum",
+                                         "Product total (Tp)" = "product"), ui_lang(session)),
                   selected = take("bp_total"))
     })
 
@@ -266,7 +250,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
 
     biplot_build <- function(interactive) {
       req(group_vec(), input$bp_x, input$bp_y)
-      validate(need(input$bp_x != input$bp_y, "Choose two different axes."))
+      validate(need(input$bp_x != input$bp_y, t("Choose two different axes.")))
       kr <- keep_rows()
       plot_clr_biplot(pca(), group_vec(), palette = input$palette,
                       axes = as.integer(c(input$bp_x, input$bp_y)),
