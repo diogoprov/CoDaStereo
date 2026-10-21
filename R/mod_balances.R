@@ -77,7 +77,9 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows) {
       matrix(vals, nrow = nrow(base), dimnames = dimnames(base))
     })
 
-    sbp_issues <- reactive(sbp_problems(sbp_current()))
+    # Wait until the user pauses editing before validating and redrawing
+    sbp_settled <- debounce(sbp_current, 500)
+    sbp_issues  <- reactive(sbp_problems(sbp_settled()))
 
     output$sbp_status <- renderUI({
       issues <- sbp_issues()
@@ -92,14 +94,14 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows) {
 
     output$sbp_table <- renderTable({
       req(length(sbp_issues()) == 0)
-      sbp_labels(sbp_current())
+      sbp_labels(sbp_settled())
     })
 
     draw_dendrogram <- function() {
       req(comp(), input$group_var, keep_rows())
       validate(need(length(sbp_issues()) == 0,
                     "Fix the SBP to draw the dendrogram."))
-      plot_coda_dendrogram(comp(), sbp_current(),
+      plot_coda_dendrogram(comp(), sbp_settled(),
                            groups  = df()[[input$group_var]][keep_rows()],
                            palette = input$palette)
     }

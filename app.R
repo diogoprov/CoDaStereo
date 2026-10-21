@@ -9,33 +9,15 @@
 #   pkgload::load_all(); run_app()
 # ==============================================================================
 
-# Load dependencies
+# Only the UI packages are attached; everything else is called with pkg::
+# (as in the package), which keeps start-up short.
 library(shiny)
 library(shinydashboard)
-library(dplyr)
-library(tidyr)
-library(tibble)
-library(ggplot2)
-library(scales)           # percent_format() for descriptives
-library(readxl)
-library(naniar)
-library(compositions)
-library(zCompositions)
-library(RRPP)
-library(factoextra)
-library(FactoMineR)
-library(rintrojs)         # guided tour
+.data  <- rlang::.data   # tidy-eval pronoun used in ggplot2 aesthetics
+`%||%` <- rlang::`%||%`
 
-# Source package code (order matters: helpers first, then modules, then app)
-source("R/fct_helpers.R",     local = TRUE)
-source("R/mod_tutorial.R",    local = TRUE)
-source("R/mod_data.R",        local = TRUE)
-source("R/mod_imputation.R",  local = TRUE)
-source("R/mod_analysis.R",    local = TRUE)
-source("R/mod_balances.R",    local = TRUE)
-source("R/mod_stats.R",       local = TRUE)
-source("R/app_ui.R",          local = TRUE)
-source("R/app_server.R",      local = TRUE)
+# Source package code: every file in R/ (helpers, modules, app)
+for (f in list.files("R", pattern = "[.]R$", full.names = TRUE)) source(f, local = TRUE)
 
-# Launch
-shinyApp(ui = app_ui, server = app_server)
+# Launch (start_workers() runs model fits in background mirai workers)
+shinyApp(ui = app_ui, server = app_server, onStart = start_workers)

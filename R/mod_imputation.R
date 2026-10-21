@@ -87,12 +87,14 @@ mod_imputation_server <- function(id, df, parts) {
         return()
       }
 
-      rv$imputed <- switch(input$zero_method,
-        "CZM" = zCompositions::cmultRepl(mat, method = "CZM", output = "p-counts",
-                                          label = 0, z.warning = 0.99),
-        "multRepl" = { dl <- compute_dl(mat); zCompositions::multRepl(mat, label = 0, dl = dl$mat, z.warning = 0.99) },
-        "lrEM"     = { dl <- compute_dl(mat); zCompositions::lrEM(mat, label = 0, dl = dl$mat, ini.cov = "multRepl", z.warning = 0.99) }
-      )
+      withProgress(message = sprintf("Replacing zeros (%s)...", input$zero_method), {
+        rv$imputed <- switch(input$zero_method,
+          "CZM" = zCompositions::cmultRepl(mat, method = "CZM", output = "p-counts",
+                                            label = 0, z.warning = 0.99),
+          "multRepl" = { dl <- compute_dl(mat); zCompositions::multRepl(mat, label = 0, dl = dl$mat, z.warning = 0.99) },
+          "lrEM"     = { dl <- compute_dl(mat); zCompositions::lrEM(mat, label = 0, dl = dl$mat, ini.cov = "multRepl", z.warning = 0.99) }
+        )
+      })
       rv$comp        <- compositions::acomp(rv$imputed)
       rv$method_used <- input$zero_method
     })

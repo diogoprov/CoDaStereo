@@ -39,6 +39,7 @@ Imports:
     golem (>= 0.4.0),
     rlang,
     purrr,
+    mirai,
     graphics,
     stats,
     utils,

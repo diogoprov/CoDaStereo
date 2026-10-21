@@ -121,7 +121,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
                   selected = if (length(parts()) >= 3) parts()[3] else NULL)
     })
 
-    amalg_list <- reactive({
+    amalg_typed <- reactive({
       if (input$tern_mode != "amalg") return(NULL)
       req(input$amalg_p1, input$amalg_p2, input$amalg_p3,
           input$amalg_name1, input$amalg_name2, input$amalg_name3)
@@ -130,6 +130,7 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows) {
         c(input$amalg_name1, input$amalg_name2, input$amalg_name3)
       )
     })
+    amalg_list <- debounce(amalg_typed, 500)
 
     ternary_obj <- reactive({
       req(df(), input$group_var)

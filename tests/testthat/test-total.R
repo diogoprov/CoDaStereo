@@ -47,23 +47,28 @@ test_that("stats module detects a size-only effect only when the total is includ
                 keep_rows = shiny::reactive(rep(TRUE, nrow(df))),
                 raw = shiny::reactive(d$raw)),
     {
-      set.seed(1)
-      session$setInputs(factors = "Group", include_total = FALSE)
+      session$setInputs(factors = "Group", total_mode = "none", iter = "999",
+                        ss_type = "I", block = "", total_type = "sum")
       session$setInputs(run_manova = 1)
-      p_comp <- rv$manova_out$table[1, "Pr(>F)"]
-      expect_null(rv$total_out)
+      p_comp <- rv$fit$anova$table[1, "Pr(>F)"]
+      expect_null(rv$fit$total_anova)
 
-      session$setInputs(include_total = TRUE, total_type = "sum")
+      session$setInputs(total_mode = "joint")
       session$setInputs(run_manova = 2)
-      p_joint <- rv$manova_out$table[1, "Pr(>F)"]
-      p_total <- rv$total_out$table[1, "Pr(>F)"]
-      expect_equal(ncol(rv$model$LM$Y), ncol(d$raw))  # D - 1 ilr + log-total
+      p_joint <- rv$fit$anova$table[1, "Pr(>F)"]
+      p_total <- rv$fit$total_anova$table[1, "Pr(>F)"]
+      expect_equal(ncol(rv$fit$model$LM$Y), ncol(d$raw))  # D - 1 ilr + log-total
 
       expect_gt(p_comp, 0.05)
       expect_lt(p_joint, 0.01)
       expect_lt(p_total, 0.01)
       expect_no_error(output$total_plot)
       expect_null(output$total_warning$html)
+
+      session$setInputs(total_mode = "covariate")
+      session$setInputs(run_manova = 3)
+      expect_match(rv$fit$rhs, "log_total")
+      expect_equal(ncol(rv$fit$model$LM$Y), ncol(d$raw) - 1)
     }
   )
 })
