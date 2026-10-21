@@ -1,7 +1,8 @@
 # CoDa Stereo <img src="man/figures/logo.png" align="right" height="139" alt="CoDa Stereo logo"/>
 
 <!-- badges: start -->
-[![version](https://img.shields.io/badge/version-3.1.0-blue)](NEWS.md)
+[![Launch the app](https://img.shields.io/badge/launch-the%20app-E69F00?logo=rstudioide&logoColor=white)](https://sxzbf8.short.gy/CoDaStereo)
+[![version](https://img.shields.io/badge/version-3.1.1-blue)](NEWS.md)
 [![R >= 4.1](https://img.shields.io/badge/R-%3E%3D4.1-blue?logo=R)](https://www.r-project.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![R-CMD-check](https://github.com/diogoprov/CoDaStereo/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/diogoprov/CoDaStereo/actions/workflows/R-CMD-check.yaml)
@@ -18,6 +19,10 @@
 > Provete, D.B., Severgnini, M.R., Fernandes, C.E. & Franco-Belussi, L.
 > *A Practical Guide to using Compositional Data Analysis in Tissue Stereology
 > and Blood Cell Profile*. **Physiological Reports** (in review).
+
+**Use it online, no installation needed:** <https://sxzbf8.short.gy/CoDaStereo>
+(the interface opens in English; add `?lang=pt` or `?lang=es` to the link for
+Portuguese or Spanish).
 
 See [NEWS.md](NEWS.md) for the changes in each version and the
 [package website](https://provetelab.org/CoDaStereo/) for the
@@ -175,7 +180,7 @@ the software:
   year    = {2026},
   url     = {https://github.com/diogoprov/CoDaStereo},
   doi     = {10.5281/zenodo.19928374},
-  version = {3.1.0}
+  version = {3.1.1}
 }
 ```
 

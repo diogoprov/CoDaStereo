@@ -1,3 +1,13 @@
+# CoDaStereo 3.1.1
+
+* The clr-biplot keeps equal axis scales unless the second axis would be
+  squashed (it spans less than a quarter of the first, e.g. 99% vs 0.4% of
+  the variance). In that case the scales are freed and the plot says that
+  angles and lengths are distorted.
+* The hex logo (tissue cube) is used in the app, README and website.
+* README and website link to the online app; the website lives at
+  <https://provetelab.org/CoDaStereo/>.
+
 # CoDaStereo 3.1.0
 
 ## Data

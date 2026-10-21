@@ -5156,7 +5156,7 @@
       "checksum": "2551db2a6d80160060c08a76b5ca6283"
     },
     "DESCRIPTION": {
-      "checksum": "4ae871a867c04e4f9a18dd573f94219d"
+      "checksum": "c25fff1764b94ddb7f4651c644d34614"
     },
     "inst/extdata/kidney_fields.csv": {
       "checksum": "ad7377f1aeba529c4e3a82f52a920efa"
@@ -5171,7 +5171,7 @@
       "checksum": "6a01451a7bb38db31cfbc670d2ac0b88"
     },
     "inst/golem-config.yml": {
-      "checksum": "01aafe301a1ce25ed197ab7127b0527e"
+      "checksum": "40d784203989b9505dd271c6321562da"
     },
     "inst/i18n/translations.csv": {
       "checksum": "68bdea174ff1ea6ee8001383eb8a7502"
@@ -5213,7 +5213,7 @@
       "checksum": "2fb5b7d4b51c2315d35e59cfc0345ed1"
     },
     "R/fct_plots.R": {
-      "checksum": "b9035bda7e60fcd91b1e9fc880a6fb02"
+      "checksum": "36011b8951e14aa04ef792d8ee863d0e"
     },
     "R/fct_reproducibility.R": {
       "checksum": "65f2bdc2551301edb255354d45b4e63d"
@@ -5241,6 +5241,9 @@
     },
     "R/run_app.R": {
       "checksum": "ef4a3d2d3cc6312347193cfe4d0fecc9"
+    },
+    "www/logo/logo.svg": {
+      "checksum": "c517c63406b614b73fc7148793eb2fb1"
     }
   },
   "users": null

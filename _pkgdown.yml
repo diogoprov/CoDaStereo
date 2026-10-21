@@ -5,13 +5,22 @@ template:
   bslib:
     primary: "#0072B2"
 
-home:
-  title: "CoDa Stereo: Compositional Data Analysis for Stereology"
 
 navbar:
   structure:
-    left:  [intro, reference, articles, news]
+    left:  [app, intro, reference, articles, news]
     right: [search, github]
+  components:
+    app:
+      text: Launch the app
+      icon: fa-play
+      href: https://sxzbf8.short.gy/CoDaStereo
+
+home:
+  title: "CoDa Stereo: Compositional Data Analysis for Stereology"
+  links:
+  - text: Launch the app (Posit Connect Cloud)
+    href: https://sxzbf8.short.gy/CoDaStereo
 
 reference:
   - title: "Run the app"

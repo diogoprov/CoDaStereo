@@ -1,6 +1,6 @@
 Package: CoDaStereo
 Title: Compositional Data Analysis for Stereological and Histomorphometric Data
-Version: 3.1.0
+Version: 3.1.1
 Authors@R: person("Diogo B.", "Provete", email = "diogo.provete@ufms.br",
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0002-0097-0651"))
