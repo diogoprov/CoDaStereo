@@ -1,4 +1,4 @@
-"Specimen","Species","Site","Lobed","Budded","Notched","AN","Kidney_shaped","Abnormal","Normal"
+"Specimen","Species","Site","Lobed","Budded","Notched","Anucleate","Kidney_shaped","Abnormal","Normal"
 "non_urban_LP1","L.podicipinus","non_urban",0,0,0,0,0,0,1000
 "non_urban_LP2","L.podicipinus","non_urban",6,0,1,0,0,7,986
 "non_urban_LP3","L.podicipinus","non_urban",8,1,7,0,0,16,968

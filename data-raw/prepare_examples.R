@@ -49,7 +49,7 @@ wr(data.frame(Specimen = paste(site(a$local), a$animal, sep = "_"),
               Lobed    = a$Lobado,
               Budded   = a$Bud,
               Notched  = a$Entalhada,
-              AN       = a$AN,
+              Anucleate = a$AN,  # "AN" in the original sheet: anucleate erythrocytes
               Kidney_shaped = a$Reniforme,
               Abnormal = a$Total_anormalidades,
               Normal   = a$Total_cell - a$Total_anormalidades),
