@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/diogoprov/CoDaStereo/blob/v3.1.1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/diogoprov/CoDaStereo/blob/main/DESCRIPTION)
 
 Provete D (2026). *CoDaStereo: Compositional Data Analysis for
 Stereological and Histomorphometric Data*. R package version 3.1.1,
