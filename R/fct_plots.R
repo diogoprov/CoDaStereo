@@ -28,12 +28,19 @@ save_plot <- function(file, plot, format = "pdf", width = 17, height = 15,
       png  = grDevices::png(file, width = w, height = h, units = "in", res = dpi,
                             pointsize = base_size),
       svg  = svglite::svglite(file, width = w, height = h, pointsize = base_size),
-      tiff = tryCatch(
-        grDevices::tiff(file, width = w, height = h, units = "in", res = dpi,
-                        pointsize = base_size, compression = "lzw", type = "cairo"),
-        # cairo unavailable (e.g. macOS without XQuartz): default device, no LZW
-        error = function(e) grDevices::tiff(file, width = w, height = h, units = "in",
-                                            res = dpi, pointsize = base_size)))
+      tiff = {
+        # LZW needs the cairo device; without system cairo (e.g. macOS without
+        # XQuartz) it only warns and opens nothing, so check before using it
+        opened <- cairo_available() && tryCatch({
+          grDevices::tiff(file, width = w, height = h, units = "in", res = dpi,
+                          pointsize = base_size, compression = "lzw", type = "cairo")
+          TRUE
+        }, error = function(e) FALSE, warning = function(w) FALSE)
+        if (!opened) {
+          grDevices::tiff(file, width = w, height = h, units = "in", res = dpi,
+                          pointsize = base_size)
+        }
+      })
     on.exit(grDevices::dev.off(), add = TRUE)
     plot()
   }
@@ -85,6 +92,13 @@ sample_ids <- function(df) {
 #' @noRd
 has_ggiraph <- function() {
   isTRUE(tryCatch(requireNamespace("ggiraph", quietly = TRUE), error = function(e) FALSE))
+}
+
+#' Is the cairo graphics device usable? (needs system cairo libraries)
+#' @noRd
+cairo_available <- function() {
+  isTRUE(tryCatch(nzchar(grDevices::cairoVersion()),
+                  warning = function(w) FALSE, error = function(e) FALSE))
 }
 
 #' Point layer that is interactive (hover tooltip) when requested

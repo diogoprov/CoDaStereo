@@ -73,11 +73,18 @@ test_that("the app works without ggiraph and TIFF falls back without cairo", {
   p <- plot_clr_biplot(clr_pca(s$x), s$d$Site, interactive = TRUE)  # silently static
   expect_false(any(purrr::map_lgl(p$layers, \(l) grepl("Interactive", class(l$geom)[1]))))
 
+  # cairo reported as missing, or failing with a warning (as on the macOS runner)
   local_mocked_bindings(tiff = function(..., type) {
-    if (!missing(type) && identical(type, "cairo")) stop("failed to load cairo DLL")
+    if (!missing(type) && identical(type, "cairo")) {
+      warning("failed to load cairo DLL")
+      return(invisible(NULL))
+    }
     grDevices::png(...)  # stand-in device
   }, .package = "grDevices")
-  f <- tempfile(fileext = ".tiff")
-  expect_no_error(save_plot(f, function() plot(1:3), "tiff", width = 8, height = 8, dpi = 100))
-  expect_gt(file.size(f), 500)
+  for (avail in c(TRUE, FALSE)) {
+    local_mocked_bindings(cairo_available = function() avail)
+    f <- tempfile(fileext = ".tiff")
+    expect_no_error(save_plot(f, function() plot(1:3), "tiff", width = 8, height = 8, dpi = 100))
+    expect_gt(file.size(f), 500)
+  }
 })
