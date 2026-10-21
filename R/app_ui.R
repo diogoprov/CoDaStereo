@@ -16,7 +16,7 @@ app_ui <- function(request) {
                 tags$a(href = "?lang=en", title = "English",
                        style = if (lang == "en") "font-weight: bold;", "EN")),
         tags$li(class = "dropdown",
-                tags$a(href = "?lang=pt", title = "Português",
+                tags$a(href = "?lang=pt", title = "Portugu\u00eas",
                        style = if (lang == "pt") "font-weight: bold;", "PT")),
         tags$li(class = "dropdown",
                 actionButton("tour_btn_header",
