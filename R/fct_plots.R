@@ -97,8 +97,16 @@ has_ggiraph <- function() {
 #' Is the cairo graphics device usable? (needs system cairo libraries)
 #' @noRd
 cairo_available <- function() {
-  isTRUE(tryCatch(nzchar(grDevices::cairoVersion()),
-                  warning = function(w) FALSE, error = function(e) FALSE))
+  if (!isTRUE(capabilities("cairo"))) return(FALSE)
+  # capabilities() can claim cairo while its system libraries are missing
+  # (macOS without XQuartz): try opening a device for real
+  f <- tempfile(fileext = ".tiff")
+  on.exit(unlink(f))
+  tryCatch({
+    grDevices::tiff(f, type = "cairo")
+    grDevices::dev.off()
+    TRUE
+  }, warning = function(w) FALSE, error = function(e) FALSE)
 }
 
 #' Point layer that is interactive (hover tooltip) when requested
