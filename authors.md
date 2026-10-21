@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/diogoprov/CoDaStereo/blob/main/DESCRIPTION)
 
 Provete D (2026). *CoDaStereo: Compositional Data Analysis for
-Stereological and Histomorphometric Data*. R package version 3.1.0,
+Stereological and Histomorphometric Data*. R package version 3.1.1,
 <https://github.com/diogoprov/CoDaStereo>.
 
     @Manual{,
       title = {CoDaStereo: Compositional Data Analysis for Stereological and Histomorphometric Data},
       author = {Diogo B. Provete},
       year = {2026},
-      note = {R package version 3.1.0},
+      note = {R package version 3.1.1},
       url = {https://github.com/diogoprov/CoDaStereo},
     }

@@ -13,6 +13,10 @@
 > Analysis in Tissue Stereology and Blood Cell Profile*. **Physiological
 > Reports** (in review).
 
+**Use it online, no installation needed:**
+<https://sxzbf8.short.gy/CoDaStereo> (the interface opens in English;
+add `?lang=pt` or `?lang=es` to the link for Portuguese or Spanish).
+
 See [NEWS.md](https://provetelab.org/CoDaStereo/NEWS.md) for the changes
 in each version and the [package
 website](https://provetelab.org/CoDaStereo/) for the getting-started
@@ -173,7 +177,7 @@ the software:
   year    = {2026},
   url     = {https://github.com/diogoprov/CoDaStereo},
   doi     = {10.5281/zenodo.19928374},
-  version = {3.1.0}
+  version = {3.1.1}
 }
 ```
 
