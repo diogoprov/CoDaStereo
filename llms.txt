@@ -204,7 +204,7 @@ the software:
   title   = {{CoDa Stereo}: Compositional Data Analysis for Stereological Data},
   year    = {2026},
   url     = {https://github.com/diogoprov/CoDaStereo},
-  doi     = {10.5281/zenodo.19928374},
+  doi     = {10.5281/zenodo.19925778},
   version = {3.1.1}
 }
 ```
