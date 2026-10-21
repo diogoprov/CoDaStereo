@@ -54,7 +54,7 @@ test_that("analysis module renders all plots for each palette", {
         expect_s3_class(biplot_build(TRUE), "ggplot")
         expect_no_error(output$ternary_plot)
         expect_no_error(output$biplot)
-        expect_no_error(output$biplot_i)
+        if (has_ggiraph()) expect_no_error(output$biplot_i)
         expect_no_error(output$variation_plot)
         expect_no_error(output$scree)
         expect_no_error(output$center_barplot)

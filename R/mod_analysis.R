@@ -14,8 +14,10 @@ mod_analysis_ui <- function(id, lang = "en") {
             column(3, uiOutput(ns("group_var_ui"))),
             column(3, selectInput(ns("palette"), t("Colour palette:"),
                                   choices = tr_choices(plot_palettes, lang))),
-            column(3, checkboxInput(ns("interactive"),
-                                    t("Interactive plots (hover shows the sample)"), FALSE)),
+            column(3, if (has_ggiraph()) {
+              checkboxInput(ns("interactive"),
+                            t("Interactive plots (hover shows the sample)"), FALSE)
+            }),
             column(3, NULL)
           ),
           export_settings_ui(ns, lang)
@@ -118,6 +120,7 @@ mod_analysis_ui <- function(id, lang = "en") {
 #' Static plot or ggiraph widget, switched by the "interactive" checkbox
 #' @noRd
 interactive_plot_ui <- function(ns, id, height = "400px") {
+  if (!has_ggiraph()) return(plotOutput(ns(id), height = height))
   tagList(
     conditionalPanel(sprintf("!input['%s']", ns("interactive")),
                      plotOutput(ns(id), height = height)),
@@ -214,7 +217,9 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
            amalg_list(), input$tern_regions, input$tern_centre)
     }
     output$ternary_plot   <- renderPlot(ternary_build(FALSE)) |> bindCache(ternary_keys())
-    output$ternary_plot_i <- ggiraph::renderGirafe(ggiraph::girafe(ggobj = ternary_build(TRUE)))
+    if (has_ggiraph()) {
+      output$ternary_plot_i <- ggiraph::renderGirafe(ggiraph::girafe(ggobj = ternary_build(TRUE)))
+    }
     output$dl_ternary <- plot_download(input, "ternary", function() ternary_build(FALSE))
 
     # -- Biplot ----------------------------------------------------------------
@@ -263,7 +268,9 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
            input$bp_shape, input$bp_labels, input$bp_total)
     }
     output$biplot   <- renderPlot(biplot_build(FALSE)) |> bindCache(biplot_keys())
-    output$biplot_i <- ggiraph::renderGirafe(ggiraph::girafe(ggobj = biplot_build(TRUE)))
+    if (has_ggiraph()) {
+      output$biplot_i <- ggiraph::renderGirafe(ggiraph::girafe(ggobj = biplot_build(TRUE)))
+    }
     output$dl_biplot <- plot_download(input, "clr_biplot", function() biplot_build(FALSE))
 
     output$scree     <- renderPlot(plot_scree(pca(), base_size = 12)) |> bindCache(pca())

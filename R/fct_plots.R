@@ -28,8 +28,12 @@ save_plot <- function(file, plot, format = "pdf", width = 17, height = 15,
       png  = grDevices::png(file, width = w, height = h, units = "in", res = dpi,
                             pointsize = base_size),
       svg  = svglite::svglite(file, width = w, height = h, pointsize = base_size),
-      tiff = grDevices::tiff(file, width = w, height = h, units = "in", res = dpi,
-                             pointsize = base_size, compression = "lzw", type = "cairo"))
+      tiff = tryCatch(
+        grDevices::tiff(file, width = w, height = h, units = "in", res = dpi,
+                        pointsize = base_size, compression = "lzw", type = "cairo"),
+        # cairo unavailable (e.g. macOS without XQuartz): default device, no LZW
+        error = function(e) grDevices::tiff(file, width = w, height = h, units = "in",
+                                            res = dpi, pointsize = base_size)))
     on.exit(grDevices::dev.off(), add = TRUE)
     plot()
   }
@@ -76,10 +80,17 @@ sample_ids <- function(df) {
   if (length(id_col) > 0) as.character(df[[id_col[1]]]) else as.character(seq_len(nrow(df)))
 }
 
+#' Can interactive plots be used? ggiraph needs gdtools, whose binary links
+#' to system cairo (missing e.g. on macOS without XQuartz)
+#' @noRd
+has_ggiraph <- function() {
+  isTRUE(tryCatch(requireNamespace("ggiraph", quietly = TRUE), error = function(e) FALSE))
+}
+
 #' Point layer that is interactive (hover tooltip) when requested
 #' @noRd
 geom_point_maybe <- function(interactive, ...) {
-  if (interactive) ggiraph::geom_point_interactive(...) else ggplot2::geom_point(...)
+  if (interactive && has_ggiraph()) ggiraph::geom_point_interactive(...) else ggplot2::geom_point(...)
 }
 
 # ------------------------------------------------------------------------------

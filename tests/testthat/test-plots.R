@@ -62,3 +62,22 @@ test_that("variation matrix plot and ray table are consistent", {
   expect_equal(sum(rt$clr_SD^2), sum(vm) / (2 * D), tolerance = 1e-8)
   expect_s3_class(plot_variation_matrix(s$x), "ggplot")
 })
+
+test_that("the app works without ggiraph and TIFF falls back without cairo", {
+  local_mocked_bindings(has_ggiraph = function() FALSE)
+  ui <- as.character(app_ui(list(QUERY_STRING = "")))
+  expect_false(grepl("girafe", ui))
+  expect_false(grepl("Interactive plots", ui))
+
+  s <- spleen_specimens()
+  p <- plot_clr_biplot(clr_pca(s$x), s$d$Site, interactive = TRUE)  # silently static
+  expect_false(any(purrr::map_lgl(p$layers, \(l) grepl("Interactive", class(l$geom)[1]))))
+
+  local_mocked_bindings(tiff = function(..., type) {
+    if (!missing(type) && identical(type, "cairo")) stop("failed to load cairo DLL")
+    grDevices::png(...)  # stand-in device
+  }, .package = "grDevices")
+  f <- tempfile(fileext = ".tiff")
+  expect_no_error(save_plot(f, function() plot(1:3), "tiff", width = 8, height = 8, dpi = 100))
+  expect_gt(file.size(f), 500)
+})
