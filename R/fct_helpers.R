@@ -36,9 +36,102 @@ gmean_impute <- function(mat) {
 }
 
 #' Get non-numeric, non-part column names (factor candidates)
+#'
+#' Columns whose values are mostly unique (IDs) or constant cannot act as
+#' grouping factors and are left out.
 #' @noRd
 factor_candidates <- function(df, parts) {
-  setdiff(names(df)[!sapply(df, is.numeric)], parts)
+  cands <- setdiff(names(df)[!purrr::map_lgl(df, is.numeric)], parts)
+  purrr::keep(cands, \(v) {
+    k <- dplyr::n_distinct(df[[v]])
+    k >= 2 && k <= nrow(df) / 2
+  })
+}
+
+#' Path to a file shipped in inst/, both installed and from the source tree
+#' (the root app.R runs from the repository without installing the package)
+#' @noRd
+app_file <- function(...) {
+  p <- system.file(..., package = "CoDaStereo")
+  if (nzchar(p)) p else file.path("inst", ...)
+}
+
+#' Simulated liver histomorphometry example (two groups, count zeros)
+#' @noRd
+simulate_liver <- function() {
+  set.seed(42)
+  n <- 20
+  raw <- data.frame(
+    Hepatocytes       = c(stats::rnorm(n, 80, 1.5), stats::rnorm(n, 65, 2.0)),
+    Sinusoids         = c(stats::rnorm(n, 10, 1.0), stats::rnorm(n,  8, 0.9)),
+    Stroma            = c(stats::rnorm(n,  8, 0.8), stats::rnorm(n,  6.5, 0.7)),
+    Melanomacrophages = c(stats::rnorm(n, 2.5, 0.5), stats::rnorm(n, 20, 2.5))
+  )
+  raw[raw < 0] <- 0
+  bdl_idx <- sample.int(n, size = round(n * 0.25))
+  raw$Melanomacrophages[bdl_idx] <- 0
+  data.frame(Sample_ID = seq_len(2 * n),
+             Group     = factor(rep(c("Control", "Impacted"), each = n)),
+             100 * raw / rowSums(raw))
+}
+
+#' Example datasets offered in the Data Upload tab
+#'
+#' Real datasets are the case studies of the companion paper (built by
+#' data-raw/prepare_examples.R). `specimen` names the column to aggregate
+#' fields by, when rows are fields of view nested in specimens.
+#' @noRd
+example_datasets <- function() {
+  list(
+    liver_sim  = list(file = NULL, specimen = NULL,
+                      parts = c("Hepatocytes", "Sinusoids", "Stroma", "Melanomacrophages")),
+    spleen     = list(file = "spleen_fields.csv", specimen = "Specimen",
+                      parts = c("Sinusoids", "Red_pulp", "White_pulp", "MMCs", "Blood_vessels")),
+    kidney     = list(file = "kidney_fields.csv", specimen = "Specimen",
+                      parts = c("Proximal_tubule", "Distal_tubule", "Renal_corpuscle",
+                                "Collecting_duct", "Interstitial_space")),
+    leukocytes = list(file = "leukocytes.csv", specimen = NULL,
+                      parts = c("Monocytes", "Lymphocytes", "Neutrophils", "Eosinophils")),
+    nuclear    = list(file = "nuclear_abnormalities.csv", specimen = NULL,
+                      parts = c("Abnormal", "Normal"))
+  )
+}
+
+#' Load one example dataset by key
+#' @noRd
+load_example <- function(key) {
+  ex <- example_datasets()[[key]]
+  if (is.null(ex$file)) return(simulate_liver())
+  df <- utils::read.csv(app_file("extdata", ex$file), stringsAsFactors = FALSE)
+  df[] <- purrr::map(df, \(x) if (is.character(x)) factor(x) else x)
+  df
+}
+
+#' Aggregate rows (e.g. fields of view) into specimens
+#'
+#' Parts are summed (counts) or averaged (areas, proportions). Other columns
+#' are kept only if constant within every specimen.
+#' @param df Data frame.
+#' @param id Name of the specimen column.
+#' @param parts Character vector of part names.
+#' @param fun "sum" or "mean".
+#' @return Aggregated data frame with attribute `dropped` (non-constant columns).
+#' @noRd
+aggregate_specimens <- function(df, id, parts, fun = c("sum", "mean")) {
+  fun   <- match.arg(fun)
+  f     <- if (fun == "sum") sum else mean
+  other <- setdiff(names(df), c(id, parts))
+  is_const <- purrr::map_lgl(other, \(v)
+    all(tapply(df[[v]], df[[id]], \(x) dplyr::n_distinct(x) == 1)))
+  keep  <- other[is_const]
+  out <- df |>
+    dplyr::group_by(.data[[id]]) |>
+    dplyr::summarise(dplyr::across(dplyr::all_of(keep), dplyr::first),
+                     dplyr::across(dplyr::all_of(parts), f),
+                     n_rows = dplyr::n(), .groups = "drop") |>
+    as.data.frame()
+  attr(out, "dropped") <- other[!is_const]
+  out
 }
 
 # ==============================================================================

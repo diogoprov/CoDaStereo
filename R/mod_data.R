@@ -18,11 +18,33 @@ mod_data_upload_ui <- function(id) {
           uiOutput(ns("sheet_selector_ui")),
           hr(),
           h4("Or try it out:"),
-          actionButton(ns("load_example"),
-                       "Load Example Data (Liver Histomorphometry)",
+          selectInput(ns("example"), "Example dataset:",
+                      choices = c("Simulated liver (2 groups)"                    = "liver_sim",
+                                  "Spleen, point counts per field (case study 1)" = "spleen",
+                                  "Kidney, point counts per field (case study 2)" = "kidney",
+                                  "Leukocyte differential counts (case study 3)"  = "leukocytes",
+                                  "Erythrocyte nuclear abnormalities (case study 4)" = "nuclear")),
+          actionButton(ns("load_example"), "Load example",
                        icon = icon("table"), class = "btn-primary")
       ),
       box(title = "Data Preview", width = 8, tableOutput(ns("contents")))
+    ),
+    fluidRow(
+      box(title = "Specimens (nested designs)", width = 12, status = "info",
+          p("When rows are fields of view (or sections) nested within specimens, ",
+            "analyse one composition per specimen: fields of the same animal are ",
+            "not independent replicates. Point counts are summed; areas or ",
+            "proportions are averaged."),
+          fluidRow(
+            column(3, checkboxInput(ns("agg_on"), "Aggregate rows by specimen", FALSE)),
+            column(4, uiOutput(ns("agg_id_ui"))),
+            column(5, radioButtons(ns("agg_fun"), "Combine parts by:",
+                                   choices = c("Sum (counts)" = "sum",
+                                               "Mean (areas, proportions)" = "mean"),
+                                   inline = TRUE))
+          ),
+          uiOutput(ns("agg_report"))
+      )
     ),
     fluidRow(
       box(title = "Compositional parts", width = 8, status = "primary",
@@ -72,7 +94,7 @@ mod_data_inspect_ui <- function(id) {
 mod_data_server <- function(id) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    rv <- reactiveValues(df = NULL)
+    rv <- reactiveValues(df = NULL, default_parts = NULL)
 
     uploaded_ext <- reactive({
       req(input$file1)
@@ -94,6 +116,7 @@ mod_data_server <- function(id) {
       {
         req(input$file1)
         ext <- uploaded_ext()
+        rv$default_parts <- NULL
         rv$df <- if (ext == "csv") {
           read.csv(input$file1$datapath, header = input$header, sep = input$sep)
         } else if (ext %in% c("xlsx", "xls")) {
@@ -110,29 +133,52 @@ mod_data_server <- function(id) {
     )
 
     observeEvent(input$load_example, {
-      set.seed(42)
-      n <- 20
-      raw <- data.frame(
-        Hepatocytes       = c(rnorm(n, 80, 1.5), rnorm(n, 65, 2.0)),
-        Sinusoids         = c(rnorm(n, 10, 1.0), rnorm(n,  8, 0.9)),
-        Stroma            = c(rnorm(n,  8, 0.8), rnorm(n,  6.5, 0.7)),
-        Melanomacrophages = c(rnorm(n, 2.5, 0.5), rnorm(n, 20, 2.5))
-      )
-      raw[raw < 0] <- 0
-      bdl_idx <- sample.int(n, size = round(n * 0.25))
-      raw$Melanomacrophages[bdl_idx] <- 0
-      closed <- 100 * raw / rowSums(raw)
-      rv$df <- data.frame(
-        Sample_ID = seq_len(2 * n),
-        Group     = factor(rep(c("Control", "Impacted"), each = n)),
-        closed
-      )
+      ex <- example_datasets()[[input$example]]
+      rv$default_parts <- ex$parts
+      rv$df <- load_example(input$example)
+      updateCheckboxInput(session, "agg_on", value = !is.null(ex$specimen))
+      rv$default_specimen <- ex$specimen
+    })
+
+    output$agg_id_ui <- renderUI({
+      req(rv$df)
+      cols <- names(rv$df)
+      sel  <- rv$default_specimen %||% cols[1]
+      selectInput(ns("agg_id"), "Specimen column:", choices = cols,
+                  selected = if (sel %in% cols) sel else cols[1])
+    })
+
+    # Data passed downstream: one row per specimen when aggregation is on
+    df_out <- reactive({
+      req(rv$df)
+      if (!isTRUE(input$agg_on) || is.null(input$agg_id) || is.null(input$parts)) {
+        return(rv$df)
+      }
+      validate(need(!input$agg_id %in% input$parts,
+                    "The specimen column cannot be a compositional part."))
+      aggregate_specimens(rv$df, input$agg_id, input$parts, input$agg_fun)
+    })
+
+    output$agg_report <- renderUI({
+      req(isTRUE(input$agg_on), df_out())
+      dropped <- attr(df_out(), "dropped")
+      tags$p(style = "color: #31708f;", icon("layer-group"),
+             sprintf(" %d rows aggregated into %d specimens (%s).",
+                     nrow(rv$df), nrow(df_out()), input$agg_fun),
+             if (length(dropped) > 0) {
+               sprintf(" Columns not constant within specimens were dropped: %s.",
+                       paste(dropped, collapse = ", "))
+             })
     })
 
     output$select_parts_ui <- renderUI({
       req(rv$df)
-      num_cols    <- names(rv$df)[sapply(rv$df, is.numeric)]
-      default_sel <- num_cols[!is_id_name(num_cols)]
+      num_cols    <- names(rv$df)[purrr::map_lgl(rv$df, is.numeric)]
+      default_sel <- if (!is.null(rv$default_parts) && all(rv$default_parts %in% num_cols)) {
+        rv$default_parts
+      } else {
+        num_cols[!is_id_name(num_cols)]
+      }
       if (length(default_sel) < 2) default_sel <- num_cols
       selectInput(ns("parts"),
                   "Compositional parts (numeric columns to analyse):",
@@ -143,7 +189,7 @@ mod_data_server <- function(id) {
     # -- Pre-flight check output -----------------------------------------------
     output$preflight_ui <- renderUI({
       req(rv$df, input$parts)
-      check <- preflight_check(rv$df, input$parts)
+      check <- preflight_check(df_out(), input$parts)
       if (check$ok) {
         tags$div(
           icon("check-circle", style = "color: #28a745; font-size: 1.3em;"),
@@ -174,12 +220,12 @@ mod_data_server <- function(id) {
 
     chosen_parts <- reactive({ req(input$parts); input$parts })
 
-    output$contents <- renderTable({ req(rv$df); head(rv$df, 10) })
+    output$contents <- renderTable({ head(df_out(), 10) })
 
     # -- Data inspection plots -------------------------------------------------
     parts_long <- reactive({
-      req(rv$df, input$parts)
-      rv$df[, input$parts, drop = FALSE] |>
+      req(df_out(), input$parts)
+      df_out()[, input$parts, drop = FALSE] |>
         tibble::rowid_to_column("Sample") |>
         tidyr::pivot_longer(-"Sample", names_to = "Part", values_to = "Value") |>
         dplyr::mutate(
@@ -207,8 +253,8 @@ mod_data_server <- function(id) {
     })
 
     output$vis_miss_plot <- renderPlot({
-      req(rv$df, input$parts)
-      naniar::vis_miss(rv$df[, input$parts, drop = FALSE]) +
+      req(df_out(), input$parts)
+      naniar::vis_miss(df_out()[, input$parts, drop = FALSE]) +
         ggplot2::theme(legend.position = "bottom",
                        axis.text.x = ggplot2::element_text(angle = 45, hjust = 0))
     })
@@ -232,6 +278,6 @@ mod_data_server <- function(id) {
         ggplot2::theme(legend.position = "bottom")
     })
 
-    list(df = reactive(rv$df), parts = reactive(input$parts))
+    list(df = df_out, parts = reactive(input$parts))
   })
 }

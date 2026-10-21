@@ -6,7 +6,17 @@
 \alias{CoDaStereo-package}
 \title{CoDaStereo: Compositional Data Analysis for Stereological and Histomorphometric Data}
 \description{
-Shiny application implementing the Aitchison geometry for stereological and histomorphometric data. Covers the full PPDAC cycle: data upload, zero/NA handling, compositional visualisation (ternary plots, clr-biplots), and permutational MANOVA with pairwise post-hoc tests. Developed as supplementary material for the Journal of Microscopy.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+Interactive 'shiny' application for compositional data analysis of stereological, histomorphometric and blood-cell count data under the Aitchison geometry. It covers data upload and inspection, zero and missing-value replacement, ternary diagrams, centred log-ratio biplots, user-editable sequential binary partitions with CoDa dendrograms, and permutational multivariate analysis of variance on isometric log-ratio coordinates, optionally including the log-transformed total as described by Pawlowsky-Glahn, Egozcue and Lovell (2015) \doi{10.1177/1471082X14535526}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/diogoprov/CoDaStereo}
+  \item Report bugs at \url{https://github.com/diogoprov/CoDaStereo/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Diogo B. Provete \email{diogo.provete@ufms.br} (\href{https://orcid.org/0000-0002-0097-0651}{ORCID})
