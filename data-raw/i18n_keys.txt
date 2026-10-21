@@ -13,7 +13,7 @@ Reproducibility
 Welcome to CoDa Stereo
 This tool implements the Aitchison geometry for stereological and histomorphometric data.
 Follow the sidebar from top to bottom to complete the PPDAC cycle.
-The interface is available in English and Portuguese (EN / PT at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication.
+The interface is available in English, Portuguese and Spanish (EN / PT / ES at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication.
 Start guided tour
 At least 2 parts are required for compositional analysis.
 '%s' has mean = %.2f, which is %.0f× the median part mean (%.2f). Is it really a compositional part?

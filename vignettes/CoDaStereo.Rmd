@@ -68,8 +68,9 @@ walks through each step.
 7. **Reproducibility.** Download an R script that reproduces the analysis,
    a self-contained HTML report, or save the session to resume it later.
 
-The interface is available in English and Portuguese (*EN / PT* in the
-header).
+The interface is available in English, Portuguese and Spanish
+(*EN / PT / ES* in the header); a link can open the app directly in one
+language, e.g. `?lang=es`.
 
 ## When to include the total
 

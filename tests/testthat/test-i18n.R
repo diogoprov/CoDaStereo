@@ -11,13 +11,18 @@ test_that("tr() translates to Portuguese and falls back to English", {
 test_that("printf templates keep their placeholders in Portuguese", {
   tab <- i18n_table()
   ph  <- function(x) regmatches(x, gregexpr("%[.0-9]*[sdf%]", x))
-  expect_equal(ph(names(tab)), ph(unname(tab)))
+  expect_equal(ph(tab$en), ph(tab$pt))
+  expect_equal(ph(tab$en), ph(tab$es))
   expect_match(sprintf(tr("%d parts need exactly %d balances.", "pt"), 4L, 3L), "4 partes")
 })
 
 test_that("the UI renders in both languages", {
   en <- as.character(app_ui(list(QUERY_STRING = "")))
   pt <- as.character(app_ui(list(QUERY_STRING = "?lang=pt")))
+  es <- as.character(app_ui(list(QUERY_STRING = "?lang=es")))
+  expect_match(es, "Carga de datos")
+  expect_match(es, "Modelado estad\u00edstico")
+  expect_match(en, "?lang=es", fixed = TRUE)
   expect_match(en, "Data Upload")
   expect_match(pt, "Carregar dados")
   expect_match(pt, "Modelagem estatística")
@@ -27,8 +32,10 @@ test_that("the UI renders in both languages", {
 test_that("every tour step is translated", {
   en <- build_tour_steps("en")
   pt <- build_tour_steps("pt")
+  es <- build_tour_steps("es")
   expect_equal(nrow(pt), nrow(en))
   expect_true(all(pt$intro != en$intro))
+  expect_true(all(es$intro != en$intro))
 })
 
 test_that("SBP and pre-flight messages are translated", {

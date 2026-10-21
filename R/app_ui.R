@@ -10,20 +10,20 @@ app_ui <- function(request) {
   tagList(
     rintrojs::introjsUI(),
     dashboardPage(
-      dashboardHeader(
-        title = "CoDa Stereo v3.1",
-        tags$li(class = "dropdown",
-                tags$a(href = "?lang=en", title = "English",
-                       style = if (lang == "en") "font-weight: bold;", "EN")),
-        tags$li(class = "dropdown",
-                tags$a(href = "?lang=pt", title = "Portugu\u00eas",
-                       style = if (lang == "pt") "font-weight: bold;", "PT")),
-        tags$li(class = "dropdown",
-                actionButton("tour_btn_header",
-                             label = paste("\U0001f393", t("Tour")),
-                             class = "btn btn-default btn-sm",
-                             style = "margin-top: 8px; margin-right: 10px;"))
-      ),
+      # dashboardHeader() wants each dropdown as its own argument
+      do.call(dashboardHeader, c(
+        list(title = "CoDa Stereo v3.1"),
+        unname(purrr::imap(app_languages, \(label, code) {
+          tags$li(class = "dropdown",
+                  tags$a(href = paste0("?lang=", code), label,
+                         style = if (lang == code) "font-weight: bold;"))
+        })),
+        list(tags$li(class = "dropdown",
+                     actionButton("tour_btn_header",
+                                  label = paste("\U0001f393", t("Tour")),
+                                  class = "btn btn-default btn-sm",
+                                  style = "margin-top: 8px; margin-right: 10px;")))
+      )),
       dashboardSidebar(
         sidebarMenu(id = "sidebarMenu",
           menuItem(t("Introduction"), tabName = "intro", icon = icon("info-circle")),
@@ -47,7 +47,7 @@ app_ui <- function(request) {
                            p(t("This tool implements the Aitchison geometry for stereological and histomorphometric data.")),
                            p(t("Follow the sidebar from top to bottom to complete the PPDAC cycle.")),
                            p(style = "color: #666;",
-                             t("The interface is available in English and Portuguese (EN / PT at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication."))
+                             t("The interface is available in English, Portuguese and Spanish (EN / PT / ES at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication."))
                     )
                   ),
                   hr(),

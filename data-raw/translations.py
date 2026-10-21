@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-# Portuguese (pt-BR) UI translations. Keys are the English strings extracted
-# by data-raw/extract_i18n_keys.R. Run:  python3 data-raw/translations_pt.py
-import csv, re, sys
+# UI translations: Portuguese (pt-BR, below) and Spanish (data-raw/
+# translations_es.py). Keys are the English strings extracted by
+# data-raw/extract_i18n_keys.R. Run:  python3 data-raw/translations.py
+import csv, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from translations_es import ES
 
 PT = {
 "Next": "Próximo", "Back": "Voltar", "Done": "Concluir", "Tour": "Tour",
@@ -14,8 +17,8 @@ PT = {
   "Esta ferramenta implementa a geometria de Aitchison para dados estereológicos e histomorfométricos.",
 "Follow the sidebar from top to bottom to complete the PPDAC cycle.":
   "Siga o menu lateral de cima para baixo para completar o ciclo PPDAC.",
-"The interface is available in English and Portuguese (EN / PT at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication.":
-  "A interface está disponível em inglês e português (EN / PT no topo). Trocar o idioma recarrega o app: salve sua sessão antes. As figuras, o relatório e o script R permanecem em inglês, para publicação.",
+"The interface is available in English, Portuguese and Spanish (EN / PT / ES at the top). Changing the language reloads the app: save your session first. Figures, the report and the R script stay in English, for publication.":
+  "A interface está disponível em inglês, português e espanhol (EN / PT / ES no topo). Trocar o idioma recarrega o app: salve sua sessão antes. As figuras, o relatório e o script R permanecem em inglês, para publicação.",
 "Start guided tour": "Iniciar tour guiado",
 "At least 2 parts are required for compositional analysis.": "A análise composicional exige pelo menos 2 partes.",
 "'%s' has mean = %.2f, which is %.0f× the median part mean (%.2f). Is it really a compositional part?":
@@ -230,20 +233,21 @@ SKIP = {"font-size: 85%;", "65px", "none", "II"}
 keys = [k for k in open("data-raw/i18n_keys.txt", encoding="utf-8").read().split("\n") if k]
 # the extractor writes "\nBlock: %s" as two lines; restore it
 keys = [("\nBlock: %s" if k == "Block: %s" else k) for k in keys]
-missing = [k for k in keys if k not in PT and k not in SKIP and k.strip()]
 extra   = ["%d row(s) (%d NA cell(s)) dropped via listwise deletion",
            "%d NA cell(s) partially imputed; %d residual row(s) dropped",
            "%d NA cell(s) imputed via column geometric mean",
            "No zeros detected. Using raw composition.", "Comma", "Semicolon", "Tab"]
-if missing:
-    print("MISSING:", *missing, sep="\n  "); sys.exit(1)
-# placeholders must match in order
-for en, pt in PT.items():
-    if re.findall(r"%[.0-9]*[sdf%]", en) != re.findall(r"%[.0-9]*[sdf%]", pt):
-        print("PLACEHOLDER MISMATCH:", en); sys.exit(1)
-rows = [(k, PT[k]) for k in dict.fromkeys(keys + extra) if k in PT]
+wanted = [k for k in dict.fromkeys(keys + extra) if k not in SKIP and k.strip()]
+for name, tab in (("pt", PT), ("es", ES)):
+    missing = [k for k in wanted if k not in tab]
+    if missing:
+        print("MISSING", name, *missing, sep="\n  "); sys.exit(1)
+    # placeholders must match in order
+    for en, tr in tab.items():
+        if re.findall(r"%[.0-9]*[sdf%]", en) != re.findall(r"%[.0-9]*[sdf%]", tr):
+            print("PLACEHOLDER MISMATCH", name, en); sys.exit(1)
 with open("inst/i18n/translations.csv", "w", newline="", encoding="utf-8") as f:
     w = csv.writer(f, quoting=csv.QUOTE_ALL)
-    w.writerow(["en", "pt"])
-    w.writerows(rows)
-print(len(rows), "translations written")
+    w.writerow(["en", "pt", "es"])
+    w.writerows((k, PT[k], ES[k]) for k in wanted)
+print(len(wanted), "strings written (pt, es)")

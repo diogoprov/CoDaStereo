@@ -12,7 +12,7 @@
 > A Shiny application implementing the Aitchison geometry for the full
 > data analysis cycle: data upload, zero/NA handling, compositional
 > visualisation, balances, and permutational MANOVA with post-hoc tests.
-> Interface in English and Portuguese.
+> Interface in English, Portuguese and Spanish.
 >
 > Developed alongside:
 > Provete, D.B., Severgnini, M.R., Fernandes, C.E. & Franco-Belussi, L.

@@ -52,8 +52,8 @@
 
 ## Interface
 
-* The interface is available in English and Portuguese (EN / PT in the
-  header), including the guided tour. Figures, the report and the R script
+* The interface is available in English, Portuguese and Spanish
+  (EN / PT / ES in the header), including the guided tour. Figures, the report and the R script
   stay in English.
 * Package website built with pkgdown.
 
