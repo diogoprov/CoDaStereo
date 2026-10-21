@@ -179,9 +179,25 @@ plot_clr_biplot <- function(pca, groups, palette = "okabe_ito", axes = c(1, 2),
     ggplot2::labs(x = sprintf("Dim%d (%.1f%%)", axes[1], pct[1]),
                   y = sprintf("Dim%d (%.1f%%)", axes[2], pct[2]),
                   colour = NULL, fill = NULL, shape = NULL) +
-    ggplot2::coord_equal() +
+    biplot_aspect(ind[, 1], ind[, 2]) +
     ggplot2::theme_minimal(base_size = base_size) +
     ggplot2::theme(legend.position = "bottom")
+}
+
+#' Equal axis scales for a biplot unless one axis would be squashed
+#'
+#' Equal scales preserve angles and distances, so they are kept whenever the
+#' second axis spans at least a quarter of the first. Beyond that (e.g. Dim1
+#' 99% vs Dim2 0.4%) the plot collapses into a line, so the scales are freed
+#' and a caption says that angles are distorted.
+#' @noRd
+biplot_aspect <- function(x, y, min_ratio = 0.25) {
+  ratio <- diff(range(y)) / diff(range(x))
+  if (is.finite(ratio) && ratio >= min_ratio && ratio <= 1 / min_ratio) {
+    return(ggplot2::coord_equal())
+  }
+  list(ggplot2::coord_cartesian(),
+       ggplot2::labs(caption = "Axes drawn at different scales: angles and lengths are distorted."))
 }
 
 #' Scree plot of the clr-PCA (percentage of variance per axis)

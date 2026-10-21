@@ -20,7 +20,7 @@
 > and Blood Cell Profile*. **Physiological Reports** (in review).
 
 See [NEWS.md](NEWS.md) for the changes in each version and the
-[package website](https://diogoprov.github.io/CoDaStereo/) for the
+[package website](https://provetelab.org/CoDaStereo/) for the
 getting-started guide.
 
 ---

@@ -14,7 +14,7 @@ Description: Interactive 'shiny' application for compositional data
     log-transformed total as described by Pawlowsky-Glahn, Egozcue and
     Lovell (2015) <doi:10.1177/1471082X14535526>.
 License: MIT + file LICENSE
-URL: https://github.com/diogoprov/CoDaStereo, https://diogoprov.github.io/CoDaStereo/
+URL: https://github.com/diogoprov/CoDaStereo, https://provetelab.org/CoDaStereo/
 BugReports: https://github.com/diogoprov/CoDaStereo/issues
 Depends:
     R (>= 4.1.0)

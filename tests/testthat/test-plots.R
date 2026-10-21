@@ -88,3 +88,13 @@ test_that("the app works without ggiraph and TIFF falls back without cairo", {
     expect_gt(file.size(f), 500)
   }
 })
+
+test_that("biplot keeps equal scales unless one axis would be squashed", {
+  expect_equal(biplot_aspect(c(-2, 2), c(-1, 1))$ratio, 1)
+  squashed <- biplot_aspect(c(-2, 2), c(-0.1, 0.1))
+  expect_null(squashed[[1]]$ratio)
+  sim <- simulate_liver()
+  x   <- compositions::acomp(as.matrix(sim[, -(1:2)]) + 0.1)
+  p   <- plot_clr_biplot(clr_pca(x), sim$Group)
+  expect_match(p$labels$caption, "different scales")
+})
