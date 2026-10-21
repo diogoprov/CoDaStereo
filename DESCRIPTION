@@ -39,6 +39,9 @@ Imports:
     rlang,
     purrr,
     ggiraph,
+    htmltools,
+    jsonlite,
+    knitr,
     ggrepel,
     svglite,
     mirai,
@@ -48,7 +51,6 @@ Imports:
     grDevices,
     tools
 Suggests:
-    knitr,
     pkgload,
     rmarkdown,
     testthat (>= 3.0.0)

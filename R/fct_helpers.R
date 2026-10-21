@@ -280,7 +280,7 @@ scale_palette <- function(name, n) {
 #'
 #' "sum": ln of the sum of parts (product space Ts; recommended by the authors
 #' when the relevant total is the sum). "product": ln of prod(x)^(1/sqrt(D)) =
-#' sum(ln x) / sqrt(D) (space Tp), which makes [ilr, coordinate] isometric to
+#' sum(ln x) / sqrt(D) (space Tp), which makes (ilr, coordinate) isometric to
 #' the log of each part. For "product", zero-replaced parts are rescaled to the
 #' observed sum.
 #' @param raw Numeric matrix of parts on their original (absolute) scale.

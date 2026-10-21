@@ -102,9 +102,11 @@ mod_stats_ui <- function(id) {
 }
 
 #' @noRd
-mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
+mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
+                             restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    take <- restore_pending(restore, "stats")
     rv <- reactiveValues(fit = NULL, pairwise = NULL)
     # Results come back from a worker: register RRPP's print/plot S3 methods here
     loadNamespace("RRPP")
@@ -128,7 +130,7 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       req(df(), parts())
       cands <- factor_candidates(df(), parts())
       selectInput(ns("factors"), "Factor(s) for the model:",
-                  choices = cands, selected = head(cands, 1),
+                  choices = cands, selected = take("factors") %||% head(cands, 1),
                   multiple = TRUE, width = "100%")
     })
 
@@ -138,7 +140,7 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       radioButtons(ns("interaction_type"), "Model design:",
                    choices = c("Additive (main effects only)" = "+",
                                "Factorial (with interactions)" = "*"),
-                   selected = "+", inline = TRUE)
+                   selected = take("design") %||% "+", inline = TRUE)
     })
 
     output$covariates_ui <- renderUI({
@@ -146,14 +148,16 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       cands <- covariate_candidates(df(), parts())
       if (length(cands) == 0) return(NULL)
       selectInput(ns("covariates"), "Numeric covariate(s) (ANCOVA):",
-                  choices = cands, multiple = TRUE, width = "100%")
+                  choices = cands, multiple = TRUE, width = "100%",
+                  selected = take("covariates"))
     })
 
     output$block_ui <- renderUI({
       req(df(), parts())
       cands <- setdiff(names(df()), c(parts(), input$factors))
       selectInput(ns("block"), "Block (permutations restricted within blocks):",
-                  choices = c("None" = "", cands), selected = "", width = "100%")
+                  choices = c("None" = "", cands), selected = take("block") %||% "",
+                  width = "100%")
     })
 
     model_spec_rhs <- reactive({
@@ -179,7 +183,7 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
     output$pairwise_group_ui <- renderUI({
       req(input$factors)
       selectInput(ns("pw_group"), "Grouping factor for pairwise tests:",
-                  choices = input$factors, selected = input$factors[1])
+                  choices = input$factors, selected = take("pw_group") %||% input$factors[1])
     })
 
     # -- Model fitting (background worker when available) ----------------------
@@ -203,7 +207,7 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
     fit_task <- ExtendedTask$new(function(spec) run_in_worker(fit_models, spec))
     pw_task  <- ExtendedTask$new(function(arg) run_in_worker(fit_pairwise, arg))
 
-    observeEvent(input$run_manova, {
+    run_fit <- function() {
       req(comp(), keep_rows(), input$factors)
       spec <- build_spec()
       rv$pairwise <- NULL
@@ -214,7 +218,8 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
           rv$fit <- fit_models(spec)
         })
       }
-    })
+    }
+    observeEvent(input$run_manova, run_fit())
 
     observeEvent(fit_task$status(), {
       if (fit_task$status() == "success") rv$fit <- fit_task$result()
@@ -242,7 +247,7 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       print(rv$fit$anova)
     })
 
-    observeEvent(input$run_pairwise, {
+    run_pw <- function() {
       req(rv$fit, input$pw_group, keep_rows())
       arg <- list(model  = rv$fit$model,
                   groups = as.factor(df()[[input$pw_group]][keep_rows()]))
@@ -253,7 +258,8 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
           rv$pairwise <- fit_pairwise(arg)
         })
       }
-    })
+    }
+    observeEvent(input$run_pairwise, run_pw())
 
     observeEvent(pw_task$status(), {
       if (pw_task$status() == "success") rv$pairwise <- pw_task$result()
@@ -311,10 +317,56 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       }
     )
 
-    list(fit = reactive(rv$fit), pairwise = reactive(rv$pairwise),
-         inputs = reactive(list(factors = input$factors, rhs = if (length(input$factors)) model_spec_rhs(),
-                                iter = input$iter, ss_type = input$ss_type, block = input$block,
-                                total_mode = total_mode(), total_type = input$total_type,
-                                pw_group = input$pw_group)))
+    observeEvent(restore(), {
+      st <- restore()$stats
+      updateRadioButtons(session, "ss_type", selected = st$ss_type)
+      updateSelectInput(session, "iter", selected = st$iter)
+      updateRadioButtons(session, "total_mode", selected = st$total_mode)
+      updateRadioButtons(session, "total_type", selected = st$total_type)
+      rv$fit <- NULL
+      rv$pairwise <- NULL
+      if (isTRUE(st$fitted) && length(st$factors)) pending_fit(st)
+    })
+
+    # Restore: refit once every restored input has come back from the browser
+    pending_fit <- reactiveVal(NULL)
+    pending_pw  <- reactiveVal(NULL)
+    same <- function(a, b) identical(as.character(a %||% character(0)),
+                                     as.character(b %||% character(0)))
+    observe({
+      st <- pending_fit()
+      req(st, comp(), keep_rows())
+      req(same(input$factors, st$factors), same(input$covariates, st$covariates),
+          same(input$block, st$block %||% ""), same(input$iter, st$iter),
+          same(input$ss_type, st$ss_type), same(total_mode(), st$total_mode),
+          length(st$factors) < 2 || same(input$interaction_type, st$design))
+      pending_fit(NULL)
+      run_fit()
+      if (isTRUE(st$pairwise_run)) pending_pw(st$pw_group)
+    })
+    observe({
+      g <- pending_pw()
+      req(g, rv$fit, same(input$pw_group, g))
+      pending_pw(NULL)
+      run_pw()
+    })
+
+    state <- reactive(list(
+      factors = input$factors, design = input$interaction_type,
+      covariates = input$covariates, block = input$block,
+      rhs = if (length(input$factors)) model_spec_rhs(),
+      iter = input$iter, ss_type = input$ss_type, total_mode = total_mode(),
+      total_type = input$total_type, pw_group = input$pw_group,
+      fitted = !is.null(rv$fit), pairwise_run = !is.null(rv$pairwise),
+      fit = rv$fit, pairwise = rv$pairwise))
+
+
+    # Inputs built by renderUI must exist even in hidden tabs (session restore)
+    outputOptions(output, "factors_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "interaction_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "covariates_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "block_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "pairwise_group_ui", suspendWhenHidden = FALSE)
+    list(fit = reactive(rv$fit), pairwise = reactive(rv$pairwise), state = state)
   })
 }

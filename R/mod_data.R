@@ -91,10 +91,10 @@ mod_data_inspect_ui <- function(id) {
 }
 
 #' @noRd
-mod_data_server <- function(id) {
+mod_data_server <- function(id, restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
-    rv <- reactiveValues(df = NULL, default_parts = NULL)
+    rv <- reactiveValues(df = NULL, default_parts = NULL, source = NULL)
 
     uploaded_ext <- reactive({
       req(input$file1)
@@ -117,6 +117,9 @@ mod_data_server <- function(id) {
         req(input$file1)
         ext <- uploaded_ext()
         rv$default_parts <- NULL
+        rv$source <- list(type = if (ext == "csv") "csv" else "excel",
+                          file_name = input$file1$name, header = input$header,
+                          sep = input$sep, sheet = input$excel_sheet)
         rv$df <- if (ext == "csv") {
           read.csv(input$file1$datapath, header = input$header, sep = input$sep)
         } else if (ext %in% c("xlsx", "xls")) {
@@ -136,6 +139,7 @@ mod_data_server <- function(id) {
       ex <- example_datasets()[[input$example]]
       rv$default_parts <- ex$parts
       rv$df <- load_example(input$example)
+      rv$source <- list(type = "example", example = input$example)
       updateCheckboxInput(session, "agg_on", value = !is.null(ex$specimen))
       rv$default_specimen <- ex$specimen
     })
@@ -278,6 +282,32 @@ mod_data_server <- function(id) {
         ggplot2::theme(legend.position = "bottom")
     })
 
-    list(df = df_out, parts = reactive(input$parts))
+    # -- Restore a saved session ------------------------------------------------
+    observeEvent(restore(), {
+      st <- restore()$data
+      rv$default_parts    <- st$parts
+      rv$default_specimen <- st$agg$id
+      rv$source <- st$source
+      rv$df     <- st$df
+      updateCheckboxInput(session, "agg_on", value = isTRUE(st$agg$on))
+      updateRadioButtons(session, "agg_fun", selected = st$agg$fun %||% "sum")
+      if (identical(st$source$type, "example")) {
+        updateSelectInput(session, "example", selected = st$source$example)
+      }
+    })
+
+    state <- reactive({
+      req(rv$df)
+      out <- df_out()
+      list(df = rv$df, df_out = out, parts = input$parts, source = rv$source,
+           agg = list(on = isTRUE(input$agg_on), id = input$agg_id, fun = input$agg_fun,
+                      keep = setdiff(names(out), c(input$agg_id, input$parts, "n_rows"))))
+    })
+
+
+    # Inputs built by renderUI must exist even in hidden tabs (session restore)
+    outputOptions(output, "select_parts_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "agg_id_ui", suspendWhenHidden = FALSE)
+    list(df = df_out, parts = reactive(input$parts), state = state)
   })
 }

@@ -24,6 +24,7 @@ build_tour_steps <- function() {
       "a[data-value='analysis']",            # 6 ternary + biplot tab link
       "a[data-value='balances']",            # 6b SBP + CoDa dendrogram tab link
       "a[data-value='stats']",               # 7 MANOVA tab link
+      "a[data-value='export']",              # 7b reproducibility tab link
       "#tour_btn_header"                     # 8 done — point at tour button
     ),
     intro = c(
@@ -116,6 +117,13 @@ build_tour_steps <- function() {
         "<b>residual diagnostics</b>.",
         "All results are downloadable as CSV or PDF."
       ),
+      # 7b Reproducibility
+      paste(
+        "<b>7 &mdash; Reproducibility</b><br><br>",
+        "Download an <b>R script</b> that reproduces your analysis, a",
+        "self-contained <b>HTML report</b>, or <b>save the session</b>",
+        "to resume it later."
+      ),
       # 8 Done
       paste(
         "<b>You're ready!</b><br><br>",
@@ -135,6 +143,7 @@ build_tour_steps <- function() {
       "right",   # 6 analysis tab
       "right",   # 6b balances tab
       "right",   # 7 stats tab
+      "right",   # 7b export tab
       "bottom"   # 8 tour button
     ),
     stringsAsFactors = FALSE

@@ -42,13 +42,13 @@ mod_imputation_ui <- function(id) {
 }
 
 #' @noRd
-mod_imputation_server <- function(id, df, parts) {
+mod_imputation_server <- function(id, df, parts, restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     rv <- reactiveValues(comp = NULL, imputed = NULL, raw = NULL, keep_rows = NULL,
                          method_used = NULL, na_action = NULL)
 
-    observeEvent(input$run, {
-      req(df(), input$zero_method, input$na_handling, parts())
+    run_impute <- function(zero_method, na_handling) {
+      req(df(), parts())
       mat       <- as.matrix(df()[, parts(), drop = FALSE])
       keep_rows <- rep(TRUE, nrow(mat))
       na_action <- "no NAs detected"
@@ -56,7 +56,7 @@ mod_imputation_server <- function(id, df, parts) {
       if (anyNA(mat)) {
         n_na_rows  <- sum(!complete.cases(mat))
         n_na_cells <- sum(is.na(mat))
-        if (input$na_handling == "drop") {
+        if (na_handling == "drop") {
           keep_rows <- complete.cases(mat)
           mat <- mat[keep_rows, , drop = FALSE]
           na_action <- sprintf("%d row(s) (%d NA cell(s)) dropped via listwise deletion",
@@ -87,8 +87,8 @@ mod_imputation_server <- function(id, df, parts) {
         return()
       }
 
-      withProgress(message = sprintf("Replacing zeros (%s)...", input$zero_method), {
-        rv$imputed <- switch(input$zero_method,
+      withProgress(message = sprintf("Replacing zeros (%s)...", zero_method), {
+        rv$imputed <- switch(zero_method,
           "CZM" = zCompositions::cmultRepl(mat, method = "CZM", output = "p-counts",
                                             label = 0, z.warning = 0.99),
           "multRepl" = { dl <- compute_dl(mat); zCompositions::multRepl(mat, label = 0, dl = dl$mat, z.warning = 0.99) },
@@ -96,8 +96,9 @@ mod_imputation_server <- function(id, df, parts) {
         )
       })
       rv$comp        <- compositions::acomp(rv$imputed)
-      rv$method_used <- input$zero_method
-    })
+      rv$method_used <- zero_method
+    }
+    observeEvent(input$run, run_impute(input$zero_method, input$na_handling))
 
     output$report <- renderPrint({
       req(rv$comp)
@@ -109,7 +110,30 @@ mod_imputation_server <- function(id, df, parts) {
       print(round(rv$comp[1:min(5, nrow(rv$comp)), ], 4))
     })
 
-    list(comp = reactive(rv$comp), imputed = reactive(rv$imputed),
+    # Restore: re-run the saved imputation once the restored parts arrive
+    pending <- reactiveVal(NULL)
+    observeEvent(restore(), {
+      st <- restore()$imputation
+      updateRadioButtons(session, "zero_method", selected = st$zero_method)
+      updateRadioButtons(session, "na_handling", selected = st$na_handling)
+      rv$comp <- NULL
+      if (!is.null(st$method_used)) pending(list(st = st, parts = restore()$data$parts))
+    })
+    observe({
+      p <- pending()
+      req(p, df(), parts(), setequal(parts(), p$parts))
+      pending(NULL)
+      run_impute(p$st$zero_method, p$st$na_handling)
+    })
+
+    state <- reactive(list(
+      zero_method = input$zero_method, na_handling = input$na_handling,
+      method_used = rv$method_used,
+      result = list(comp = rv$comp, imputed = rv$imputed, raw = rv$raw,
+                    keep_rows = rv$keep_rows, method_used = rv$method_used,
+                    na_action = rv$na_action)))
+
+    list(comp = reactive(rv$comp), imputed = reactive(rv$imputed), state = state,
          raw = reactive(rv$raw),
          keep_rows = reactive(rv$keep_rows), method_used = reactive(rv$method_used))
   })

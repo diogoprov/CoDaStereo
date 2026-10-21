@@ -50,23 +50,34 @@ mod_balances_ui <- function(id) {
 }
 
 #' @noRd
-mod_balances_server <- function(id, df, parts, comp, keep_rows) {
+mod_balances_server <- function(id, df, parts, comp, keep_rows,
+                                restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    take <- restore_pending(restore, "balances")
+    restored_sbp <- reactiveVal(NULL)
+    observeEvent(restore(), {
+      updateSelectInput(session, "palette", selected = restore()$balances$palette)
+      restored_sbp(restore()$balances$sbp)
+    })
     cell_id <- function(i, j) paste0("sbp_", i, "_", j)
 
     output$group_var_ui <- renderUI({
       req(df(), parts())
       selectInput(ns("group_var"), "Colour / group by:",
-                  choices = factor_candidates(df(), parts()))
+                  choices = factor_candidates(df(), parts()),
+                  selected = take("group_var"))
     })
 
     # Automatic SBP: recomputed when the composition changes; the reset button
     # re-renders the grid from it
     sbp_default <- reactive({
       req(comp())
-      sbp_auto(comp())
+      auto <- sbp_auto(comp())
+      saved <- restored_sbp()
+      if (!is.null(saved) && identical(colnames(saved), colnames(auto))) saved else auto
     })
+    observeEvent(input$reset_sbp, restored_sbp(NULL), ignoreInit = TRUE)
 
     output$sbp_grid <- renderUI({
       input$reset_sbp
@@ -171,7 +182,11 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows) {
       }
     )
 
+
+    # Inputs built by renderUI must exist even in hidden tabs (session restore)
+    outputOptions(output, "group_var_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "sbp_grid", suspendWhenHidden = FALSE)
     list(sbp = reactive(if (length(sbp_issues()) == 0) sbp_settled()),
-         group_var = reactive(input$group_var))
+         group_var = reactive(input$group_var), palette = reactive(input$palette))
   })
 }

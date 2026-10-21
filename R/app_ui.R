@@ -23,7 +23,8 @@ app_ui <- function(request) {
           menuItem("Zero Handling", tabName = "zeros", icon = icon("eraser")),
           menuItem("Compositional Analysis", tabName = "analysis", icon = icon("chart-pie")),
           menuItem("Balances (SBP)", tabName = "balances", icon = icon("sitemap")),
-          menuItem("Statistical Modeling", tabName = "stats", icon = icon("microscope"))
+          menuItem("Statistical Modeling", tabName = "stats", icon = icon("microscope")),
+          menuItem("Reproducibility", tabName = "export", icon = icon("file-code"))
         )
       ),
       dashboardBody(
@@ -70,7 +71,8 @@ app_ui <- function(request) {
           mod_imputation_ui("imputation"),
           mod_analysis_ui("analysis"),
           mod_balances_ui("balances"),
-          mod_stats_ui("stats")
+          mod_stats_ui("stats"),
+          mod_export_ui("export")
         )
       )
     )

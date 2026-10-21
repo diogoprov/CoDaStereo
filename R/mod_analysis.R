@@ -144,20 +144,31 @@ interactive_plot_ui <- function(ns, id, height = "400px") {
 }
 
 #' @noRd
-mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
+mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
+                                restore = reactive(NULL)) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    take <- restore_pending(restore, "analysis")
+    observeEvent(restore(), {
+      st <- restore()$analysis
+      updateSelectInput(session, "palette", selected = st$palette)
+      updateRadioButtons(session, "tern_mode", selected = st$tern_mode)
+      updateRadioButtons(session, "tern_regions", selected = st$tern_regions)
+      updateCheckboxInput(session, "tern_centre", value = isTRUE(st$tern_centre))
+    })
 
     output$group_var_ui <- renderUI({
       req(df(), parts())
       cands <- factor_candidates(df(), parts())
-      selectInput(ns("group_var"), "Colour / group by:", choices = cands)
+      selectInput(ns("group_var"), "Colour / group by:", choices = cands,
+                  selected = take("group_var"))
     })
 
     output$select_ternary_ui <- renderUI({
       req(parts())
       selectInput(ns("tern_vars"), "Select 3 Parts:",
-                  choices = parts(), multiple = TRUE, selected = head(parts(), 3))
+                  choices = parts(), multiple = TRUE,
+                  selected = take("tern_vars") %||% head(parts(), 3))
     })
 
     output$amalg_parts1_ui <- renderUI({
@@ -233,7 +244,8 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       if (is.null(raw)) return(NULL)
       selectInput(ns("bp_total"), "Add log-total (T-space biplot):",
                   choices = c("No" = "none", "Sum of parts (Ts)" = "sum",
-                              "Product total (Tp)" = "product"))
+                              "Product total (Tp)" = "product"),
+                  selected = take("bp_total"))
     })
 
     pca <- reactive({
@@ -339,9 +351,19 @@ mod_analysis_server <- function(id, df, parts, comp, keep_rows, raw = NULL) {
       }
     )
 
+
+    # Inputs built by renderUI must exist even in hidden tabs (session restore)
+    outputOptions(output, "group_var_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "select_ternary_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "bp_total_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "bp_shape_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "amalg_parts1_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "amalg_parts2_ui", suspendWhenHidden = FALSE)
+    outputOptions(output, "amalg_parts3_ui", suspendWhenHidden = FALSE)
     list(inputs = reactive(list(group_var = input$group_var, palette = input$palette,
                                 tern_vars = input$tern_vars, tern_mode = input$tern_mode,
                                 amalg = amalg_list(), tern_regions = input$tern_regions,
+                                tern_centre = input$tern_centre,
                                 bp_axes = c(input$bp_x, input$bp_y),
                                 bp_total = input$bp_total %||% "none")),
          pca = pca)
