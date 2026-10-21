@@ -151,7 +151,7 @@ CoDaStereo/
 ├── tests/testthat/        # Unit, module and reproducibility tests
 ├── vignettes/             # Getting started
 ├── data-raw/              # Scripts that build the examples and translations
-├── dev/                   # Development scripts (run_dev.R, make_sticker.py)
+├── dev/                   # Development scripts (run_dev.R, write_manifest.R)
 └── .github/workflows/     # R CMD check (3 OSes) and pkgdown site
 ```
 

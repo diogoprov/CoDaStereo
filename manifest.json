@@ -5165,7 +5165,7 @@
       "checksum": "d718baf3311fec4b3f5fb45a2db6c156"
     },
     "inst/extdata/nuclear_abnormalities.csv": {
-      "checksum": "518ba4c81e948224450894151b8e1ee0"
+      "checksum": "c23eb1bf89376f7819aaf2e8f4f7a494"
     },
     "inst/extdata/spleen_fields.csv": {
       "checksum": "6a01451a7bb38db31cfbc670d2ac0b88"
@@ -5174,13 +5174,7 @@
       "checksum": "01aafe301a1ce25ed197ab7127b0527e"
     },
     "inst/i18n/translations.csv": {
-      "checksum": "080852d7bed6c97279b819e8a84acf9b"
-    },
-    "inst/logo/codastreo_logo.png": {
-      "checksum": "deea8091f39cb8e99a90e567f9abdb48"
-    },
-    "inst/logo/codastreo_logo.svg": {
-      "checksum": "4df50f82e1b6e502e3fe375fae4af584"
+      "checksum": "68bdea174ff1ea6ee8001383eb8a7502"
     },
     "inst/logo/FONTS.md": {
       "checksum": "59026b91a1637a08b008eec7a5a32b19"
@@ -5204,7 +5198,7 @@
       "checksum": "479dfef628d1c1a01a830c701b7ddf6d"
     },
     "R/app_ui.R": {
-      "checksum": "e5abaffe69d13bded71dddeff32fb833"
+      "checksum": "ac85a80a07128b4497249041e9420cc1"
     },
     "R/CoDaStereo-package.R": {
       "checksum": "63be19fe6582b977dba95b0b59a3be0a"
@@ -5213,19 +5207,19 @@
       "checksum": "320c8489b8f672370990964392c11e1e"
     },
     "R/fct_i18n.R": {
-      "checksum": "ff85d503e204aaebf37fb9abfc7a861b"
+      "checksum": "704d760fbecf471493e1434deaa98f21"
     },
     "R/fct_models.R": {
-      "checksum": "02ca473589454838fa42358a4438588c"
+      "checksum": "2fb5b7d4b51c2315d35e59cfc0345ed1"
     },
     "R/fct_plots.R": {
-      "checksum": "8e9b81099c63202dcbbf338a1facc3b4"
+      "checksum": "b9035bda7e60fcd91b1e9fc880a6fb02"
     },
     "R/fct_reproducibility.R": {
       "checksum": "65f2bdc2551301edb255354d45b4e63d"
     },
     "R/mod_analysis.R": {
-      "checksum": "dd8ca8f99fb862e735182952a50cc02e"
+      "checksum": "26c477517ae625d6783be7de8d01f472"
     },
     "R/mod_balances.R": {
       "checksum": "3ad134c748cdcc89e3986761481cab6e"
@@ -5247,9 +5241,6 @@
     },
     "R/run_app.R": {
       "checksum": "ef4a3d2d3cc6312347193cfe4d0fecc9"
-    },
-    "www/logo/codastreo_logo.svg": {
-      "checksum": "4df50f82e1b6e502e3fe375fae4af584"
     }
   },
   "users": null

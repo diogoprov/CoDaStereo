@@ -40,7 +40,7 @@ app_ui <- function(request) {
         tabItems(
           tabItem(tabName = "intro",
                   fluidRow(
-                    column(3, tags$img(src = "logo/codastreo_logo.svg",
+                    column(3, tags$img(src = "logo/logo.svg",
                                        width = "100%", style = "max-width: 220px;")),
                     column(9,
                            h2(t("Welcome to CoDa Stereo")),
