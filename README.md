@@ -160,6 +160,32 @@ CoDaStereo/
 └── .github/workflows/     # R CMD check (3 OSes) and pkgdown site
 ```
 
+## Why "CoDa Stereo"?
+
+The name joins the two fields that the package brings together: *CoDa*,
+the usual abbreviation of compositional data analysis, and *stereology*, the
+quantification of tissue structure whose volume fractions and point counts
+are compositions by construction. It is also a double musical homage.
+[*Coda*](https://en.wikipedia.org/wiki/Coda_(Led_Zeppelin_album)) (1982) is
+the ninth and final studio album by Led Zeppelin, released almost two years
+after the band broke up following the death of drummer John Bonham, and its
+title refers to the closing section of a piece of music.
+[Soda Stereo](https://en.wikipedia.org/wiki/Soda_Stereo) is the band formed
+in Buenos Aires in 1982 by Gustavo Cerati, Zeta Bosio and Charly Alberti,
+regarded as a pioneer of Latin American rock. Changing a single letter turns
+Soda Stereo into CoDa Stereo.
+
+The logo carries both references in its typography. "CODA" is set in
+[Ryga](https://justfreefonts.com/fonts/ryga/), a free display typeface with
+neon-like outlined strokes, chosen as a homage to Led Zeppelin's *Coda*.
+"STEREO" is set in Inter Bold, widely spaced, as a solid 1980s nod to Soda
+Stereo. Above the name, an isometric block of tissue with cells and blood
+vessels stands for the object of stereology, and its stacked bars stand both
+for the parts of a composition and for the level meters of a stereo
+equalizer. The package has no connection with either band, and the logo uses
+none of their artwork or lyrics. The fonts are documented in
+[`inst/logo/FONTS.md`](inst/logo/FONTS.md).
+
 ## How to cite
 
 If you use CoDaStereo in your research, please cite both the paper and
