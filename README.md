@@ -77,9 +77,10 @@ run_app()
 ### Dependencies
 
 CoDaStereo depends on: `shiny`, `shinydashboard`, `rintrojs`, `dplyr`,
-`tidyr`, `tibble`, `purrr`, `ggplot2`, `ggiraph`, `ggrepel`, `scales`,
-`svglite`, `readxl`, `naniar`, `compositions`, `zCompositions`, `RRPP`,
-`FactoMineR`, `mirai`, `htmltools`, `jsonlite`, `knitr`, `golem`, `rlang`.
+`ggplot2`, `ggiraph`, `ggrepel`, `scales`, `svglite`, `readxl`, `naniar`,
+`compositions`, `zCompositions`, `RRPP`, `FactoMineR`, `htmltools`,
+`jsonlite` and `golem`. If `mirai` is installed, model fits run in background
+workers so the interface stays responsive.
 
 All are available on CRAN.
 

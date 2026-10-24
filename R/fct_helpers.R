@@ -2,6 +2,10 @@
 # Helper and utility functions for CoDa Stereo
 # ==============================================================================
 
+#' Default for NULL (in base R only from 4.4.0)
+#' @noRd
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
 #' Compute per-column detection limits
 #' @noRd
 compute_dl <- function(mat, frac = 0.5) {
@@ -41,11 +45,11 @@ gmean_impute <- function(mat) {
 #' grouping factors and are left out.
 #' @noRd
 factor_candidates <- function(df, parts) {
-  cands <- setdiff(names(df)[!purrr::map_lgl(df, is.numeric)], parts)
-  purrr::keep(cands, \(v) {
+  cands <- setdiff(names(df)[!vapply(df, is.numeric, logical(1))], parts)
+  Filter(\(v) {
     k <- dplyr::n_distinct(df[[v]])
     k >= 2 && k <= nrow(df) / 2
-  })
+  }, cands)
 }
 
 #' Path to a file shipped in inst/, both installed and from the source tree
@@ -103,7 +107,7 @@ load_example <- function(key) {
   ex <- example_datasets()[[key]]
   if (is.null(ex$file)) return(simulate_liver())
   df <- utils::read.csv(app_file("extdata", ex$file), stringsAsFactors = FALSE)
-  df[] <- purrr::map(df, \(x) if (is.character(x)) factor(x) else x)
+  df[] <- lapply(df, \(x) if (is.character(x)) factor(x) else x)
   df
 }
 
@@ -121,8 +125,8 @@ aggregate_specimens <- function(df, id, parts, fun = c("sum", "mean")) {
   fun   <- match.arg(fun)
   f     <- if (fun == "sum") sum else mean
   other <- setdiff(names(df), c(id, parts))
-  is_const <- purrr::map_lgl(other, \(v)
-    all(tapply(df[[v]], df[[id]], \(x) dplyr::n_distinct(x) == 1)))
+  is_const <- vapply(other, \(v)
+    all(tapply(df[[v]], df[[id]], \(x) dplyr::n_distinct(x) == 1)), logical(1))
   keep  <- other[is_const]
   out <- df |>
     dplyr::group_by(.data[[id]]) |>
@@ -363,13 +367,13 @@ sbp_problems <- function(sbp, lang = "en") {
     all(sbp[b, sa] == 1) || all(sbp[b, sa] == -1)
   }
   pairs <- utils::combn(nrow(sbp), 2, simplify = FALSE)
-  clash <- purrr::keep(pairs, \(ij) {
+  clash <- Filter(\(ij) {
     i <- ij[1]; j <- ij[2]
     any(sbp[i, ] != 0 & sbp[j, ] != 0) && !nested_in(i, j) && !nested_in(j, i)
-  })
-  out <- c(out, purrr::map_chr(clash, \(ij) sprintf(
+  }, pairs)
+  out <- c(out, vapply(clash, \(ij) sprintf(
     t("Balances %s and %s are not nested: each balance must split one group of its parent."),
-    rownames(sbp)[ij[1]], rownames(sbp)[ij[2]])))
+    rownames(sbp)[ij[1]], rownames(sbp)[ij[2]]), character(1)))
   out
 }
 
@@ -378,10 +382,10 @@ sbp_problems <- function(sbp, lang = "en") {
 sbp_labels <- function(sbp) {
   data.frame(
     Balance     = rownames(sbp),
-    Numerator   = purrr::map_chr(seq_len(nrow(sbp)), \(i)
-                    paste(colnames(sbp)[sbp[i, ] == 1], collapse = ", ")),
-    Denominator = purrr::map_chr(seq_len(nrow(sbp)), \(i)
-                    paste(colnames(sbp)[sbp[i, ] == -1], collapse = ", ")),
+    Numerator   = vapply(seq_len(nrow(sbp)), \(i)
+                    paste(colnames(sbp)[sbp[i, ] == 1], collapse = ", "), character(1)),
+    Denominator = vapply(seq_len(nrow(sbp)), \(i)
+                    paste(colnames(sbp)[sbp[i, ] == -1], collapse = ", "), character(1)),
     stringsAsFactors = FALSE
   )
 }
@@ -438,9 +442,9 @@ plot_ternary_manual <- function(data, parts, group_var,
 
   three_parts <- function(d) {
     if (!is.null(amalg) && length(amalg) == 3) {
-      purrr::map(amalg, \(p) rowSums(d[, p, drop = FALSE]))
+      lapply(amalg, \(p) rowSums(d[, p, drop = FALSE]))
     } else {
-      purrr::map(parts[1:3], \(p) d[[p]])
+      lapply(parts[1:3], \(p) d[[p]])
     }
   }
   abc <- three_parts(data)
@@ -494,17 +498,17 @@ plot_ternary_manual <- function(data, parts, group_var,
       sub[grDevices::chull(sub$xc, sub$yc), ]
     }))
   } else if (regions %in% c("confidence", "predictive")) {
-    do.call(rbind, purrr::imap(grp_idx, \(i, g) {
+    do.call(rbind, Map(\(i, g) {
       reg <- ternary_region(cbind(rL[i], rT[i], rR[i]), regions)
       if (is.null(reg)) return(NULL)
       data.frame(to_xy(reg[, 1], reg[, 2], reg[, 3]), group = g)
-    }))
+    }, grp_idx, names(grp_idx)))
   }
   centres <- if (centre) {
-    do.call(rbind, purrr::imap(grp_idx, \(i, g) {
+    do.call(rbind, Map(\(i, g) {
       gm <- exp(colMeans(log(cbind(rL[i], rT[i], rR[i]))))
       data.frame(to_xy(gm[1], gm[2], gm[3]), group = g)
-    }))
+    }, grp_idx, names(grp_idx)))
   }
 
   # -- Assemble ---------------------------------------------------------------

@@ -66,8 +66,8 @@ fit_pairwise <- function(arg) {
 #' Numeric columns that can act as covariates (not parts, not IDs, not constant)
 #' @noRd
 covariate_candidates <- function(df, parts) {
-  num <- setdiff(names(df)[purrr::map_lgl(df, is.numeric)], parts)
-  purrr::keep(num, \(v) !is_id_name(v) && dplyr::n_distinct(df[[v]]) >= 3)
+  num <- setdiff(names(df)[vapply(df, is.numeric, logical(1))], parts)
+  Filter(\(v) !is_id_name(v) && dplyr::n_distinct(df[[v]]) >= 3, num)
 }
 
 # ------------------------------------------------------------------------------

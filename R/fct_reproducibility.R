@@ -133,10 +133,10 @@ build_r_script <- function(state) {
       if (tot == "joint") add("y <- cbind(y, log_total = log_total)")
     }
     vars <- unique(c(st$factors, st$covariates, if (nzchar(st$block %||% "")) st$block))
-    cols <- purrr::map_chr(vars, \(v) {
+    cols <- vapply(vars, \(v) {
       if (v %in% st$covariates) sprintf("%s = df[[%s]]", v, r_code(v))
       else sprintf("%s = factor(df[[%s]])", v, r_code(v))
-    })
+    }, character(1), USE.NAMES = FALSE)
     if (tot == "covariate") cols <- c(cols, "log_total = log_total")
     add(sprintf("dat <- RRPP::rrpp.data.frame(y = y, %s)", paste(cols, collapse = ", ")),
         sprintf("fit <- RRPP::lm.rrpp(y ~ %s, data = dat, iter = %s, seed = 42,",
@@ -172,7 +172,8 @@ report_img <- function(plot, width = 17, height = 13) {
   f <- tempfile(fileext = ".png")
   on.exit(unlink(f))
   save_plot(f, plot, "png", width = width, height = height, dpi = 150)
-  htmltools::tags$img(src = knitr::image_uri(f),
+  png <- readBin(f, "raw", file.info(f)$size)
+  htmltools::tags$img(src = paste0("data:image/png;base64,", jsonlite::base64_enc(png)),
                       style = "max-width: 100%; height: auto;")
 }
 
@@ -180,11 +181,17 @@ report_img <- function(plot, width = 17, height = 13) {
 #' @noRd
 report_pre <- function(x) htmltools::tags$pre(paste(utils::capture.output(print(x)), collapse = "\n"))
 
-#' Data frame as an HTML table
+#' Data frame as an HTML table (numbers rounded to `digits`)
 #' @noRd
 report_table <- function(x, digits = 3) {
-  htmltools::HTML(knitr::kable(x, format = "html", digits = digits,
-                               table.attr = "class='tbl'"))
+  x <- as.data.frame(x)
+  cells <- lapply(x, \(v) if (is.numeric(v)) format(round(v, digits), trim = TRUE) else as.character(v))
+  rn <- if (!identical(rownames(x), as.character(seq_len(nrow(x))))) rownames(x)
+  tags <- htmltools::tags
+  head <- tags$tr(if (!is.null(rn)) tags$th(""), lapply(names(x), tags$th))
+  body <- lapply(seq_len(nrow(x)), \(i)
+    tags$tr(if (!is.null(rn)) tags$td(rn[i]), lapply(cells, \(v) tags$td(v[i]))))
+  tags$table(class = "tbl", tags$thead(head), tags$tbody(body))
 }
 
 #' Write a self-contained HTML report of the session
@@ -308,14 +315,14 @@ session_from_json <- function(txt) {
   cols <- s$data$columns
   cls  <- s$data$classes
   if (!is.list(cols) || length(cols) == 0) stop("The session has no data.")
-  df <- as.data.frame(purrr::imap(cols, \(x, nm) {
+  df <- as.data.frame(Map(\(x, nm) {
     x <- unlist(lapply(x, function(v) if (is.null(v)) NA else v))
     switch(cls[[nm]] %||% "character",
            factor = factor(x), numeric = as.numeric(x), integer = as.integer(x),
            logical = as.logical(x), as.character(x))
-  }), stringsAsFactors = FALSE, check.names = FALSE)
+  }, cols, names(cols)), stringsAsFactors = FALSE, check.names = FALSE)
   parts <- s$data$parts
-  if (!all(parts %in% names(df)) || !all(purrr::map_lgl(df[parts], is.numeric))) {
+  if (!all(parts %in% names(df)) || !all(vapply(df[parts], is.numeric, logical(1)))) {
     stop("The session's parts are not numeric columns of its data.")
   }
   sb <- s$balances$sbp

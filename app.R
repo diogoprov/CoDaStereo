@@ -13,8 +13,7 @@
 # (as in the package), which keeps start-up short.
 library(shiny)
 library(shinydashboard)
-.data  <- rlang::.data   # tidy-eval pronoun used in ggplot2 aesthetics
-`%||%` <- rlang::`%||%`
+.data  <- dplyr::.data   # tidy-eval pronoun used in ggplot2 aesthetics
 
 # Source package code: every file in R/ (helpers, modules, app)
 for (f in list.files("R", pattern = "[.]R$", full.names = TRUE)) source(f, local = TRUE)

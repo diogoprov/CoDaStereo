@@ -182,7 +182,7 @@ mod_stats_server <- function(id, df, parts, comp, keep_rows, raw = NULL,
       cols <- unique(c(input$factors, input$covariates,
                        if (nzchar(input$block %||% "")) input$block))
       d <- df()[kr, cols, drop = FALSE]
-      d[] <- purrr::map(names(d), \(v) if (v %in% input$covariates) d[[v]] else as.factor(d[[v]]))
+      d[] <- lapply(names(d), \(v) if (v %in% input$covariates) d[[v]] else as.factor(d[[v]]))
       list(y          = unclass(compositions::ilr(comp())),
            data       = d,
            rhs        = model_spec_rhs(),
