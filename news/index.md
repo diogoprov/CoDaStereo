@@ -1,5 +1,11 @@
 # Changelog
 
+## CoDaStereo (development version)
+
+- The hex logo now stands upright (pointy top and bottom), following the
+  hex sticker standard; the cube no longer overlaps the wordmark.
+  Favicons were regenerated from it.
+
 ## CoDaStereo 3.1.1
 
 - The clr-biplot keeps equal axis scales unless the second axis would be
