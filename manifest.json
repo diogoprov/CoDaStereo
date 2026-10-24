@@ -5150,7 +5150,7 @@
   },
   "files": {
     ".Rbuildignore": {
-      "checksum": "87f9d4ec0ffedff42d9aa1a7e04c6c96"
+      "checksum": "b03870bbfadfee69740b9d9ec3a6130f"
     },
     "app.R": {
       "checksum": "2551db2a6d80160060c08a76b5ca6283"
@@ -5183,10 +5183,10 @@
       "checksum": "18b9ca10a65279015e4cab0d9ed18be3"
     },
     "inst/logo/logo.png": {
-      "checksum": "d7d584e6d238365962ac43def1eabca6"
+      "checksum": "894ce4a6998475e88d19f5de27f52e10"
     },
     "inst/logo/logo.svg": {
-      "checksum": "c517c63406b614b73fc7148793eb2fb1"
+      "checksum": "d87496a044dcee44940fe10d59653f5c"
     },
     "LICENSE": {
       "checksum": "ea235343d57592bf4bbace2adea47927"
@@ -5243,7 +5243,7 @@
       "checksum": "ef4a3d2d3cc6312347193cfe4d0fecc9"
     },
     "www/logo/logo.svg": {
-      "checksum": "c517c63406b614b73fc7148793eb2fb1"
+      "checksum": "d87496a044dcee44940fe10d59653f5c"
     }
   },
   "users": null
