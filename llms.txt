@@ -39,16 +39,27 @@ guide.
 
 ## Installation
 
-### Run locally (recommended for development)
+### Run locally
+
+Install the binary package from
+[r-universe](https://diogoprov.r-universe.dev/CoDaStereo) (no build
+tools needed):
 
 ``` r
 
-# Install from GitHub
-# install.packages("devtools")
-devtools::install_github("diogoprov/CoDaStereo")
+install.packages("CoDaStereo",
+  repos = c("https://diogoprov.r-universe.dev", "https://cloud.r-project.org"))
 
 # Launch
 CoDaStereo::run_app()
+```
+
+Or install the development version from GitHub:
+
+``` r
+
+# install.packages("devtools")
+devtools::install_github("diogoprov/CoDaStereo")
 ```
 
 ### Run without installing (quick start)

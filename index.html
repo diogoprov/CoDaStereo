@@ -121,20 +121,24 @@
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="section level3">
-<h3 id="run-locally-recommended-for-development">Run locally (recommended for development)<a class="anchor" aria-label="anchor" href="#run-locally-recommended-for-development"></a>
+<h3 id="run-locally">Run locally<a class="anchor" aria-label="anchor" href="#run-locally"></a>
 </h3>
+<p>Install the binary package from <a href="https://diogoprov.r-universe.dev/CoDaStereo" class="external-link">r-universe</a> (no build tools needed):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
-<span><span class="co"># install.packages("devtools")</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"diogoprov/CoDaStereo"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"CoDaStereo"</span>,</span>
+<span>  repos <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"https://diogoprov.r-universe.dev"</span>, <span class="st">"https://cloud.r-project.org"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Launch</span></span>
 <span><span class="fu">CoDaStereo</span><span class="fu">::</span><span class="fu"><a href="reference/run_app.html">run_app</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Or install the development version from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"diogoprov/CoDaStereo"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="run-without-installing-quick-start">Run without installing (quick start)<a class="anchor" aria-label="anchor" href="#run-without-installing-quick-start"></a>
 </h3>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Clone the repo, then:</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">setwd</a></span><span class="op">(</span><span class="st">"CoDaStereo/"</span><span class="op">)</span></span>
 <span><span class="fu">pkgload</span><span class="fu">::</span><span class="fu"><a href="https://pkgload.r-lib.org/reference/load_all.html" class="external-link">load_all</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -159,7 +163,7 @@
 <li><p><strong>Fork or push this repository</strong> to your GitHub account.</p></li>
 <li>
 <p><strong>Generate <code>manifest.json</code></strong> — this file tells Connect Cloud which R version and packages to use. Run this once in your local R session (from the repository root):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("rsconnect")</span></span>
 <span><span class="co"># list only the files the deployed app needs</span></span>
 <span><span class="va">f</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.html" class="external-link">system</a></span><span class="op">(</span><span class="st">"git ls-files"</span>, intern <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -181,7 +185,7 @@
 <div class="section level3">
 <h3 id="alternative-deploy-from-rstudio">Alternative: deploy from RStudio<a class="anchor" aria-label="anchor" href="#alternative-deploy-from-rstudio"></a>
 </h3>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># One-time authentication (opens browser)</span></span>
 <span><span class="fu">rsconnect</span><span class="fu">::</span><span class="fu">connectCloudUser</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -232,22 +236,22 @@
 <h2 id="how-to-cite">How to cite<a class="anchor" aria-label="anchor" href="#how-to-cite"></a>
 </h2>
 <p>If you use CoDaStereo in your research, please cite both the paper and the software:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="va">@article</span>{<span class="ot">provete2026codastreo</span>,</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="dt">author</span>  = {Provete, Diogo B. and Severgnini, Marcos R. and Fernandes, Carlos E. and Franco-Belussi, Lilian},</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="dt">title</span>   = {A Practical Guide to using Compositional Data Analysis in Tissue Stereology and Blood Cell Profile},</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="dt">journal</span> = {Physiological Reports},</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>  <span class="dt">year</span>    = {2026},</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>  <span class="dt">note</span>    = {In review}</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>}</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="co">@software{provete2026codastreo_app,</span></span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co">  author  = {Provete, Diogo B.},</span></span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="co">  title   = {{CoDa Stereo}: Compositional Data Analysis for Stereological Data},</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="co">  year    = {2026},</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="co">  url     = {https://github.com/diogoprov/CoDaStereo},</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="co">  doi     = {10.5281/zenodo.19925778},</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="co">  version = {3.1.1}</span></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bibtex"><code class="sourceCode bibtex"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="va">@article</span>{<span class="ot">provete2026codastreo</span>,</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>  <span class="dt">author</span>  = {Provete, Diogo B. and Severgnini, Marcos R. and Fernandes, Carlos E. and Franco-Belussi, Lilian},</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="dt">title</span>   = {A Practical Guide to using Compositional Data Analysis in Tissue Stereology and Blood Cell Profile},</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="dt">journal</span> = {Physiological Reports},</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="dt">year</span>    = {2026},</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="dt">note</span>    = {In review}</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>}</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co">@software{provete2026codastreo_app,</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co">  author  = {Provete, Diogo B.},</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">  title   = {{CoDa Stereo}: Compositional Data Analysis for Stereological Data},</span></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co">  year    = {2026},</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="co">  url     = {https://github.com/diogoprov/CoDaStereo},</span></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a><span class="co">  doi     = {10.5281/zenodo.19925778},</span></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co">  version = {3.1.1}</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="co">}</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="contributing">Contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
