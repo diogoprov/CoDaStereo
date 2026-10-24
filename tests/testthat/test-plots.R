@@ -22,8 +22,8 @@ test_that("biplot rays keep relative clr SDs after rescaling", {
   s   <- spleen_specimens()
   pca <- clr_pca(s$x)
   p   <- plot_clr_biplot(pca, s$d$Site, axes = c(1, 2))
-  rays <- ggplot2::layer_data(p, which(purrr::map_lgl(p$layers, \(l)
-            inherits(l$geom, "GeomSegment"))))
+  rays <- ggplot2::layer_data(p, which(vapply(p$layers, \(l)
+            inherits(l$geom, "GeomSegment"), logical(1))))
   len_plot <- sqrt(rays$xend^2 + rays$yend^2)
   len_pca  <- sqrt(rowSums(pca$var$coord[, 1:2]^2))
   expect_equal(len_plot / len_plot[1], unname(len_pca / len_pca[1]), tolerance = 1e-8)
@@ -71,7 +71,7 @@ test_that("the app works without ggiraph and TIFF falls back without cairo", {
 
   s <- spleen_specimens()
   p <- plot_clr_biplot(clr_pca(s$x), s$d$Site, interactive = TRUE)  # silently static
-  expect_false(any(purrr::map_lgl(p$layers, \(l) grepl("Interactive", class(l$geom)[1]))))
+  expect_false(any(vapply(p$layers, \(l) grepl("Interactive", class(l$geom)[1]), logical(1))))
 
   # cairo reported as missing, or failing with a warning (as on the macOS runner)
   local_mocked_bindings(tiff = function(..., type) {

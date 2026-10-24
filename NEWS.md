@@ -3,6 +3,10 @@
 * The hex logo now stands upright (pointy top and bottom), following the
   hex sticker standard; the cube no longer overlaps the wordmark. Favicons
   were regenerated from it.
+* Fewer hard dependencies (18 instead of 24, ahead of a CRAN submission):
+  `purrr`, `tidyr`, `tibble` and `rlang` were replaced by base R, the HTML
+  report no longer needs `knitr`, and `mirai` is now optional (without it,
+  models are fitted in the main process).
 
 # CoDaStereo 3.1.1
 

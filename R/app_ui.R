@@ -13,11 +13,11 @@ app_ui <- function(request) {
       # dashboardHeader() wants each dropdown as its own argument
       do.call(dashboardHeader, c(
         list(title = "CoDa Stereo v3.1"),
-        unname(purrr::imap(app_languages, \(label, code) {
+        unname(Map(\(label, code) {
           tags$li(class = "dropdown",
                   tags$a(href = paste0("?lang=", code), label,
                          style = if (lang == code) "font-weight: bold;"))
-        })),
+        }, app_languages, names(app_languages))),
         list(tags$li(class = "dropdown",
                      actionButton("tour_btn_header",
                                   label = paste("\U0001f393", t("Tour")),

@@ -167,7 +167,7 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
 
     output$select_parts_ui <- renderUI({
       req(rv$df)
-      num_cols    <- names(rv$df)[purrr::map_lgl(rv$df, is.numeric)]
+      num_cols    <- names(rv$df)[vapply(rv$df, is.numeric, logical(1))]
       default_sel <- if (!is.null(rv$default_parts) && all(rv$default_parts %in% num_cols)) {
         rv$default_parts
       } else {
@@ -219,17 +219,15 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
     # -- Data inspection plots -------------------------------------------------
     parts_long <- reactive({
       req(df_out(), input$parts)
-      df_out()[, input$parts, drop = FALSE] |>
-        tibble::rowid_to_column("Sample") |>
-        tidyr::pivot_longer(-"Sample", names_to = "Part", values_to = "Value") |>
-        dplyr::mutate(
-          State = dplyr::case_when(
-            is.na(.data$Value) ~ "Missing (NA)",
-            .data$Value == 0   ~ "Structural zero",
-            TRUE               ~ "Observed"
-          ),
-          Part = factor(.data$Part, levels = input$parts)
-        )
+      d <- as.matrix(df_out()[, input$parts, drop = FALSE])
+      value <- as.vector(t(d))  # one row per sample x part, samples in order
+      data.frame(
+        Sample = rep(seq_len(nrow(d)), each = ncol(d)),
+        Part   = factor(rep(input$parts, times = nrow(d)), levels = input$parts),
+        Value  = value,
+        State  = ifelse(is.na(value), "Missing (NA)",
+                        ifelse(value == 0, "Structural zero", "Observed"))
+      )
     })
 
     output$zero_na_heatmap <- renderPlot({
@@ -255,12 +253,12 @@ mod_data_server <- function(id, restore = reactive(NULL)) {
 
     output$count_plot <- renderPlot({
       df_long <- parts_long()
-      df_summary <- df_long |>
-        dplyr::filter(.data$State != "Observed") |>
-        dplyr::count(.data$Part, .data$State, .drop = FALSE) |>
-        tidyr::complete(.data$Part,
-                        State = c("Structural zero", "Missing (NA)"),
-                        fill = list(n = 0))
+      miss <- df_long[df_long$State != "Observed", ]
+      # every part x state, zero counts included
+      df_summary <- as.data.frame(
+        table(Part  = miss$Part,
+              State = factor(miss$State, levels = c("Missing (NA)", "Structural zero"))),
+        responseName = "n")
       ggplot2::ggplot(df_summary,
                       ggplot2::aes(x = .data$n, y = .data$Part, fill = .data$State)) +
         ggplot2::geom_col(position = ggplot2::position_dodge(width = 0.8), width = 0.7) +

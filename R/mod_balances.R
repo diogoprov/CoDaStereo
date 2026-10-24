@@ -78,10 +78,10 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
       base <- sbp_default()
       choices <- c("+1" = 1, "-1" = -1, "0" = 0)
       header <- tags$tr(tags$th(""),
-                        purrr::map(colnames(base), \(p) tags$th(p, style = "font-size: 85%;")))
-      rows <- purrr::map(seq_len(nrow(base)), \(i) tags$tr(
+                        lapply(colnames(base), \(p) tags$th(p, style = "font-size: 85%;")))
+      rows <- lapply(seq_len(nrow(base)), \(i) tags$tr(
         tags$th(rownames(base)[i]),
-        purrr::map(seq_len(ncol(base)), \(j) tags$td(
+        lapply(seq_len(ncol(base)), \(j) tags$td(
           selectInput(ns(cell_id(i, j)), label = NULL, choices = choices,
                       selected = base[i, j], selectize = FALSE, width = "65px")
         ))
@@ -92,10 +92,10 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
 
     sbp_current <- reactive({
       base <- sbp_default()
-      vals <- purrr::map_dbl(seq_along(base), \(k) {
+      vals <- vapply(seq_along(base), \(k) {
         i <- row(base)[k]; j <- col(base)[k]
         as.numeric(input[[cell_id(i, j)]] %||% base[i, j])
-      })
+      }, numeric(1))
       matrix(vals, nrow = nrow(base), dimnames = dimnames(base))
     })
 
@@ -110,7 +110,7 @@ mod_balances_server <- function(id, df, parts, comp, keep_rows,
                style = "color: #28a745; font-weight: bold;")
       } else {
         tags$div(style = "color: #dc3545;",
-                 tags$strong(t("Invalid SBP:")), tags$ul(purrr::map(issues, tags$li)))
+                 tags$strong(t("Invalid SBP:")), tags$ul(lapply(issues, tags$li)))
       }
     })
 

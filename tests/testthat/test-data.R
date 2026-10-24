@@ -3,7 +3,7 @@ test_that("every example dataset loads with its declared parts", {
     d  <- load_example(k)
     ex <- example_datasets()[[k]]
     expect_true(all(ex$parts %in% names(d)), info = k)
-    expect_true(all(purrr::map_lgl(d[ex$parts], is.numeric)), info = k)
+    expect_true(all(vapply(d[ex$parts], is.numeric, logical(1))), info = k)
     expect_gte(length(factor_candidates(d, ex$parts)), 1)
   }
 })

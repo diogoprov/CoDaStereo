@@ -299,12 +299,12 @@ balance_coords <- function(comp, sbp) {
 #' @noRd
 balance_tests <- function(bal, groups, iter = 999, seed = 42) {
   groups <- as.factor(groups)
-  purrr::map_dfr(names(bal), \(b) {
+  do.call(rbind, lapply(names(bal), \(b) {
     rdf <- RRPP::rrpp.data.frame(y = bal[[b]], g = groups)
     tab <- stats::anova(RRPP::lm.rrpp(y ~ g, data = rdf, iter = iter, seed = seed,
                                       print.progress = FALSE))$table
     data.frame(Balance = b, F = tab[1, "F"], Z = tab[1, "Z"], P = tab[1, "Pr(>F)"])
-  })
+  }))
 }
 
 #' Boxplots of each balance per group, facets labelled numerator / denominator
@@ -312,8 +312,8 @@ balance_tests <- function(bal, groups, iter = 999, seed = 42) {
 plot_balances <- function(bal, groups, sbp, palette = "okabe_ito", base_size = 13) {
   lab  <- sbp_labels(sbp)
   labs <- stats::setNames(
-    purrr::map_chr(sprintf("%s: %s / %s", lab$Balance, lab$Numerator, lab$Denominator),
-                   \(t) paste(strwrap(t, 40), collapse = "\n")),
+    vapply(sprintf("%s: %s / %s", lab$Balance, lab$Numerator, lab$Denominator),
+           \(t) paste(strwrap(t, 40), collapse = "\n"), character(1)),
     lab$Balance)
   long <- data.frame(Balance = factor(rep(names(bal), each = nrow(bal)), levels = names(bal)),
                      value   = unlist(bal, use.names = FALSE),
